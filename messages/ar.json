@@ -1,0 +1,28 @@
+{
+  "_review_note": "TODO: native review",
+  "common": {
+    "brandName": "وايلد هيلز",
+    "tagline": "للعقارات",
+    "chooseCountry": "اختر دولتك",
+    "exploreHomes": "عقارات في مصر، الإمارات، جورجيا، وتركيا",
+    "selectLanguage": "اللغة",
+    "selectCurrency": "العملة",
+    "countries": {
+      "ae": "الإمارات العربية المتحدة",
+      "eg": "مصر",
+      "ge": "جورجيا",
+      "tr": "تركيا"
+    },
+    "nav": {
+      "buy": "شراء",
+      "areas": "المناطق",
+      "projects": "المشاريع",
+      "contact": "تواصل معنا",
+      "sellWithUs": "اعرض عقارك معنا"
+    },
+    "shell": {
+      "welcome": "وايلد هيلز للعقارات",
+      "description": "منزل يناسب نمط حياتك في مصر، الإمارات، جورجيا، وتركيا."
+    }
+  }
+}

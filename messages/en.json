@@ -1,0 +1,27 @@
+{
+  "common": {
+    "brandName": "Wild Hills",
+    "tagline": "Real Estate",
+    "chooseCountry": "Choose your country",
+    "exploreHomes": "Homes across Egypt, UAE, Georgia, and Turkey",
+    "selectLanguage": "Language",
+    "selectCurrency": "Currency",
+    "countries": {
+      "ae": "United Arab Emirates",
+      "eg": "Egypt",
+      "ge": "Georgia",
+      "tr": "Turkey"
+    },
+    "nav": {
+      "buy": "Buy",
+      "areas": "Areas",
+      "projects": "Projects",
+      "contact": "Contact",
+      "sellWithUs": "Sell with us"
+    },
+    "shell": {
+      "welcome": "Wild Hills Real Estate",
+      "description": "Find a home that fits your life across Egypt, UAE, Georgia, and Turkey."
+    }
+  }
+}

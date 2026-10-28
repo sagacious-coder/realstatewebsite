@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Brand Tokens - WILD_HILLS_BUILD_SPEC.md Section 4.1 */
+  --navy: #101B33;
+  --navy-2: #1A2848;
+  --ivory: #FAF8F3;
+  --white: #FFFFFF;
+  --gold: #C99E4C;
+  --gold-deep: #8A6A22;
+  --gold-light: #E8D9B8;
+  --emerald: #1D7A52;
+  --emerald-deep: #14583D;
+  --mist: #E8F1EC;
+  --sea: #24509E;
+  --muted: #5A6378;
+  --line: #E4DFD2;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-color: var(--line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--ivory);
+    color: var(--navy);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  /* Typography scale - Section 4.2 */
+  h1,
+  .h1 {
+    font-family: var(--font-lora), Georgia, serif;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  h2,
+  .h2 {
+    font-family: var(--font-lora), Georgia, serif;
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  h3,
+  .h3 {
+    font-family: var(--font-lora), Georgia, serif;
+    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  p {
+    max-width: 68ch;
+    margin: 0;
+  }
+
+  /* Section 4.2: Sentence case only, never all caps */
+  button,
+  a {
+    text-transform: none;
+  }
+
+  /* Accessible Focus Rings - Section 13.2 */
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .on-navy :focus-visible {
+    outline: 2px solid var(--ivory);
+    outline-offset: 2px;
+  }
+
+  /* Right-to-Left (Arabic) Specifics - Section 4.2 & 13.7 */
+  html[dir="rtl"] {
+    font-family: var(--font-ibm-plex-arabic), -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.7;
+    letter-spacing: normal;
+  }
+
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] h4,
+  html[dir="rtl"] h5,
+  html[dir="rtl"] h6,
+  html[dir="rtl"] .h1,
+  html[dir="rtl"] .h2,
+  html[dir="rtl"] .h3 {
+    font-family: var(--font-ibm-plex-arabic), -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: normal;
+  }
+
+  /* Western/Latin default font */
+  html[dir="ltr"] {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+/* Reduced Motion - Section 4.5 & 13.3 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
