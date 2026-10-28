@@ -44,6 +44,8 @@ export async function generateMetadata({
   };
 }
 
+import { ToastProvider } from '@/components/ui/Toast';
+
 export default async function LocaleLayout({
   children,
   params,
@@ -72,7 +74,9 @@ export default async function LocaleLayout({
     >
       <body className="min-h-screen bg-ivory text-navy antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </NextIntlClientProvider>
       </body>
     </html>
