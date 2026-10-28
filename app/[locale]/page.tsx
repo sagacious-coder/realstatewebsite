@@ -1,6 +1,8 @@
 import { setRequestLocale } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { Link } from '@/i18n/routing';
+import { SiteImage } from '@/components/SiteImage';
 
 export default function LocaleHomePage({
   params,
@@ -26,24 +28,26 @@ function BrandedShell({ locale }: { locale: string }) {
   const isArabic = locale === 'ar';
 
   const countries = [
-    { code: 'ae', name: t('countries.ae'), currency: 'AED' },
-    { code: 'eg', name: t('countries.eg'), currency: 'EGP' },
-    { code: 'ge', name: t('countries.ge'), currency: 'GEL' },
-    { code: 'tr', name: t('countries.tr'), currency: 'TRY' },
+    { code: 'ae', name: t('countries.ae'), currency: 'AED', panel: '/images/panels/panel-uae.webp' },
+    { code: 'eg', name: t('countries.eg'), currency: 'EGP', panel: '/images/panels/panel-egypt.webp' },
+    { code: 'ge', name: t('countries.ge'), currency: 'GEL', panel: '/images/panels/panel-georgia.webp' },
+    { code: 'tr', name: t('countries.tr'), currency: 'TRY', panel: '/images/panels/panel-turkey.webp' },
   ];
 
   return (
     <main className="min-h-screen flex flex-col justify-between bg-ivory text-navy px-6 py-12 md:py-20 max-w-[1200px] mx-auto">
       {/* Top Brand Bar */}
       <header className="flex items-center justify-between border-b border-line pb-6">
-        <div>
-          <div className="font-serif text-2xl md:text-3xl font-semibold tracking-tight text-navy">
-            {t('brandName')}
-          </div>
-          <div className="text-xs uppercase tracking-widest text-gold-deep font-sans mt-0.5">
-            {t('tagline')}
-          </div>
-        </div>
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/brand/wild-hills-logo-full-light.svg"
+            alt="Wild Hills Real Estate"
+            width={160}
+            height={44}
+            className="h-10 w-auto"
+            priority
+          />
+        </Link>
 
         {/* Locale switcher */}
         <nav
@@ -97,23 +101,35 @@ function BrandedShell({ locale }: { locale: string }) {
           <h2 className="text-sm font-semibold uppercase tracking-wider text-muted mb-6">
             {t('chooseCountry')}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {countries.map((country) => (
               <Link
                 key={country.code}
                 href={`/${country.code}`}
-                className="group p-6 rounded-card bg-white border border-line shadow-subtle hover:border-gold transition-all duration-200 text-start"
+                className="group relative overflow-hidden rounded-card bg-white border border-line shadow-subtle hover:border-gold transition-all duration-300 text-start flex flex-col"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-medium uppercase tracking-wider px-2 py-1 bg-mist text-emerald rounded">
-                    {country.code.toUpperCase()}
-                  </span>
-                  <span className="text-xs font-medium text-muted">
-                    {country.currency}
-                  </span>
-                </div>
-                <div className="text-lg font-serif font-medium text-navy group-hover:text-gold-deep transition-colors">
-                  {country.name}
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-navy-2">
+                  <SiteImage
+                    src={country.panel}
+                    alt={country.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent" />
+                  <div className="absolute top-3 end-3 z-10">
+                    <span className="text-xs font-semibold uppercase tracking-wider px-2 py-1 bg-white/90 text-navy backdrop-blur-sm rounded">
+                      {country.code.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-4 start-4 end-4 z-10">
+                    <div className="text-xs font-medium text-gold-light uppercase tracking-wider mb-1">
+                      {country.currency}
+                    </div>
+                    <div className="text-xl font-serif font-medium text-ivory group-hover:text-gold-light transition-colors">
+                      {country.name}
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -124,7 +140,7 @@ function BrandedShell({ locale }: { locale: string }) {
       {/* Footer Minimal Indicator */}
       <footer className="border-t border-line pt-6 text-xs text-muted flex flex-col sm:flex-row justify-between items-center gap-4 text-start">
         <p>© {new Date().getFullYear()} Wild Hills Real Estate. All rights reserved.</p>
-        <p className="text-gold-deep font-medium">Stage 1: Core Shell Verified</p>
+        <p className="text-gold-deep font-medium">Stage 2: Assets &amp; Image Pipeline Verified</p>
       </footer>
     </main>
   );

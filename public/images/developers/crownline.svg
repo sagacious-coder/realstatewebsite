@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="white" fill-opacity="0"/>
+  <g transform="translate(20,55) scale(0.9)"><path d="M15 35 L34 52 L50 20 L66 52 L85 35 L77 78 H23 Z" fill="none" stroke="#C3A05C" stroke-width="5" stroke-linejoin="round"/><path d="M24 86 H76" stroke="#3D354C" stroke-width="5"/></g>
+  <text x="125" y="94" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="0.5" fill="#3D354C">CROWNLINE</text>
+  <path d="M126 108 H365" stroke="#C3A05C" stroke-width="2"/>
+  <text x="126" y="132" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2" fill="#3D354C">DEVELOPMENTS</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="white" fill-opacity="0"/>
+  <g transform="translate(20,55) scale(0.9)"><circle cx="50" cy="38" r="19" fill="none" stroke="#D4B477" stroke-width="5"/><path d="M15 78 Q50 48 85 78" fill="none" stroke="#8A5B3D" stroke-width="5"/><path d="M24 84 H76" stroke="#D4B477" stroke-width="4"/></g>
+  <text x="125" y="94" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="0.5" fill="#8A5B3D">SOLARA</text>
+  <path d="M126 108 H365" stroke="#D4B477" stroke-width="2"/>
+  <text x="126" y="132" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2" fill="#8A5B3D">PROPERTIES</text>
+</svg>

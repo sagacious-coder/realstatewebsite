@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="white" fill-opacity="0"/>
+  <g transform="translate(20,55) scale(0.9)"><path d="M20 82 V34 H43 V20 H64 V44 H80 V82 Z" fill="none" stroke="#30343B" stroke-width="5"/><path d="M29 45 H35 M29 57 H35 M51 32 H57 M51 44 H57 M51 56 H57 M70 55 H75 M70 67 H75" stroke="#B99550" stroke-width="4"/></g>
+  <text x="125" y="94" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" letter-spacing="0.5" fill="#30343B">STONE & CO</text>
+  <path d="M126 108 H365" stroke="#B99550" stroke-width="2"/>
+  <text x="126" y="132" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2" fill="#30343B">DEVELOPMENT</text>
+</svg>

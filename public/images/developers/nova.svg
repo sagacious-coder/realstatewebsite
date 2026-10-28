@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="white" fill-opacity="0"/>
+  <g transform="translate(20,55) scale(0.9)"><path d="M50 8 L59 34 L86 34 L64 50 L72 76 L50 60 L28 76 L36 50 L14 34 L41 34 Z" fill="#B99550"/></g>
+  <text x="125" y="94" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="0.5" fill="#142642">NOVA</text>
+  <path d="M126 108 H365" stroke="#B99550" stroke-width="2"/>
+  <text x="126" y="132" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2" fill="#142642">DEVELOPMENTS</text>
+</svg>

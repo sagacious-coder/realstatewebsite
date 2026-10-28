@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="white" fill-opacity="0"/>
+  <g transform="translate(20,55) scale(0.9)"><circle cx="50" cy="50" r="37" fill="none" stroke="#183B54" stroke-width="4"/><path d="M58 22 L67 61 L36 77 L44 43 Z" fill="#A8863A"/><circle cx="50" cy="50" r="4" fill="#183B54"/></g>
+  <text x="125" y="94" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="0.5" fill="#183B54">MERIDIAN</text>
+  <path d="M126 108 H365" stroke="#A8863A" stroke-width="2"/>
+  <text x="126" y="132" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="2" fill="#183B54">DEVELOPMENTS</text>
+</svg>

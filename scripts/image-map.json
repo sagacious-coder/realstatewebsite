@@ -1,0 +1,175 @@
+{
+  "brand": [
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/wild-hills-logo-full-light.svg",
+      "target": "public/brand/wild-hills-logo-full-light.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/wild-hills-logo-full-reversed.svg",
+      "target": "public/brand/wild-hills-logo-full-reversed.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/wild-hills-logo-nav-light.svg",
+      "target": "public/brand/wild-hills-logo-nav-light.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/wild-hills-logo-nav-reversed.svg",
+      "target": "public/brand/wild-hills-logo-nav-reversed.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/wild-hills-symbol.svg",
+      "target": "public/brand/wild-hills-symbol.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/favicon.ico",
+      "target": "app/favicon.ico"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/favicon.svg",
+      "target": "app/icon.svg"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/apple-touch-icon.png",
+      "target": "app/apple-icon.png"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/icon-192.png",
+      "target": "public/icons/icon-192.png"
+    },
+    {
+      "source": "source-images/files2/wild_hills_logo_pack/wild_hills_logo_pack/icon-512.png",
+      "target": "public/icons/icon-512.png"
+    },
+    {
+      "source": "source-images/wild-hills-separated-assets/share-ar-v1.jpg",
+      "target": "public/brand/share-ar-v1.jpg"
+    },
+    {
+      "source": "source-images/wild-hills-separated-assets/og-image-square.jpg",
+      "target": "public/brand/og-square-v1.jpg"
+    },
+    {
+      "source": "source-images/files2/share-default-v1.jpg",
+      "target": "public/brand/share-default-v1.jpg",
+      "note": "Selected high quality 1200x630 master variant from files2/ per DECISIONS.md"
+    }
+  ],
+  "heroes": [
+    {
+      "country": "egypt",
+      "items": [
+        { "source": "source-images/Egypt/Herosection/pexels-mfbeki-36224723.jpg", "slug": "hero-01" },
+        { "source": "source-images/Egypt/Herosection/pexels-mo-ismail-2130628-22643802.jpg", "slug": "hero-02" },
+        { "source": "source-images/Egypt/Herosection/Sunset_at_north_coast_of_egypt (1).jpg", "slug": "hero-03" }
+      ]
+    },
+    {
+      "country": "georgia",
+      "items": [
+        { "source": "source-images/gorgia/herosection/pexels-ernestos-vitouladitis-25434227-9986507.jpg", "slug": "hero-01" },
+        { "source": "source-images/gorgia/herosection/pexels-kelly-17291323.jpg", "slug": "hero-02" },
+        { "source": "source-images/gorgia/herosection/pexels-kelly-2815184.jpg", "slug": "hero-03" }
+      ]
+    },
+    {
+      "country": "turkey",
+      "items": [
+        { "source": "source-images/turkey/HEROsection/Modern_Istanbul_skyline.jpg", "slug": "hero-01" },
+        { "source": "source-images/turkey/HEROsection/pexels-tlhaguney-16254744.jpg", "slug": "hero-02" },
+        { "source": "source-images/turkey/HEROsection/TR.AL.Antalya_Konyaalti-Beach_88.jpg", "slug": "hero-03" }
+      ]
+    },
+    {
+      "country": "uae",
+      "items": [
+        { "source": "source-images/uae/Herosection/Abu_Dhabi_Landscape.jpg", "slug": "hero-01" },
+        { "source": "source-images/uae/Herosection/Dubai_skyline_unsplash.jpg", "slug": "hero-02" },
+        { "source": "source-images/uae/Herosection/pexels-mikhail-nilov-8319477.jpg", "slug": "hero-03" }
+      ]
+    }
+  ],
+  "cities": [
+    { "source": "source-images/Egypt/cities/Alex.jpg", "target": "public/images/egypt/cities/alexandria.webp" },
+    { "source": "source-images/Egypt/cities/newcairo.jpg", "target": "public/images/egypt/cities/new-cairo.webp" },
+    { "source": "source-images/Egypt/cities/newcapital.jpg", "target": "public/images/egypt/cities/new-capital.webp" },
+    { "source": "source-images/Egypt/cities/Alamein_towers.png", "target": "public/images/egypt/cities/north-coast.webp" },
+    { "source": "source-images/Egypt/cities/cairo.jpg", "target": "public/images/egypt/cities/cairo.webp" },
+    { "source": "source-images/gorgia/cities/Batumi.jpg", "target": "public/images/georgia/cities/batumi.webp" },
+    { "source": "source-images/gorgia/cities/Tbilisi.jpg", "target": "public/images/georgia/cities/tbilisi.webp" },
+    { "source": "source-images/turkey/cities/Antalya.jpg", "target": "public/images/turkey/cities/antalya.webp" },
+    { "source": "source-images/turkey/cities/istanbul.jpg", "target": "public/images/turkey/cities/istanbul.webp" },
+    { "source": "source-images/uae/cities/abuhabi.jpg", "target": "public/images/uae/cities/abu-dhabi.webp" },
+    { "source": "source-images/uae/cities/dubai.jpg", "target": "public/images/uae/cities/dubai.webp" }
+  ],
+  "areas": [
+    { "source": "source-images/areacards/batumi-new-boulevard-georgia.avif", "target": "public/images/georgia/areas/batumi-new-boulevard.avif" },
+    { "source": "source-images/areacards/dubai-marina-dubai-uae.avif", "target": "public/images/uae/areas/dubai-marina.avif" },
+    { "source": "source-images/areacards/fifth-settlement-new-cairo-egypt.avif", "target": "public/images/egypt/areas/fifth-settlement.avif" },
+    { "source": "source-images/areacards/kadikoy-istanbul-turkiye.avif", "target": "public/images/turkey/areas/kadikoy.avif" },
+    { "source": "source-images/areacards/konyaalti-antalya-turkiye.avif", "target": "public/images/turkey/areas/konyaalti.avif" },
+    { "source": "source-images/areacards/north-coast-egypt.avif", "target": "public/images/egypt/areas/north-coast.avif" },
+    { "source": "source-images/areacards/vake-tbilisi-georgia.avif", "target": "public/images/georgia/areas/vake.avif" },
+    { "source": "source-images/areacards/yas-island-abu-dhabi-uae.avif", "target": "public/images/uae/areas/yas-island.avif" }
+  ],
+  "galleries": [
+    {
+      "type": "apartment",
+      "cover": "source-images/wild_hills_apartment_default_images/apartment-cover-balcony-sea.jpg",
+      "items": [
+        "source-images/wild_hills_apartment_default_images/gallery-01-living-room.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-02-kitchen-dining.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-03-bedroom.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-04-bathroom.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-05-second-bedroom.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-06-balcony-view.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-07-resort-pool.jpg",
+        "source-images/wild_hills_apartment_default_images/gallery-08-apartment-building.jpg"
+      ]
+    },
+    {
+      "type": "villa",
+      "cover": "source-images/wild_hills_villa_default_images/villa-cover-exterior-pool.jpg",
+      "items": [
+        "source-images/wild_hills_villa_default_images/gallery-01-living-room.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-02-kitchen.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-03-bedroom.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-04-bathroom.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-05-twin-bedroom.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-06-garden-patio.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-07-sea-view-pool.jpg",
+        "source-images/wild_hills_villa_default_images/gallery-08-resort-pool.jpg"
+      ]
+    }
+  ],
+  "floorplans": [
+    {
+      "source": "source-images/wild_hills_floorplan_and_map/wild-hills-default-floor-plan-concept.jpg",
+      "target2400": "public/images/defaults/floor-plan-sample-2400.webp",
+      "target1200": "public/images/defaults/floor-plan-sample-1200.webp"
+    },
+    {
+      "source": "source-images/wild_hills_floorplan_and_map/wild-hills-project-location-map-template.jpg",
+      "target": "public/images/defaults/project-map-sample.webp"
+    }
+  ],
+  "blog": [
+    { "source": "source-images/wild_hills_sell_and_blog_images/blog-cover-01-mediterranean-market-insights.jpg", "target": "public/images/blog/blog-cover-01.webp" },
+    { "source": "source-images/wild_hills_sell_and_blog_images/blog-cover-02-coastal-neighborhoods.jpg", "target": "public/images/blog/blog-cover-02.webp" },
+    { "source": "source-images/wild_hills_sell_and_blog_images/blog-cover-03-real-estate-investment-trends.jpg", "target": "public/images/blog/blog-cover-03.webp" }
+  ],
+  "sell": [
+    { "source": "source-images/wild_hills_sell_and_blog_images/sell-with-us.jpg", "target": "public/images/sell/sell-with-us.webp" }
+  ],
+  "developers": [
+    { "source": "source-images/wild_hills_developer_logo_placeholders/01-nova.svg", "target": "public/images/developers/nova.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/02-cedar.svg", "target": "public/images/developers/cedar.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/03-horizon.svg", "target": "public/images/developers/horizon.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/04-stone-co.svg", "target": "public/images/developers/stone-co.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/05-meridian.svg", "target": "public/images/developers/meridian.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/06-solara.svg", "target": "public/images/developers/solara.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/07-verdant.svg", "target": "public/images/developers/verdant.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/08-altura.svg", "target": "public/images/developers/altura.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/09-bluehaven.svg", "target": "public/images/developers/bluehaven.svg" },
+    { "source": "source-images/wild_hills_developer_logo_placeholders/10-crownline.svg", "target": "public/images/developers/crownline.svg" }
+  ]
+}
