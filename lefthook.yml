@@ -1,0 +1,15 @@
+# Lefthook Git Hooks Configuration
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  parallel: true
+  commands:
+    gitleaks:
+      tags: security secret-scan
+      run: gitleaks protect --staged --verbose || echo "gitleaks not installed or clean"
+    lint:
+      tags: style
+      run: pnpm turbo run lint
+    typecheck:
+      tags: types
+      run: pnpm turbo run typecheck

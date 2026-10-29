@@ -1,0 +1,8 @@
+# Global owners for Wild Hills platform
+* @wild-hills-core
+
+# Security critical areas
+/SECURITY.md @wild-hills-security
+/packages/contracts/ @wild-hills-core
+/apps/api/ @wild-hills-backend
+/apps/admin/ @wild-hills-security

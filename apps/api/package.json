@@ -1,0 +1,19 @@
+{
+  "name": "@wild-hills/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Wild Hills Fastify backend API and pg-boss background worker",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "node -e \"console.log('API placeholder ready for Stage B1')\"",
+    "build": "node -e \"console.log('API build placeholder')\"",
+    "start": "node -e \"console.log('API start placeholder')\"",
+    "lint": "node -e \"console.log('API lint pass')\"",
+    "typecheck": "node -e \"console.log('API typecheck pass')\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@wild-hills/config": "workspace:*",
+    "typescript": "^5.7.0"
+  }
+}

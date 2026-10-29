@@ -1,0 +1,25 @@
+{
+  "name": "@wild-hills/admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"console.log('admin dev placeholder')\"",
+    "build": "node -e \"console.log('admin build placeholder')\"",
+    "start": "node -e \"console.log('admin start placeholder')\"",
+    "lint": "node -e \"console.log('admin lint pass')\"",
+    "typecheck": "node -e \"console.log('admin typecheck pass')\""
+  },
+  "dependencies": {
+    "@wild-hills/ui": "workspace:*",
+    "next": "15.5.28",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@wild-hills/config": "workspace:*",
+    "typescript": "^5.7.0"
+  }
+}

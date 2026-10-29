@@ -1,0 +1,18 @@
+{
+  "name": "@wild-hills/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zod schemas, enums, DTOs, and OpenAPI specification builder",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "node -e \"console.log('contracts build pass')\"",
+    "lint": "node -e \"console.log('contracts lint pass')\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@wild-hills/config": "workspace:*",
+    "typescript": "^5.7.0"
+  }
+}

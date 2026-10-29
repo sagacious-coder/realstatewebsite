@@ -51,13 +51,13 @@
 ## 3. Chronological Modification & Execution Log
 
 ### 2026-10-28 — Architecture Overhaul (v1 → v2.1)
-* **Action:** Replaced Supabase BaaS specification with custom backend architecture.
+* **Action:** Replaced legacy BaaS specification with custom backend architecture.
 * **Scope:** 
-  * Replaced Supabase with native PostgreSQL, Fastify API (`apps/api`), and `pg-boss` background worker.
+  * Replaced legacy BaaS with native PostgreSQL, Fastify API (`apps/api`), and `pg-boss` background worker.
   * Migrated from a single app to a monorepo structure with `pnpm` workspaces and Turborepo.
   * Created dual-track development model (Frontend and Backend tracks) unified by `packages/contracts`.
   * Updated spec to **v2.1** to reconcile already completed Stages 1, 2, and 3 so that `git mv` preserves all work in `apps/web` and `packages/ui`.
-* **Decisions:** Adopted ADR-001 (Custom backend over Supabase; decision defaults D1–D8 confirmed).
+* **Decisions:** Adopted ADR-001 (Custom backend over legacy BaaS; decision defaults D1–D8 confirmed).
 
 ---
 

@@ -1,34 +1,36 @@
 # Dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 .yarn/cache
 
 # Environment
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+*.env.local
 
 # Raw source assets (Section 2 rule 3: never touched, never committed)
-/source-images
-/images
+source-images/
+images/
 
 # Build and cache files
-/.next/
-/out/
-/build/
+.next/
+out/
+build/
+dist/
 *.tsbuildinfo
-realstatewebsite/
+.turbo/
 
 # Caches and debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-.turbo/
 
 # System files
 .DS_Store
 *.pem
 Thumbs.db
+
+graphify-out/
+

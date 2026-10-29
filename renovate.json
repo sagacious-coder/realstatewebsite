@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["next", "react", "react-dom"],
+      "groupName": "core-framework"
+    },
+    {
+      "matchPackagePatterns": ["^@radix-ui/"],
+      "groupName": "radix-primitives"
+    }
+  ]
+}
