@@ -116,6 +116,15 @@ The architecture adopts the default choices for key architectural decisions D1 t
   - Visitor preferences (`wh_country`, `wh_currency`, `wh_consent`) are stored in client cookies and synced with the URL routing structure. Currency formatting uses `Intl.NumberFormat` with a minor-unit conversion layer.
   - Full-screen mobile navigation is built on the shared `@wild-hills/ui` Sheet/Dialog primitive, providing robust focus trapping, Esc key dismissal, and background scroll locking.
 
+#### Decision D10: Domain Contracts, Typed Client, and Mock Adapter (Stage 5)
+- **Choice**: **Zod schemas with `.strict()` for input validation; minor-unit money arithmetic; automated OpenAPI 3.1 generator with drift check; typed isomorphic client supporting `mock` and `live` modes; single data boundary at `apps/web/lib/data.ts`** (Default)
+- **Rationale**:
+  - Boundary validation is enforced using Zod schemas with `.strict()` on all input types (search, leads, submissions), preventing unknown property pollution and prototype poisoning attacks.
+  - Public DTOs (`ListingSummary`, `ListingDetail`, `Location`, `Developer`, `Project`) strictly decouple database representations from public consumption.
+  - All currency calculations and storage representations use integer minor units (cents, fils, kuruş, tetri) to avoid floating-point rounding errors.
+  - The OpenAPI 3.1 specification (`openapi.json`) is generated directly from Zod definitions and checked for drift via CI script `pnpm contracts:openapi:check`.
+  - The frontend accesses domain data exclusively through `apps/web/lib/data.ts` backed by `createApiClient()`. During UI development without a backend, `API_MODE=mock` serves fully typed fixtures with simulated network latency and in-memory filtering. Switching to `API_MODE=live` connects seamlessly to the Fastify API.
+
 ### Consequences
 - **Positive**: Full sovereign control over data, security, and asset pipelines; zero BaaS vendor lock-in; unified type safety between frontend, admin, and backend; high developer velocity through Turborepo caching.
 - **Negative / Trade-offs**: Requires maintaining custom migrations, worker queues, and infrastructure configurations (handled via `infra/docker-compose.yml` and Drizzle migrations).

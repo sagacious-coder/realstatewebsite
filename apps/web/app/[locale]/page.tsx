@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { SiteImage } from '@/components/SiteImage';
+import { getFeaturedListings, type ListingSummary } from '@/lib/data';
 
 export default function LocaleHomePage({
   params,
@@ -19,14 +20,22 @@ async function LocaleHomeContent({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <BrandedShell />;
+  const featured = await getFeaturedListings(undefined, 4);
+
+  return <BrandedShell locale={locale} featured={featured} />;
 }
 
 /**
  * Temporary country chooser. Stage 6 replaces it with the animated intro and 4-panel selector.
  * The navy hero band carries `data-nav-hero`, which makes the navbar transparent at the top.
  */
-function BrandedShell() {
+function BrandedShell({
+  locale,
+  featured,
+}: {
+  locale: string;
+  featured: ListingSummary[];
+}) {
   const t = useTranslations('common');
 
   const countries = [
@@ -90,6 +99,42 @@ function BrandedShell() {
             </Link>
           ))}
         </div>
+
+        {featured.length > 0 && (
+          <div className="mt-16">
+            <h2 className="mb-6 font-sans text-sm font-semibold tracking-wider text-muted">
+              {locale === 'ar' ? 'مختارات مميزة عالمياً' : 'Featured Global Highlights'}
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {featured.map((item) => (
+                <div
+                  key={item.id}
+                  className="overflow-hidden rounded-card border border-line bg-white p-4 text-start shadow-subtle transition-all duration-300 hover:border-gold"
+                >
+                  <div className="relative mb-3 aspect-[16/10] w-full overflow-hidden rounded bg-navy-2">
+                    <SiteImage
+                      src={item.coverImage}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                    <div className="absolute end-2 top-2 z-10">
+                      <span className="rounded bg-navy/80 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-gold-light uppercase">
+                        {item.location.countryCode}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mb-1 text-xs font-semibold text-gold">{item.refNumber}</div>
+                  <div className="font-serif text-base font-medium text-navy line-clamp-1">{item.title}</div>
+                  <div className="mt-2 text-xs text-muted">
+                    {item.location.city} • {item.bedrooms} {locale === 'ar' ? 'غرف' : 'Beds'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </>
   );

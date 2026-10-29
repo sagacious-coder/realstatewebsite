@@ -242,6 +242,12 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.2.1
         version: 1.2.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@wild-hills/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@wild-hills/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@wild-hills/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -306,6 +312,9 @@ importers:
       '@wild-hills/contracts':
         specifier: workspace:*
         version: link:../contracts
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -320,6 +329,10 @@ importers:
   packages/config: {}
 
   packages/contracts:
+    dependencies:
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -2732,6 +2745,9 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
 snapshots:
 
@@ -5358,3 +5374,5 @@ snapshots:
   word-wrap@1.2.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@4.6.7: {}

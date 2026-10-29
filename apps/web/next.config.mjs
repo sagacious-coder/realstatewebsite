@@ -53,7 +53,7 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  transpilePackages: ['@wild-hills/ui'],
+  transpilePackages: ['@wild-hills/ui', '@wild-hills/contracts', '@wild-hills/api-client'],
   async headers() {
     const isPrivate = process.env.SITE_PRIVATE === 'true';
     const allHeaders = [...securityHeaders];

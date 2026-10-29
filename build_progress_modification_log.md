@@ -126,11 +126,43 @@
 
 ---
 
-### Template for Next Entry (Copy for Stage 1b)
-```markdown
-### YYYY-MM-DD — Stage 1b: Reconcile Stages 1–3 and set up monorepo
-* **Action:** [Summary of actions]
-* **Outputs Created/Moved:** [List of moved folders, packages initialized, and config files]
-* **Validation:** [Results of pnpm install, lint, typecheck, and build]
-* **Commit:** [Commit message hash]
-```
+### 2026-10-29 — Stage 1b: Reconcile Stages 1–3 and set up monorepo
+* **Action:** Reconciled Next.js root into pnpm workspaces monorepo with Turborepo, establishing `apps/web`, `apps/admin`, `apps/api`, `packages/contracts`, `packages/api-client`, `packages/ui`, and `packages/config`.
+* **Outputs Created/Moved:**
+  * Relocated core web application into `apps/web` and extracted shared primitives to `packages/ui`.
+  * Scaffolded `apps/admin`, `apps/api`, `packages/contracts`, and `packages/api-client`.
+  * Configured Turborepo pipelines for `build`, `lint`, `typecheck`, and `test`.
+* **Validation:** Verified `pnpm run lint`, `pnpm run typecheck`, and `pnpm run build` pass across all workspace packages.
+
+---
+
+### 2026-10-29 — Stage 4: Layout Shell, Navigation, and Preferences
+* **Action:** Implemented the full global layout shell across mobile, tablet, and desktop for all locales (`en`, `ar`, `tr`, `ka`).
+* **Outputs Created:**
+  * Dual-state responsive `Navbar` (transparent over `data-nav-hero`, solid ivory on scroll, hide-on-scroll-down, reveal on scroll-up / focus).
+  * `BuyDropdown` mega menu with featured pins per country.
+  * Mobile full-screen navigation menu with focus trap, Esc key handling, and background scroll locking.
+  * Combined `LocaleModal` (Country, Language, Currency) with cookie persistence and URL synchronization.
+  * `CurrencyProvider` with minor-unit conversions and `Intl.NumberFormat` localized display.
+  * Multilingual country-segmented `Footer`, `CookieBanner`, floating `WhatsAppButton`, and customized 404 / 500 error boundaries.
+  * Verified full bidirectional RTL mirroring for Arabic.
+* **Validation:** 61 automated browser tests passed across viewport breakpoints. `pnpm run lint` and `pnpm run typecheck` passed with 0 errors.
+
+---
+
+### 2026-10-29 — Stage 5: Contract, Typed Client, and Mock Mode (Contract Freeze)
+* **Action:** Created strictly validated domain contracts, automated OpenAPI 3.1 generator, seed fixtures, and isomorphic client with mock and live adapters.
+* **Outputs Created:**
+  * In `packages/contracts`: Zod schemas with `.strict()` input validation for enums, locations, developers, projects, listings, search queries, leads, submissions, and RFC 9457 problem details.
+  * Minor-unit money conversion utilities (`toMinorUnits`, `fromMinorUnits`, BigInt helpers, `convertMinorUnits`, `normalizeToUsdMinor`).
+  * Automated OpenAPI 3.1 generator script (`pnpm contracts:openapi`) and CI drift validation script (`pnpm contracts:openapi:check`) producing `openapi.json`.
+  * Typed fixtures: 12+ locations, 10 developers, 24 sample listings (6 per country, flagged `is_sample: true`), buying guides, FAQs, testimonials, blog posts, and country settings.
+  * In `packages/api-client`: `createApiClient` factory with `MockApiClient` (in-memory filtering, pagination, sorting) and `LiveApiClient` (HTTP client with RFC 9457 error mapping).
+  * In `apps/web/lib/data.ts`: Central typed data accessor module wired to `apiClient` in `API_MODE=mock`.
+* **Validation:**
+  * `node --test` contract tests: 4/4 passing in `packages/contracts`.
+  * `node --test` client tests: 6/6 passing in `packages/api-client`.
+  * `pnpm run lint`: 0 errors across monorepo.
+  * `pnpm run typecheck`: 0 errors across monorepo.
+  * `pnpm run build`: All 33 static pages generated successfully in `apps/web`.
+  * Tagged `contract-v1`.
