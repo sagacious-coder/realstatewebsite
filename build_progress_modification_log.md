@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 1b: Reconcile Stages 1–3 and set up monorepo`
+* **Current Stage in Progress:** `Stage 5: Contract, typed client, and mock mode`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 3 (Design system, 25 UI components, and styleguide)
-* **Next Up After 1b:** Stage 4 (Layout shell & navbar) or Stage 5 (Contracts & mock client)
+* **Latest Completed Milestone:** Stage 4 (Layout shell: Navbar, Footer, Combined Control, Mobile Menu, Cookie Consent, Currency Provider, 404/Error)
+* **Next Up After 4:** Stage 5 (Contracts & mock client) or Stage B1 (Backend foundation)
 
 ---
 
@@ -22,8 +22,8 @@
 | **Stage 1** | Next.js Project setup & i18n routing | **DONE** | 2026-10-28 | Shell rendered, headers validated |
 | **Stage 2** | Image pipeline, asset optimization & manifest | **DONE** | 2026-10-28 | 97 assets optimized, 0 over budget |
 | **Stage 3** | Brand design system, UI components & styleguide | **DONE** | 2026-10-28 | 25 components built, `/styleguide` live |
-| **Stage 1b** | Reconcile Stages 1–3 to monorepo (`apps/web`, `packages/ui`) | **IN PROGRESS** | — | Pending execution |
-| **Stage 4** | Layout shell (Navbar, Footer, Country/Lang Switcher) | Not Started | — | — |
+| **Stage 1b** | Reconcile Stages 1–3 to monorepo (`apps/web`, `packages/ui`) | **DONE** | 2026-10-29 | Monorepo layout validated, turbo build passing |
+| **Stage 4** | Layout shell (Navbar, Footer, Country/Lang Switcher) | **DONE** | 2026-10-29 | 61/61 E2E tests pass, zero lint/type errors |
 | **Stage 5** | Contracts freeze, OpenAPI 3.1 & Mock API client | Not Started | — | — |
 | **Stage 6** | Intro animation & 4-panel Country Chooser | Not Started | — | — |
 | **Stage 7** | Country Home Page (12 sections, slideshow) | Not Started | — | — |
@@ -49,6 +49,34 @@
 ---
 
 ## 3. Chronological Modification & Execution Log
+
+### 2026-10-29 — Stage 4: Layout Shell (Navbar, Footer, Combined Control, Mobile Menu, Banners)
+* **Action:** Implemented the universal layout shell for `apps/web` with responsive behavior, keyboard accessibility, visitor preferences, and localized error boundaries.
+* **Outputs Created:**
+  * Two-state `Navbar` (transparent over hero with reversed logo, solid ivory with 1px gold bottom line on scroll, hide-on-scroll-down, reveal on scroll-up/focus, Buy mega dropdown with country/city cards).
+  * Full-screen `MobileMenu` with Radix Dialog/Sheet primitive, focus trap, Esc closure, and background scroll locking.
+  * Combined `LocaleControl` ("UAE · EN · AED") with instant URL sync and cookie persistence (`wh_country`, `wh_currency`, `wh_consent`).
+  * `CurrencyProvider` with minor-unit conversion and `Intl.NumberFormat` output.
+  * `Footer` with brand summary, editable sample contact cards per country (UAE, Egypt, Georgia, Turkey), and cookie settings trigger.
+  * Accessible `CookieBanner` and floating `WhatsAppButton`.
+  * Pass-through root `apps/web/app/layout.tsx` allowing localized `app/[locale]/not-found.tsx` to render inside the locale shell.
+  * Full Arabic RTL layout mirroring (`dir="rtl"`).
+* **Validation:** 
+  * `turbo run lint`: 0 warnings, 0 errors.
+  * `turbo run typecheck`: 0 TypeScript errors across all 7 packages.
+  * `turbo run build`: 33/33 static routes compiled and prerendered cleanly.
+  * Puppeteer headless test suite: 61/61 automated checks passed (scroll behavior, keyboard navigation, focus trapping, cookie states, no horizontal overflow across mobile, tablet, and desktop).
+
+---
+
+### 2026-10-29 — Stage 1b: Reconcile Stages 1–3 and Scaffolding Hygiene
+* **Action:** Reconciled migrated monorepo structure across `apps/web`, `apps/admin`, `apps/api`, `packages/ui`, `packages/contracts`, `packages/api-client`, and `packages/config`.
+* **Fixes Applied:**
+  * Configured safe placeholder scripts in `apps/admin/package.json` until Stage 11.
+  * Removed stray root lockfile and configured `outputFileTracingRoot` in `apps/web/next.config.mjs`.
+* **Validation:** Clean zero-error execution for `pnpm run lint`, `pnpm run typecheck`, and `pnpm run build`.
+
+---
 
 ### 2026-10-28 — Architecture Overhaul (v1 → v2.1)
 * **Action:** Replaced legacy BaaS specification with custom backend architecture.

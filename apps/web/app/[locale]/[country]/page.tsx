@@ -41,6 +41,10 @@ async function CountryContent({
   return <CountryShell locale={locale} country={country as CountryCode} />;
 }
 
+/**
+ * Temporary country page. Stage 7 replaces it with the full country home.
+ * The navy hero band carries `data-nav-hero`, which makes the navbar transparent at the top.
+ */
 function CountryShell({
   locale,
   country,
@@ -52,51 +56,24 @@ function CountryShell({
   const countryName = t(`countries.${country}`);
 
   return (
-    <main className="min-h-screen bg-ivory text-navy px-6 py-12 md:py-20 max-w-[1200px] mx-auto flex flex-col justify-between">
-      <header className="flex items-center justify-between border-b border-line pb-6">
-        <div>
-          <Link href="/" className="font-serif text-2xl font-semibold tracking-tight text-navy">
-            {t('brandName')}
-          </Link>
-          <div className="text-xs uppercase tracking-widest text-gold-deep font-sans mt-0.5">
-            {t('tagline')}
-          </div>
-        </div>
-
-        <Link
-          href="/"
-          className="text-sm font-sans text-muted hover:text-navy px-3 py-1.5 rounded border border-line hover:border-gold transition-colors"
-        >
-          {locale === 'ar' ? '← جميع الدول' : '← All Countries'}
-        </Link>
-      </header>
-
-      <section className="py-16 text-start">
-        <span className="inline-block text-xs font-semibold uppercase tracking-wider px-2.5 py-1 bg-mist text-emerald rounded mb-4">
+    <section data-nav-hero className="on-navy bg-navy pb-20 pt-28 text-ivory md:pb-28 md:pt-44">
+      <div className="container text-start">
+        <span className="mb-4 inline-block rounded bg-mist px-2.5 py-1 text-xs font-semibold tracking-wider text-emerald">
           {country.toUpperCase()}
         </span>
-        <h1 className="h1 mb-4 text-navy">
-          {countryName}
-        </h1>
-        <p className="text-lg text-muted max-w-xl mb-8">
+        <h1 className="h1 mb-4 text-ivory">{countryName}</h1>
+        <p className="mb-8 max-w-xl text-lg text-ivory/80">
           {locale === 'ar'
             ? `استكشف أفضل العقارات والمشاريع الاستثمارية في ${countryName}.`
             : `Explore premium properties, off-plan launches, and verified resale opportunities in ${countryName}.`}
         </p>
-
-        <div className="p-6 rounded-card bg-white border border-line shadow-subtle max-w-md">
-          <p className="text-sm text-muted">
-            {locale === 'ar'
-              ? 'مرحلة الإعداد 1: تم تهيئة الموقع الأساسي بنجاح.'
-              : 'Stage 1 setup verified: Locale & Country shell active.'}
-          </p>
-        </div>
-      </section>
-
-      <footer className="border-t border-line pt-6 text-xs text-muted flex justify-between items-center text-start">
-        <p>© {new Date().getFullYear()} Wild Hills Real Estate.</p>
-        <p className="text-gold-deep font-medium">{country.toUpperCase()} Portal</p>
-      </footer>
-    </main>
+        <Link
+          href="/"
+          className="inline-flex min-h-11 items-center rounded-[4px] border border-ivory px-5 text-sm font-medium text-ivory transition-colors hover:bg-ivory hover:text-navy"
+        >
+          {locale === 'ar' ? 'جميع الدول' : 'All countries'}
+        </Link>
+      </div>
+    </section>
   );
 }

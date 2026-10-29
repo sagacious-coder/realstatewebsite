@@ -45,6 +45,13 @@ export async function generateMetadata({
 }
 
 import { ToastProvider } from '@/components/ui/Toast';
+import { ConsentProvider } from '@/components/providers/ConsentProvider';
+import { CurrencyProvider } from '@/components/providers/CurrencyProvider';
+import { CookieBanner } from '@/components/layout/CookieBanner';
+import { FloatingWhatsApp } from '@/components/layout/FloatingWhatsApp';
+import { Footer } from '@/components/layout/Footer';
+import { Navbar } from '@/components/layout/Navbar';
+import { SkipLink } from '@/components/layout/SkipLink';
 
 export default async function LocaleLayout({
   children,
@@ -75,7 +82,23 @@ export default async function LocaleLayout({
       <body className="min-h-screen bg-ivory text-navy antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ToastProvider>
-            {children}
+            <CurrencyProvider>
+              <ConsentProvider>
+                <SkipLink />
+                <Navbar />
+                {/* Top padding clears the fixed navbar, except on pages that start with a hero. */}
+                <main
+                  id="main-content"
+                  tabIndex={-1}
+                  className="min-h-[60vh] pt-16 outline-none md:pt-20 has-[[data-nav-hero]]:pt-0"
+                >
+                  {children}
+                </main>
+                <Footer />
+                <FloatingWhatsApp />
+                <CookieBanner />
+              </ConsentProvider>
+            </CurrencyProvider>
           </ToastProvider>
         </NextIntlClientProvider>
       </body>

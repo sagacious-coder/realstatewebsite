@@ -108,6 +108,14 @@ The architecture adopts the default choices for key architectural decisions D1 t
 - **Choice**: **Minor units (BigInt) for currency; daily cached FX rates table** (Default)
 - **Rationale**: Avoids floating-point precision loss by storing all financial values in minor units (e.g., AED fills, cents, kuruş, tetri). Historical listing prices store the original currency along with a normalized USD minor-unit equivalent (`price_usd_minor`) for cross-country sorting. A background worker refreshes daily exchange rates in the `exchange_rates` table.
 
+#### Decision D9: Layout Shell & Client Preferences (Stage 4)
+- **Choice**: **Pass-through root layout with nested locale layout; CSS-driven transparent/solid navbar; cookie-persisted visitor preferences with URL synchronization** (Default)
+- **Rationale**: 
+  - Having a minimal root `app/layout.tsx` alongside `app/[locale]/layout.tsx` allows localized 404 pages (`app/[locale]/not-found.tsx`) to render inside the full site shell (preserving the header, footer, and RTL layout) while preventing double `<html>` document nesting.
+  - Navbar transitions between transparent (over hero) and solid ivory (on scroll) using `data-nav-hero` and CSS attribute selectors, ensuring zero hydration mismatch. Hides on scroll-down and reveals on scroll-up or keyboard focus.
+  - Visitor preferences (`wh_country`, `wh_currency`, `wh_consent`) are stored in client cookies and synced with the URL routing structure. Currency formatting uses `Intl.NumberFormat` with a minor-unit conversion layer.
+  - Full-screen mobile navigation is built on the shared `@wild-hills/ui` Sheet/Dialog primitive, providing robust focus trapping, Esc key dismissal, and background scroll locking.
+
 ### Consequences
 - **Positive**: Full sovereign control over data, security, and asset pipelines; zero BaaS vendor lock-in; unified type safety between frontend, admin, and backend; high developer velocity through Turborepo caching.
 - **Negative / Trade-offs**: Requires maintaining custom migrations, worker queues, and infrastructure configurations (handled via `infra/docker-compose.yml` and Drizzle migrations).

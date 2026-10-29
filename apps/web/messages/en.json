@@ -23,5 +23,92 @@
       "welcome": "Wild Hills Real Estate",
       "description": "Find a home that fits your life across Egypt, UAE, Georgia, and Turkey."
     }
+  },
+  "shell": {
+    "skipToContent": "Skip to main content",
+    "nav": {
+      "primaryLabel": "Main navigation",
+      "mobileLabel": "Mobile navigation",
+      "buy": "Buy",
+      "projects": "Projects",
+      "developers": "Developers",
+      "sell": "Sell with us",
+      "about": "About",
+      "contact": "Contact",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "menuTitle": "Menu",
+      "menuDescription": "Site navigation, country, language and currency settings",
+      "buyMenuLabel": "Buy by country",
+      "browseCountry": "Browse properties in {country}",
+      "homeLabel": "Wild Hills Real Estate, home page"
+    },
+    "cities": {
+      "dubai": "Dubai",
+      "abu-dhabi": "Abu Dhabi",
+      "cairo": "Cairo",
+      "new-cairo": "New Cairo",
+      "tbilisi": "Tbilisi",
+      "batumi": "Batumi",
+      "istanbul": "Istanbul",
+      "antalya": "Antalya"
+    },
+    "countryShort": {
+      "ae": "UAE",
+      "eg": "Egypt",
+      "ge": "Georgia",
+      "tr": "Turkey"
+    },
+    "control": {
+      "label": "Country, language and currency",
+      "open": "Change country, language and currency",
+      "country": "Country",
+      "language": "Language",
+      "currency": "Currency"
+    },
+    "footer": {
+      "logoAlt": "Wild Hills Real Estate",
+      "about": "Wild Hills helps buyers find homes and investment properties across the UAE, Egypt, Georgia and Turkey.",
+      "contactHeading": "Contact us by country",
+      "addresses": {
+        "ae": "Sample address: Office 000, Business Bay, Dubai",
+        "eg": "Sample address: Office 000, New Cairo",
+        "ge": "Sample address: Office 000, Tbilisi",
+        "tr": "Sample address: Office 000, Istanbul"
+      },
+      "whatsappLink": "Message us on WhatsApp",
+      "opensInNewTab": "(opens in a new tab)",
+      "links": {
+        "buy": "Properties",
+        "projects": "Projects",
+        "contact": "Contact"
+      },
+      "copyright": "© {year} Wild Hills Real Estate. All rights reserved.",
+      "disclaimer": "Information on this website is general in nature and is not legal, tax or investment advice.",
+      "sampleNote": "Sample content: contact details and addresses are placeholders to be replaced before launch."
+    },
+    "cookies": {
+      "title": "Cookies on this site",
+      "body": "We use essential cookies to remember your country, language and currency. With your permission we may also use analytics cookies to improve the site.",
+      "reject": "Essential only",
+      "accept": "Accept all",
+      "settings": "Cookie settings"
+    },
+    "whatsapp": {
+      "label": "Chat with us on WhatsApp",
+      "opensInNewTab": "(opens in a new tab)",
+      "message": "Hello Wild Hills, I would like to inquire about properties."
+    },
+    "errors": {
+      "notFoundCode": "Error 404",
+      "notFoundTitle": "This page could not be found",
+      "notFoundBody": "The address may be mistyped, or the page may have moved. Choose a country to keep browsing.",
+      "browseHeading": "Browse by country",
+      "home": "Back to the home page",
+      "errorTitle": "Something went wrong",
+      "errorBody": "An unexpected error stopped this page from loading. Please try again, or return to the home page.",
+      "errorReference": "Reference:",
+      "retry": "Try again"
+    }
   }
 }

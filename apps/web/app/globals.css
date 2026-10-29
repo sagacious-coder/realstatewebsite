@@ -176,3 +176,44 @@
     transform: none !important;
   }
 }
+
+/* Site navbar states - Section 8.1.
+   Solid by default (ivory, navy text, 1px gold line). Transparent with ivory text only while the
+   page has a hero (`[data-nav-hero]`), the page is at the top, and no panel/menu is open. */
+.site-nav {
+  --nav-border: var(--line);
+  background-color: var(--ivory);
+  border-bottom: 1px solid var(--gold);
+  color: var(--navy);
+}
+
+.site-nav .site-nav-control {
+  border-color: var(--nav-border);
+}
+
+.site-nav .site-logo-hero {
+  display: none;
+}
+
+body:has([data-nav-hero]) .site-nav[data-at-top='true'][data-open='false'] {
+  --nav-border: rgba(250, 248, 243, 0.45);
+  background-color: transparent;
+  border-bottom-color: transparent;
+  color: var(--ivory);
+}
+
+body:has([data-nav-hero]) .site-nav[data-at-top='true'][data-open='false'] .site-logo-solid {
+  display: none;
+}
+
+body:has([data-nav-hero]) .site-nav[data-at-top='true'][data-open='false'] .site-logo-hero {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-nav {
+    transition:
+      transform 300ms ease-out,
+      background-color 200ms ease-out;
+  }
+}

@@ -53,9 +53,9 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 1 Project setup | Frontend | none | Done |
 | 2 Assets and image pipeline | Frontend | 1 | Done (in root, moving to `apps/web`) |
 | 3 Design system and components | Frontend | 1, 2 | Done (in root, moving to `packages/ui` & `apps/web`) |
-| 1b Reconcile Stages 1–3 and repo hygiene | Both | 1, 2, 3 | **NEXT TO RUN** |
-| 4 Layout shell | Frontend | 1b (uses UI primitives) | Not started |
-| 5 Contract, typed client, mock mode | Both | 1b | Not started |
+| 1b Reconcile Stages 1–3 and repo hygiene | Both | 1, 2, 3 | Done |
+| 4 Layout shell | Frontend | 1b (uses UI primitives) | Done |
+| 5 Contract, typed client, mock mode | Both | 1b | **NEXT TO RUN** |
 | B1 Backend foundation | Backend | 1b | Not started |
 | B2 Database | Backend | B1, 5 | Not started |
 | B3 Identity, sessions, authorization | Backend | B2 | Not started |

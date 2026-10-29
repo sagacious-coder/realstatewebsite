@@ -141,16 +141,10 @@ export default function StyleguidePage() {
         forceReducedMotion && 'motion-reduce:transition-none'
       )}
     >
-      {/* Skip to Main Content Link (Section 13.1) */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:rounded-[4px] focus:bg-navy focus:px-4 focus:py-2 focus:text-white focus:ring-2 focus:ring-gold"
-      >
-        Skip to main content
-      </a>
+      {/* Skip link and <main id="main-content"> are provided by the locale layout (Stage 4). */}
 
       {/* Top Banner: Brand Header & Interactive Tooling Bar */}
-      <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md px-4 py-3 sm:px-8 shadow-xs">
+      <header className="relative z-10 border-b border-line bg-white/95 px-4 py-3 shadow-xs sm:px-8">
         <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <SiteImage
@@ -269,7 +263,7 @@ export default function StyleguidePage() {
       </header>
 
       {/* Main Content Container */}
-      <main id="main-content" className="mx-auto max-w-[1200px] px-4 sm:px-8 pt-10">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-8 pt-10">
         {/* Styleguide Hero Banner */}
         <section className="mb-14 border-b border-line pb-10">
           <SectionHeading
@@ -1072,7 +1066,7 @@ export default function StyleguidePage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }
