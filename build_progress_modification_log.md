@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 5: Contract, typed client, and mock mode`
+* **Current Stage in Progress:** `Stage 7: Country home`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 4 (Layout shell: Navbar, Footer, Combined Control, Mobile Menu, Cookie Consent, Currency Provider, 404/Error)
-* **Next Up After 4:** Stage 5 (Contracts & mock client) or Stage B1 (Backend foundation)
+* **Latest Completed Milestone:** Stage 6 (Intro animation and 4-panel Country Chooser)
+* **Next Up After 6:** Stage 7 (Country home)
 
 ---
 
@@ -24,9 +24,9 @@
 | **Stage 3** | Brand design system, UI components & styleguide | **DONE** | 2026-10-28 | 25 components built, `/styleguide` live |
 | **Stage 1b** | Reconcile Stages 1–3 to monorepo (`apps/web`, `packages/ui`) | **DONE** | 2026-10-29 | Monorepo layout validated, turbo build passing |
 | **Stage 4** | Layout shell (Navbar, Footer, Country/Lang Switcher) | **DONE** | 2026-10-29 | 61/61 E2E tests pass, zero lint/type errors |
-| **Stage 5** | Contracts freeze, OpenAPI 3.1 & Mock API client | Not Started | — | — |
-| **Stage 6** | Intro animation & 4-panel Country Chooser | Not Started | — | — |
-| **Stage 7** | Country Home Page (12 sections, slideshow) | Not Started | — | — |
+| **Stage 5** | Contracts freeze, OpenAPI 3.1 & Mock API client | **DONE** | 2026-10-29 | Tag `contract-v1`, 10/10 tests pass, openapi check clean |
+| **Stage 6** | Intro animation & 4-panel Country Chooser | **DONE** | 2026-10-30 | Brand intro, interactive panels, 33/33 static pages build |
+| **Stage 7** | Country Home Page (12 sections, slideshow) | In Progress | — | — |
 | **Stage 8** | Search & Listings directory (`/buy`) | Not Started | — | — |
 | **Stage 9** | Property details page, inquiry leads & share cards | Not Started | — | — |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | Not Started | — | — |
@@ -166,3 +166,17 @@
   * `pnpm run typecheck`: 0 errors across monorepo.
   * `pnpm run build`: All 33 static pages generated successfully in `apps/web`.
   * Tagged `contract-v1`.
+
+---
+
+### 2026-10-30 — Stage 6: Intro Animation and Country Chooser (`apps/web`)
+* **Action:** Implemented the animated SVG brand intro and interactive 4-panel country chooser on the root locale route (`/[locale]`).
+* **Outputs Created & Configured:**
+  * `BrandIntro` (`apps/web/components/intro/BrandIntro.tsx`): 7-layer CSS keyframe animation sequence derived from `wild-hills-symbol.svg` (outer/inner gold arch line drawing, sun & sky fade, hills slide, cypress tree scale, modern towers with glowing windows, water ripples, wordmark). Features `sessionStorage` single-run check, `prefers-reduced-motion` immediate bypass, click/tap/Esc/Space dismissal, and zero LCP penalty.
+  * `CountryChooser` (`apps/web/components/home/CountryChooser.tsx`): 4-panel interactive selector for UAE, Turkey, Georgia, and Egypt with smooth flex expansion on desktop hover/keyboard-focus (`flex-[2.4]`), clean stacked cards with touch-friendly 44px tap targets on mobile, and localized country taglines, teasers, and quick-stats.
+  * Cookie persistence & Routing: Choice writes `wh_country`, `wh_locale`, and `wh_currency` cookies and routes visitors to `/[locale]/[country]`. Returning visitor cookie detection in `middleware.ts` routes returning visitors directly to their selected country home.
+  * Internationalization: Full English and Arabic translations in `en.json` and `ar.json` with RTL mirroring.
+* **Validation:**
+  * `pnpm run lint`: 0 errors across monorepo.
+  * `pnpm run typecheck`: 0 errors across monorepo.
+  * `pnpm run build`: All 33 static pages generated successfully in `apps/web`.

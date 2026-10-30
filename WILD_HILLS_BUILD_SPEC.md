@@ -55,13 +55,13 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 3 Design system and components | Frontend | 1, 2 | Done (in root, moving to `packages/ui` & `apps/web`) |
 | 1b Reconcile Stages 1–3 and repo hygiene | Both | 1, 2, 3 | Done |
 | 4 Layout shell | Frontend | 1b (uses UI primitives) | Done |
-| 5 Contract, typed client, mock mode | Both | 1b | **NEXT TO RUN** |
+| 5 Contract, typed client, mock mode | Both | 1b | Done (`contract-v1`) |
 | B1 Backend foundation | Backend | 1b | Not started |
 | B2 Database | Backend | B1, 5 | Not started |
 | B3 Identity, sessions, authorization | Backend | B2 | Not started |
 | B4 Public read API and search | Backend | B2, 5 | Not started |
-| 6 Intro and country chooser | Frontend | 1b, 4 | Not started |
-| 7 Country home | Frontend | 4, 5 (B4 for live data) | Not started |
+| 6 Intro and country chooser | Frontend | 1b, 4 | Done |
+| 7 Country home | Frontend | 4, 5 (B4 for live data) | **NEXT TO RUN** |
 | 8 Search and listings page | Frontend | 7 (B4 for live data) | Not started |
 | B5 Leads, submissions, files, jobs | Backend | B3, B4 | Not started |
 | 9 Property page, leads, share cards | Frontend | 8 (B5 for live leads) | Not started |

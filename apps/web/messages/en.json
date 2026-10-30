@@ -24,6 +24,50 @@
       "description": "Find a home that fits your life across Egypt, UAE, Georgia, and Turkey."
     }
   },
+  "intro": {
+    "skip": "Skip intro",
+    "title": "Wild Hills Real Estate",
+    "tagline": "Find a home that fits your life",
+    "clickToSkip": "Click anywhere or press Esc to skip"
+  },
+  "countryChooser": {
+    "badge": "Portfolio",
+    "title": "Choose your destination",
+    "subtitle": "Explore curated real estate portfolios across four distinctive markets.",
+    "exploreLabel": "Explore properties",
+    "featuredCities": "Featured cities",
+    "currencyLabel": "Currency",
+    "countries": {
+      "ae": {
+        "name": "United Arab Emirates",
+        "tagline": "Waterfront residences & off-plan icons",
+        "teaser": "Waterfront residences, off-plan icons, and high-yield investments.",
+        "currency": "AED · UAE Dirham",
+        "cities": "Dubai · Abu Dhabi"
+      },
+      "tr": {
+        "name": "Turkey",
+        "tagline": "Bosphorus views & Mediterranean villas",
+        "teaser": "Bosphorus views, Mediterranean villas, and residency-eligible homes.",
+        "currency": "TRY · Turkish Lira",
+        "cities": "Istanbul · Antalya · Mersin"
+      },
+      "ge": {
+        "name": "Georgia",
+        "tagline": "Black Sea resorts & capital living",
+        "teaser": "Black Sea resort apartments and historic capital investment.",
+        "currency": "GEL · Georgian Lari",
+        "cities": "Tbilisi · Batumi"
+      },
+      "eg": {
+        "name": "Egypt",
+        "tagline": "Master communities & coastal retreats",
+        "teaser": "Master-planned communities, modern luxury, and coastal retreats.",
+        "currency": "EGP · Egyptian Pound",
+        "cities": "New Cairo · North Coast · New Capital"
+      }
+    }
+  },
   "shell": {
     "skipToContent": "Skip to main content",
     "nav": {

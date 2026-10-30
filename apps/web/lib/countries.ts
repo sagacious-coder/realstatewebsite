@@ -44,6 +44,7 @@ export const COUNTRY_SECTIONS = [
 export type CountrySection = (typeof COUNTRY_SECTIONS)[number];
 
 export const COOKIE_COUNTRY = 'wh_country';
+export const COOKIE_LOCALE = 'wh_locale';
 export const COOKIE_CURRENCY = 'wh_currency';
 export const COOKIE_CONSENT = 'wh_consent';
 
