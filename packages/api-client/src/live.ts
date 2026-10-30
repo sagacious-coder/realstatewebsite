@@ -154,6 +154,14 @@ export class LiveApiClient implements ApiClient {
     return this.request(`/v1/developers${qs}`, { method: 'GET' });
   }
 
+  async getDeveloper(id: string): Promise<Developer | null> {
+    try {
+      return await this.request(`/v1/developers/${encodeURIComponent(id)}`, { method: 'GET' });
+    } catch {
+      return null;
+    }
+  }
+
   async getProjects(countryCode?: CountryCode): Promise<Project[]> {
     const qs = countryCode ? `?country=${encodeURIComponent(countryCode)}` : '';
     return this.request(`/v1/projects${qs}`, { method: 'GET' });

@@ -38,6 +38,7 @@ export interface ApiClient {
   getLocations(countryCode?: CountryCode): Promise<Location[]>;
   getFeaturedLocations(countryCode: CountryCode): Promise<Location[]>;
   getDevelopers(countryCode?: CountryCode): Promise<Developer[]>;
+  getDeveloper(id: string): Promise<Developer | null>;
   getProjects(countryCode?: CountryCode): Promise<Project[]>;
   getSearchSuggestions(query: string, countryCode?: CountryCode): Promise<SmartSearchSuggestionGroup>;
   getCountrySettings(countryCode: CountryCode): Promise<CountrySettings>;

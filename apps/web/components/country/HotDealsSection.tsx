@@ -104,7 +104,7 @@ export function HotDealsSection({
                 sizeSqm={item.sizeSqm}
                 propertyType={item.propertyType}
                 badges={badges.length > 0 ? badges : ['new-launch']}
-                href={`/${locale}/${countryCode}/property/${item.refNumber.toLowerCase()}-${item.slug}`}
+                href={`/${locale}/${countryCode}/buy/${item.slug}`}
               />
             );
           })}

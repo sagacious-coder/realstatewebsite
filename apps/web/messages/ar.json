@@ -366,5 +366,79 @@
       "paymentPlan": "خطة السداد",
       "viewProperty": "عرض العقار"
     }
+  },
+  "property": {
+    "breadcrumbs": {
+      "home": "الرئيسية",
+      "buy": "شراء"
+    },
+    "refCode": "الرمز المرجعي",
+    "copyRef": "نسخ الرمز المرجعي",
+    "copiedRef": "تم نسخ الرمز المرجعي إلى الحافظة",
+    "sampleData": "عقار تجريبي",
+    "sampleDataBadge": "بيانات نموذجية",
+    "viewAllPhotos": "عرض جميع الصور ({count})",
+    "floorPlan": "المخطط الهندسي",
+    "viewFloorPlan": "عرض المخطط الهندسي التفاعلي",
+    "keyAttributes": "أبرز المواصفات",
+    "bedrooms": "غرف النوم",
+    "bathrooms": "دورات المياه",
+    "size": "المساحة الإجمالية",
+    "sqm": "م²",
+    "sqft": "قدم²",
+    "pricePerSqm": "سعر المتر المربع",
+    "pricePerSqft": "سعر القدم المربع",
+    "completion": "موعد التسليم",
+    "completionYear": "سنة التسليم",
+    "furnishing": "الفرش",
+    "overview": "نظرة عامة على العقار",
+    "description": "تفاصيل العقار",
+    "amenities": "المرافق والخدمات",
+    "paymentPlan": {
+      "title": "خطة السداد وجدول الدفعات",
+      "subtitle": "جدول زمني مرن للأقساط من المطور مباشرة",
+      "downPayment": "الدفعة الأولى",
+      "duringConstruction": "أثناء الإنشاء",
+      "onHandover": "عند الاستلام",
+      "postHandover": "بعد الاستلام",
+      "inquireSchedule": "طلب جدول السداد الكامل (PDF)"
+    },
+    "developer": {
+      "title": "تطوير شركة {name}",
+      "verifiedPartner": "مطور رئيسي معتمد",
+      "projects": "{count} مشروع رئيسي",
+      "activeListings": "{count} عقار نشط",
+      "viewDeveloper": "عرض محفظة المطور"
+    },
+    "locationVicinity": {
+      "title": "الموقع والمعالم القريبة",
+      "subtitle": "سهولة الوصول وأبرز الوجهات الحيوية في المنطقة",
+      "airport": "المطار الدولي",
+      "beach": "الشاطئ / الواجهة البحرية",
+      "downtown": "وسط المدينة",
+      "metro": "محطة المترو / النقل السريع",
+      "minutes": "{count} دقيقة"
+    },
+    "similar": {
+      "title": "عقارات مشابهة في {country}",
+      "subtitle": "مجموعة مختارة من المساكن الفاخرة والمشاريع المطروحة بمواصفات مطابقة"
+    },
+    "inquiry": {
+      "title": "طلب استفسار عن هذا العقار",
+      "subtitle": "تحدث مباشرة مع مستشار عقاري معتمد للحصول على الوحدات المتاحة وتفاصيل الحجز والزيارات.",
+      "agent": "مكتب الاستشارات الخاصة",
+      "license": "مستشار عقاري معتمد ومسجل",
+      "call": "الاتصال بالمستشار",
+      "whatsapp": "مراسلة عبر واتساب",
+      "scheduleViewing": "حجز موعد للمعاينة",
+      "inquireNow": "طلب الكتيب وتفاصيل الوحدات",
+      "formTitle": "استفسار عن العقار",
+      "formSubtitle": "سجل بياناتك للتواصل واستلام عروض الأسعار والمخططات الهندسية."
+    },
+    "share": {
+      "shareProperty": "مشاركة العقار",
+      "copiedLink": "تم نسخ رابط العقار إلى الحافظة",
+      "shareVia": "مشاركة عبر..."
+    }
   }
 }

@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 9: Property details page, inquiry leads & share cards (/property/[slug])`
+* **Current Stage in Progress:** `Stage 10: Remaining public pages (City, Area, Projects, Developers, Sell with us, About, Contact)`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 8 (Search & Listings directory /buy: URL synchronization, sticky filter panel, mobile drawer, active chips, dual currency, compare tray, custom search modal)
-* **Next Up After 8:** Stage 9 (Property details page, inquiry leads & share cards)
+* **Latest Completed Milestone:** Stage 9 (Property details page /buy/[slug]: media mosaic, lightbox, zoom floor plan, attributes, payment plan timeline, amenities checklist, landmark vicinity, sticky agent sidebar, mobile inquiry dock, and share card)
+* **Next Up After 9:** Stage 10 (Remaining public pages)
 
 ---
 
@@ -28,8 +28,8 @@
 | **Stage 6** | Intro animation & 4-panel Country Chooser | **DONE** | 2026-10-30 | Brand intro, interactive panels, 33/33 static pages build |
 | **Stage 7** | Country Home Page (12 sections, slideshow) | **DONE** | 2026-10-30 | 12 editorial sections, hero slideshow, payment plan calculator, 33/33 SSG build clean |
 | **Stage 8** | Search & Listings directory (`/buy`) | **DONE** | 2026-10-31 | 53/53 SSG build clean, zero lint/typecheck errors |
-| **Stage 9** | Property details page, inquiry leads & share cards | NEXT TO RUN | — | — |
-| **Stage 10** | Remaining public pages (City, Area, Sell with us) | Not Started | — | — |
+| **Stage 9** | Property details page, inquiry leads & share cards | **DONE** | 2026-10-31 | 149/149 SSG build clean, zero lint/typecheck errors |
+| **Stage 10** | Remaining public pages (City, Area, Sell with us) | NEXT TO RUN | — | — |
 | **Stage 11** | Admin App foundation, listings management & uploads | Not Started | — | — |
 | **Stage 12** | Admin CRM, leads, locations, settings & users | Not Started | — | — |
 | **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | Not Started | — | — |
@@ -223,3 +223,23 @@
   * `pnpm run typecheck`: 0 errors across all 7 packages.
   * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
   * `pnpm run build`: All 53 static routes compiled and prerendered cleanly (including 16 localized country buy routes).
+
+---
+
+### 2026-10-31 — Stage 9: Property Details Page, Inquiry Leads & Share Cards (`/buy/[slug]`)
+* **Action:** Built the comprehensive public Property Details route at `app/[locale]/[country]/buy/[slug]/page.tsx` with responsive media gallery, Radix-based Lightbox, interactive ZoomViewer for floor plans, dual-currency pricing with sqm/sqft converter, verified developer card, visual milestone payment plan timeline, category amenities checklist, landmark vicinity travel indicators, desktop sticky advisor inquiry sidebar, mobile sticky action dock, Web Share API integration, dynamic OpenGraph cards, and 3-card similar properties carousel.
+* **Outputs Created & Configured:**
+  * `PropertyDetailPage` (`apps/web/app/[locale]/[country]/buy/[slug]/page.tsx`): Server component fetching property detail via `getListingBySlug(slug)`, developer details via `getDeveloper(developer.id)`, and similar properties via `searchListings()`. Generates static params for all 24 sample fixture listings across all 4 locales (96 static pages), plus dynamic OpenGraph metadata with localized descriptions.
+  * `PropertyHeader` (`apps/web/components/property/PropertyHeader.tsx`): Hierarchical breadcrumbs (`Home > [Country] > Buy > [City] > [Title]`), completion status/hot-deal badges, demo data indicator, monospace reference pill with 1-click clipboard copy + toast feedback, and native Web Share API trigger (`navigator.share`) with fallback URL copy.
+  * `PropertyHeroGallery` (`apps/web/components/property/PropertyHeroGallery.tsx`): 5-tile desktop mosaic (1 prominent 2-row photo + 4 secondary thumbs with +N counter) and mobile swipe hero, with "View all photos" button opening the accessible `Lightbox` dialog, and floor plan launcher triggering `ZoomViewer`.
+  * `PropertyAttributes` (`apps/web/components/property/PropertyAttributes.tsx`): Dual-currency pricing card with active currency and original price, built-in sqm/sqft unit toggle recalculating price-per-unit, 4-metric overview grid (Bedrooms, Bathrooms, Area, Handover Year), narrative description, and verified master developer profile card.
+  * `PropertyPaymentPlan` (`apps/web/components/property/PropertyPaymentPlan.tsx`): Multi-segment progress visualizer and milestone cards displaying down payment %, construction installments %, and handover balance % with converted monetary sums.
+  * `PropertyFeatures` (`apps/web/components/property/PropertyFeatures.tsx`): Category grid of indoor/outdoor amenities backed by Lucide icons (pool, sea view, smart home, gym, security, parking, maid's room).
+  * `PropertyLocation` (`apps/web/components/property/PropertyLocation.tsx`): District and neighborhood overview with travel time badges to key destinations (airport, beach, downtown, metro).
+  * `PropertyInquirySidebar` (`apps/web/components/property/PropertyInquirySidebar.tsx`): Desktop sticky advisor card featuring licensed concierge profile, direct prefilled WhatsApp CTA (`https://wa.me/...`), direct telephone link, and "Schedule a Viewing" & "Inquire Now" buttons opening a `LeadForm` modal prefilled with listing reference and title. Includes fixed mobile bottom action dock for 1-tap inquiries.
+  * `SimilarProperties` (`apps/web/components/property/SimilarProperties.tsx`): 3-card grid of `ListingCard` components in the same country and property type.
+  * Legacy Route Compatibility (`apps/web/app/[locale]/[country]/property/[slug]/page.tsx`): Redirects legacy `/property/[slug]` links seamlessly to `/buy/[slug]`.
+* **Validation:**
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
+  * `pnpm run build`: All 149 static routes compiled and prerendered cleanly (including 96 localized property detail pages).

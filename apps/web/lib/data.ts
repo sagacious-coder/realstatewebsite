@@ -56,6 +56,10 @@ export async function getDevelopers(countryCode?: CountryCode): Promise<Develope
   return apiClient.getDevelopers(countryCode);
 }
 
+export async function getDeveloper(id: string): Promise<Developer | null> {
+  return apiClient.getDeveloper(id);
+}
+
 export async function getProjects(countryCode?: CountryCode): Promise<Project[]> {
   return apiClient.getProjects(countryCode);
 }

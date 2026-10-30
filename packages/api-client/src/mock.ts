@@ -247,7 +247,11 @@ export class MockApiClient implements ApiClient {
     await delay();
     const normalized = slug.toLowerCase();
     const found = FIXTURE_LISTINGS.find(
-      (l) => l.slug.toLowerCase() === normalized || l.refNumber.toLowerCase() === normalized
+      (l) =>
+        l.slug.toLowerCase() === normalized ||
+        l.refNumber.toLowerCase() === normalized ||
+        normalized.endsWith(l.slug.toLowerCase()) ||
+        normalized.includes(l.refNumber.toLowerCase())
     );
     return found || null;
   }
@@ -278,6 +282,15 @@ export class MockApiClient implements ApiClient {
     await delay();
     if (!countryCode) return FIXTURE_DEVELOPERS;
     return FIXTURE_DEVELOPERS.filter((d) => d.countryCodes.includes(countryCode));
+  }
+
+  async getDeveloper(id: string): Promise<Developer | null> {
+    await delay();
+    const normalized = id.toLowerCase();
+    const dev = FIXTURE_DEVELOPERS.find(
+      (d) => d.id.toLowerCase() === normalized || d.slug.toLowerCase() === normalized
+    );
+    return dev || null;
   }
 
   async getProjects(countryCode?: CountryCode): Promise<Project[]> {

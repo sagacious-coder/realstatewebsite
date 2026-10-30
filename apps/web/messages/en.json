@@ -365,5 +365,79 @@
       "paymentPlan": "Payment Plan",
       "viewProperty": "View Property"
     }
+  },
+  "property": {
+    "breadcrumbs": {
+      "home": "Home",
+      "buy": "Buy"
+    },
+    "refCode": "Ref",
+    "copyRef": "Copy ref code",
+    "copiedRef": "Reference code copied to clipboard",
+    "sampleData": "Sample Property",
+    "sampleDataBadge": "Demo Data",
+    "viewAllPhotos": "View all {count} photos",
+    "floorPlan": "Floor Plan",
+    "viewFloorPlan": "View interactive floor plan",
+    "keyAttributes": "Key Attributes",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "size": "Total Area",
+    "sqm": "sq m",
+    "sqft": "sq ft",
+    "pricePerSqm": "Price per sqm",
+    "pricePerSqft": "Price per sq ft",
+    "completion": "Handover Date",
+    "completionYear": "Completion",
+    "furnishing": "Furnishing",
+    "overview": "Property Overview",
+    "description": "About this property",
+    "amenities": "Amenities & Features",
+    "paymentPlan": {
+      "title": "Payment Plan & Milestone Breakdown",
+      "subtitle": "Structured developer installment terms",
+      "downPayment": "Down Payment",
+      "duringConstruction": "During Construction",
+      "onHandover": "On Handover",
+      "postHandover": "Post-Handover",
+      "inquireSchedule": "Request Full Payment Plan PDF"
+    },
+    "developer": {
+      "title": "Developed by {name}",
+      "verifiedPartner": "Verified Master Developer",
+      "projects": "{count} Master Projects",
+      "activeListings": "{count} Active Listings",
+      "viewDeveloper": "View Developer Portfolio"
+    },
+    "locationVicinity": {
+      "title": "Location & Landmark Vicinity",
+      "subtitle": "Strategic connectivity and neighborhood highlights",
+      "airport": "International Airport",
+      "beach": "Beach / Waterfront",
+      "downtown": "Downtown / City Center",
+      "metro": "Metro / Transit",
+      "minutes": "{count} mins"
+    },
+    "similar": {
+      "title": "Similar Properties in {country}",
+      "subtitle": "Hand-picked luxury residences and off-plan launches with comparable specifications"
+    },
+    "inquiry": {
+      "title": "Inquire About This Property",
+      "subtitle": "Speak with an authorized client advisor for availability, off-market units, and site visits.",
+      "agent": "Private Advisory Desk",
+      "license": "Certified Real Estate Advisor",
+      "call": "Call Advisor",
+      "whatsapp": "Message on WhatsApp",
+      "scheduleViewing": "Schedule a Viewing",
+      "inquireNow": "Request Brochure & Availability",
+      "formTitle": "Property Inquiry",
+      "formSubtitle": "Submit your contact information to receive direct developer pricing and floor plans."
+    },
+    "share": {
+      "shareProperty": "Share property",
+      "copiedLink": "Property link copied to clipboard",
+      "shareVia": "Share via..."
+    }
   }
 }

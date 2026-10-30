@@ -145,7 +145,7 @@ export function ListingResults({
               onToggleFavorite={handleToggleFavorite}
               onToggleCompare={handleToggleCompare}
               viewMode={viewMode}
-              href={`/${locale}/${item.location.countryCode}/property/${item.refNumber.toLowerCase()}-${item.slug}`}
+              href={`/${locale}/${item.location.countryCode}/buy/${item.slug}`}
               locale={locale}
             />
           );
