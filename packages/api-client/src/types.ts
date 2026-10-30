@@ -32,6 +32,7 @@ export interface ApiClientConfig {
 export interface ApiClient {
   readonly mode: ApiMode;
   getListings(query?: SearchQueryInput): Promise<SearchResult>;
+  searchListings(query?: SearchQueryInput): Promise<SearchResult>;
   getListingBySlug(slug: string): Promise<ListingDetail | null>;
   getFeaturedListings(countryCode?: CountryCode, limit?: number): Promise<ListingSummary[]>;
   getLocations(countryCode?: CountryCode): Promise<Location[]>;

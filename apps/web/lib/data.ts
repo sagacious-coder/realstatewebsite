@@ -29,6 +29,10 @@ export async function getListings(query?: SearchQueryInput): Promise<SearchResul
   return apiClient.getListings(query);
 }
 
+export async function searchListings(query?: SearchQueryInput): Promise<SearchResult> {
+  return apiClient.searchListings(query);
+}
+
 export async function getListingBySlug(slug: string): Promise<ListingDetail | null> {
   return apiClient.getListingBySlug(slug);
 }

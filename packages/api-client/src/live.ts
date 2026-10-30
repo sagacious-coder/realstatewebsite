@@ -111,6 +111,10 @@ export class LiveApiClient implements ApiClient {
     return this.request(`/v1/listings${qs}`, { method: 'GET' }, SearchResultSchema);
   }
 
+  async searchListings(query?: SearchQueryInput): Promise<SearchResult> {
+    return this.getListings(query);
+  }
+
   async getListingBySlug(slug: string): Promise<ListingDetail | null> {
     try {
       return await this.request(

@@ -5,6 +5,7 @@
 
 export const COUNTRY_CODES = ['ae', 'eg', 'ge', 'tr'] as const;
 export type CountryCode = (typeof COUNTRY_CODES)[number];
+export const DEFAULT_COUNTRY: CountryCode = 'ae';
 
 export const CURRENCY_CODES = ['AED', 'EGP', 'GEL', 'TRY', 'USD', 'EUR', 'GBP'] as const;
 export type CurrencyCode = (typeof CURRENCY_CODES)[number];

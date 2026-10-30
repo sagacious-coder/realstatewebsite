@@ -33,6 +33,7 @@ export interface ListingCardProps {
   href?: string;
   className?: string;
   locale?: string;
+  viewMode?: 'grid' | 'list';
 }
 
 /**
@@ -68,9 +69,11 @@ export function ListingCard({
   href = '#',
   className,
   locale: propLocale,
+  viewMode = 'grid',
 }: ListingCardProps) {
   const routeLocale = useLocale();
   const activeLocale = propLocale || routeLocale || 'en';
+  const isListView = viewMode === 'list';
 
   const cardId = id || refCode;
   const displayPrice = priceFormatted || price || '';
@@ -86,13 +89,19 @@ export function ListingCard({
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-card bg-white border border-line shadow-subtle',
+        'group relative flex overflow-hidden rounded-card bg-white border border-line shadow-subtle',
         'hover:border-gold/60 transition-colors duration-300 text-start',
+        isListView ? 'flex-col sm:flex-row' : 'flex-col',
         className
       )}
     >
       {/* 4:3 Media Frame */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-navy-2">
+      <div
+        className={cn(
+          'relative aspect-[4/3] w-full overflow-hidden bg-navy-2',
+          isListView && 'sm:w-72 md:w-80 sm:aspect-[4/3] flex-shrink-0'
+        )}
+      >
         <a href={href} className="block w-full h-full" tabIndex={-1} aria-hidden="true">
           <SiteImage
             src={displayCover}

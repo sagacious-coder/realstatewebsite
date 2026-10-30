@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 8: Search & Listings directory (/buy)`
+* **Current Stage in Progress:** `Stage 9: Property details page, inquiry leads & share cards (/property/[slug])`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 7 (Country home: 12 editorial sections across 4 countries with seeded data, hero slideshow, and payment plan calculator)
-* **Next Up After 7:** Stage 8 (Search & Listings directory /buy)
+* **Latest Completed Milestone:** Stage 8 (Search & Listings directory /buy: URL synchronization, sticky filter panel, mobile drawer, active chips, dual currency, compare tray, custom search modal)
+* **Next Up After 8:** Stage 9 (Property details page, inquiry leads & share cards)
 
 ---
 
@@ -27,8 +27,8 @@
 | **Stage 5** | Contracts freeze, OpenAPI 3.1 & Mock API client | **DONE** | 2026-10-29 | Tag `contract-v1`, 10/10 tests pass, openapi check clean |
 | **Stage 6** | Intro animation & 4-panel Country Chooser | **DONE** | 2026-10-30 | Brand intro, interactive panels, 33/33 static pages build |
 | **Stage 7** | Country Home Page (12 sections, slideshow) | **DONE** | 2026-10-30 | 12 editorial sections, hero slideshow, payment plan calculator, 33/33 SSG build clean |
-| **Stage 8** | Search & Listings directory (`/buy`) | In Progress | — | — |
-| **Stage 9** | Property details page, inquiry leads & share cards | Not Started | — | — |
+| **Stage 8** | Search & Listings directory (`/buy`) | **DONE** | 2026-10-31 | 53/53 SSG build clean, zero lint/typecheck errors |
+| **Stage 9** | Property details page, inquiry leads & share cards | NEXT TO RUN | — | — |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | Not Started | — | — |
 | **Stage 11** | Admin App foundation, listings management & uploads | Not Started | — | — |
 | **Stage 12** | Admin CRM, leads, locations, settings & users | Not Started | — | — |
@@ -202,3 +202,24 @@
   * `pnpm run lint`: 0 errors, 0 warnings across monorepo.
   * `pnpm run typecheck`: 0 errors across all 7 packages.
   * `pnpm run build`: All 33 static pages compiled and prerendered cleanly.
+
+---
+
+### 2026-10-31 — Stage 8: Search & Listings Directory (`/buy`)
+* **Action:** Built the full-featured public Search & Listings directory page at `app/[locale]/[country]/buy/page.tsx` with bi-directional URL synchronization, desktop sticky filter sidebar, mobile drawer sheet, active filter chips, dual-currency cards, favorite toggle, compare tray/modal, editorial empty state with custom search intake, and server-side filtering via `@wild-hills/api-client`.
+* **Outputs Created & Configured:**
+  * `SearchDirectoryClient` (`apps/web/components/search/SearchDirectoryClient.tsx`): Main client orchestrator managing optimistic transitions, URL parameter serialization without full page reloads, and responsive layout coordination.
+  * `SearchFilterPanel` (`apps/web/components/search/SearchFilterPanel.tsx`): Collapsible desktop sticky filter sidebar covering location (city/area dropdowns from country location fixtures), multi-select property types (apartment, villa, townhouse, penthouse, duplex, studio, chalet), numeric price bounds with dual slider, bedroom pills (Any, Studio, 1, 2, 3, 4, 5+), bathroom pills (Any, 1+, 2+, 3+, 4+), size bounds with sqm/sqft unit toggle, completion status (ready, off-plan, under construction), and feature flags (hot deals, new launches, verified, payment plan).
+  * `MobileFilterSheet` (`apps/web/components/search/MobileFilterSheet.tsx`): Radix-powered bottom sheet drawer triggered on mobile and tablet with active counter badge, full filter controls, reset action, and sticky "Apply Filters" CTA bar.
+  * `ActiveFilterChips` (`apps/web/components/search/ActiveFilterChips.tsx`): Dismissible badge pills rendered above results grid with single-click filter removal and "Clear all" action.
+  * `SearchHeader` (`apps/web/components/search/SearchHeader.tsx`): Header bar displaying localized match counts (e.g., "Showing 6 properties in UAE"), instant search box with clear button, 7-option sort dropdown (`featured`, `price_asc`, `price_desc`, `newest`, `beds_asc`, `beds_desc`, `size_desc`), and Grid vs. List view toggle.
+  * `ListingResults` & `ListingCard` (`apps/web/components/search/ListingResults.tsx`, `apps/web/components/cards/ListingCard.tsx`): Enhanced card rendering with list/grid mode layout flipping, dual currency conversion (selected display currency + original listing price), `localStorage['wh_favorites']` heart toggling, and comparison selection.
+  * `CompareTray` (`apps/web/components/search/CompareTray.tsx`): Floating bottom dock displaying up to 4 selected properties with removal buttons, and side-by-side comparison modal table comparing pricing, locations, developers, specifications, and payment plans.
+  * `SearchEmptyState` (`apps/web/components/search/SearchEmptyState.tsx`): Editorial fallback when zero listings match, featuring "Reset Filters" action and "Request a Custom Search" CTA opening an accessible `LeadForm` modal prefilled with the visitor's active search parameters.
+  * `SearchPagination` (`apps/web/components/search/SearchPagination.tsx`): Numbered accessible pagination preserving all active filter query parameters.
+  * Internationalization: Comprehensive English and Arabic search dictionaries added to `en.json` and `ar.json` with RTL layout flipping.
+  * Global route redirect (`apps/web/app/[locale]/buy/page.tsx`): Reads visitor's `wh_country` cookie (or defaults to `ae`) and redirects to `/[locale]/[country]/buy` preserving query strings.
+* **Validation:**
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
+  * `pnpm run build`: All 53 static routes compiled and prerendered cleanly (including 16 localized country buy routes).

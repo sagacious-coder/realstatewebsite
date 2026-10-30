@@ -239,6 +239,10 @@ export class MockApiClient implements ApiClient {
     };
   }
 
+  async searchListings(query?: SearchQueryInput): Promise<SearchResult> {
+    return this.getListings(query);
+  }
+
   async getListingBySlug(slug: string): Promise<ListingDetail | null> {
     await delay();
     const normalized = slug.toLowerCase();
