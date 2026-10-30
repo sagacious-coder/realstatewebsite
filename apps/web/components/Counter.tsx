@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 export interface CounterProps {
@@ -11,6 +12,7 @@ export interface CounterProps {
   label: string;
   isPlaceholder?: boolean;
   className?: string;
+  locale?: string;
 }
 
 /**
@@ -26,7 +28,11 @@ export function Counter({
   label,
   isPlaceholder = false,
   className,
+  locale: propLocale,
 }: CounterProps) {
+  const routeLocale = useLocale();
+  const activeLocale = propLocale || routeLocale || 'en';
+
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -78,7 +84,7 @@ export function Counter({
     >
       <div className="flex items-baseline gap-1 font-serif text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-navy">
         {prefix && <span className="text-gold-deep text-2xl md:text-3xl font-medium">{prefix}</span>}
-        <span className="tabular-nums">{count.toLocaleString()}</span>
+        <span className="tabular-nums">{new Intl.NumberFormat(activeLocale).format(count)}</span>
         {suffix && <span className="text-gold-deep text-2xl md:text-3xl font-medium">{suffix}</span>}
       </div>
 

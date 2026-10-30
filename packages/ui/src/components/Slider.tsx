@@ -8,6 +8,7 @@ export interface SliderProps
   extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
   currency?: string;
   formatValue?: (val: number) => string;
+  locale?: string;
 }
 
 /**
@@ -18,7 +19,7 @@ export interface SliderProps
 export const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   SliderProps
->(({ className, currency = 'USD', formatValue, value, defaultValue, ...props }, ref) => {
+>(({ className, currency = 'USD', formatValue, locale = 'en-US', value, defaultValue, ...props }, ref) => {
   const values = (value || defaultValue || [0]) as number[];
 
   return (
@@ -36,7 +37,9 @@ export const Slider = React.forwardRef<
         <SliderPrimitive.Range className="absolute h-full bg-gold" />
       </SliderPrimitive.Track>
       {values.map((val, index) => {
-        const textVal = formatValue ? formatValue(val) : `${val.toLocaleString()} ${currency}`;
+        const textVal = formatValue
+          ? formatValue(val)
+          : `${new Intl.NumberFormat(locale).format(val)} ${currency}`;
         return (
           <SliderPrimitive.Thumb
             key={index}

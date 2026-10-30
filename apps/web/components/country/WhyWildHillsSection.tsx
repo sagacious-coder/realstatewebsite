@@ -104,3 +104,4 @@ export function WhyWildHillsSection() {
     </section>
   );
 }
+

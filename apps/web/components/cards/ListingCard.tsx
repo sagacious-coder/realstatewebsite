@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useLocale } from 'next-intl';
 import { Heart, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { Badge, type BadgeVariant } from '@/components/ui/Badge';
 import { SiteImage } from '@/components/SiteImage';
@@ -31,6 +32,7 @@ export interface ListingCardProps {
   onToggleCompare?: (id: string) => void;
   href?: string;
   className?: string;
+  locale?: string;
 }
 
 /**
@@ -65,14 +67,21 @@ export function ListingCard({
   onToggleCompare,
   href = '#',
   className,
+  locale: propLocale,
 }: ListingCardProps) {
+  const routeLocale = useLocale();
+  const activeLocale = propLocale || routeLocale || 'en';
+
   const cardId = id || refCode;
   const displayPrice = priceFormatted || price || '';
   const displayCover = coverImage || imageSrc || '/images/defaults/villa/cover-exterior.webp';
   const displayBadges: BadgeVariant[] = badges || (badge ? [badge] : []);
+
+  const sizeValue = isSqft ? Math.round(sizeSqm * 10.7639) : sizeSqm;
+  const formattedSize = new Intl.NumberFormat(activeLocale).format(sizeValue);
   const displaySize = isSqft
-    ? `${Math.round(sizeSqm * 10.7639).toLocaleString()} sq ft`
-    : `${sizeSqm.toLocaleString()} sqm`;
+    ? `${formattedSize} sq ft`
+    : `${formattedSize} sqm`;
 
   return (
     <article

@@ -1,8 +1,10 @@
+import { cookies } from 'next/headers';
 import { setRequestLocale } from 'next-intl/server';
 import { BrandIntro } from '@/components/intro/BrandIntro';
 import { CountryChooser } from '@/components/home/CountryChooser';
 import { SiteImage } from '@/components/SiteImage';
 import { getFeaturedListings, type ListingSummary } from '@/lib/data';
+import { COOKIE_INTRO_SEEN } from '@/lib/countries';
 
 export default async function LocaleHomePage({
   params,
@@ -12,13 +14,17 @@ export default async function LocaleHomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  // Check lightweight session cookie for intro state (Option A)
+  const cookieStore = await cookies();
+  const introSeen = cookieStore.get(COOKIE_INTRO_SEEN)?.value === '1';
+
   // Prefetch global highlights for editorial depth
   const featured = await getFeaturedListings(undefined, 4);
 
   return (
     <>
       {/* Animated Brand Intro (full-screen overlay, skippable, plays once per session) */}
-      <BrandIntro />
+      <BrandIntro initialPlaying={!introSeen} />
 
       {/* Interactive Four-Panel Country Chooser (Section 8.2) */}
       <CountryChooser locale={locale} />

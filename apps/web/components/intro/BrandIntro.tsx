@@ -2,23 +2,28 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import { COOKIE_INTRO_SEEN } from '@/lib/countries';
+
+export interface BrandIntroProps {
+  initialPlaying?: boolean;
+}
 
 /**
  * Animated Brand Intro - Section 8.2 & 13.3.
  *
  * Requirements:
- * - Plays only at root for first-time visitors once per session (sessionStorage).
+ * - Plays only at root for first-time visitors once per session (sessionStorage & session cookie).
  * - Full-screen navy overlay.
  * - Arch draws itself in gold (stroke-dashoffset), followed by hills, cypress,
  *   towers, water, and wordmark.
  * - Duration ~2.5s.
  * - Skippable immediately via click, tap, Escape, or Space.
- * - Zero LCP penalty (page content mounts underneath immediately).
+ * - Zero LCP penalty & zero FOUC (SSR mounts overlay directly unless cookie indicates seen).
  * - Respects prefers-reduced-motion by skipping immediately.
  */
-export function BrandIntro() {
+export function BrandIntro({ initialPlaying = true }: BrandIntroProps) {
   const t = useTranslations('intro');
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(initialPlaying);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const isTerminatedRef = useRef(false);
 
@@ -32,6 +37,9 @@ export function BrandIntro() {
       // Ignore private browsing sessionStorage access errors
     }
 
+    // Set session cookie for SSR synchronization
+    document.cookie = `${COOKIE_INTRO_SEEN}=1; path=/; SameSite=Lax`;
+
     setIsFadingOut(true);
     setTimeout(() => {
       setIsPlaying(false);
@@ -40,25 +48,30 @@ export function BrandIntro() {
   }, []);
 
   useEffect(() => {
-    // 1. Check if already seen in this session
+    // 1. Check if already seen in this session via sessionStorage or cookie
     try {
-      if (sessionStorage.getItem('wh_intro_seen') === '1') {
+      if (
+        sessionStorage.getItem('wh_intro_seen') === '1' ||
+        document.cookie.indexOf(`${COOKIE_INTRO_SEEN}=1`) !== -1
+      ) {
+        setIsPlaying(false);
         return;
       }
-    } catch {
-      return;
-    }
+    } catch {}
 
     // 2. Check prefers-reduced-motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       try {
         sessionStorage.setItem('wh_intro_seen', '1');
       } catch {}
+      document.cookie = `${COOKIE_INTRO_SEEN}=1; path=/; SameSite=Lax`;
+      setIsPlaying(false);
       return;
     }
 
-    // 3. Start intro playback
-    setIsPlaying(true);
+    if (!isPlaying) return;
+
+    // 3. Start intro playback lock
     document.body.style.overflow = 'hidden';
 
     // 4. Automatic completion after ~2.5s
@@ -81,22 +94,24 @@ export function BrandIntro() {
       window.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
     };
-  }, [handleComplete]);
+  }, [isPlaying, handleComplete]);
 
   if (!isPlaying) {
     return null;
   }
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('title')}
-      onClick={handleComplete}
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-navy px-6 text-ivory cursor-pointer select-none transition-opacity duration-500 ease-out ${
-        isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
-    >
+    <>
+      <div
+        id="brand-intro-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('title')}
+        onClick={handleComplete}
+        className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-navy px-6 text-ivory cursor-pointer select-none transition-opacity duration-500 ease-out ${
+          isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+      >
       <style>{`
         @keyframes introDrawArch {
           0% {
@@ -392,5 +407,13 @@ export function BrandIntro() {
         </p>
       </div>
     </div>
-  );
+    {/* Inline blocking script (Option B defense-in-depth): If sessionStorage has intro seen, hide immediately before first paint */}
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(function(){try{if(sessionStorage.getItem('wh_intro_seen')==='1'){var el=document.getElementById('brand-intro-overlay');if(el){el.style.display='none';}}}catch(e){}})();`,
+      }}
+    />
+  </>
+);
 }
+

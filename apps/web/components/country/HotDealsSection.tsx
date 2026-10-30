@@ -69,7 +69,7 @@ export function HotDealsSection({
             // Original price in listing's native currency
             const priceOriginal =
               activeCurrency !== item.currency
-                ? `${(item.priceMinor / 100).toLocaleString(locale)} ${item.currency}`
+                ? `${new Intl.NumberFormat(locale).format(item.priceMinor / 100)} ${item.currency}`
                 : undefined;
 
             const badges: BadgeVariant[] = [];

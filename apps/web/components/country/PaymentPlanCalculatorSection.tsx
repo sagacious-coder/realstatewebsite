@@ -38,6 +38,8 @@ export function PaymentPlanCalculatorSection({
   const [durationMonths, setDurationMonths] = useState<number>(36);
   const [inquirySent, setInquirySent] = useState<boolean>(false);
 
+  const numberFormatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
+
   // Derived handover percentage (100% - downPayment - construction)
   const handoverPercent = useMemo(
     () => Math.max(0, 100 - downPaymentPercent - constructionPercent),
@@ -98,8 +100,8 @@ export function PaymentPlanCalculatorSection({
                 aria-label={t('propertyPrice')}
               />
               <div className="mt-2 flex justify-between text-xs text-muted">
-                <span>{(defaultPrices[countryCode] * 0.3).toLocaleString(locale)} {nativeCurrency}</span>
-                <span>{(defaultPrices[countryCode] * 4).toLocaleString(locale)} {nativeCurrency}</span>
+                <span>{numberFormatter.format(defaultPrices[countryCode] * 0.3)} {nativeCurrency}</span>
+                <span>{numberFormatter.format(defaultPrices[countryCode] * 4)} {nativeCurrency}</span>
               </div>
             </div>
 
@@ -207,7 +209,7 @@ export function PaymentPlanCalculatorSection({
                   {formattedDownPayment}
                 </div>
                 <div className="text-xs text-muted mt-0.5">
-                  {(downPaymentAmount).toLocaleString(locale)} {nativeCurrency}
+                  {numberFormatter.format(downPaymentAmount)} {nativeCurrency}
                 </div>
               </div>
 
@@ -221,7 +223,7 @@ export function PaymentPlanCalculatorSection({
                   {formattedMonthly}
                 </div>
                 <div className="text-xs text-muted mt-0.5">
-                  {Math.round(monthlyInstallment).toLocaleString(locale)} {nativeCurrency} / month
+                  {numberFormatter.format(Math.round(monthlyInstallment))} {nativeCurrency} / month
                 </div>
               </div>
 
@@ -234,7 +236,7 @@ export function PaymentPlanCalculatorSection({
                   {formattedHandover}
                 </div>
                 <div className="text-xs text-muted mt-0.5">
-                  {(handoverAmount).toLocaleString(locale)} {nativeCurrency}
+                  {numberFormatter.format(handoverAmount)} {nativeCurrency}
                 </div>
               </div>
             </div>

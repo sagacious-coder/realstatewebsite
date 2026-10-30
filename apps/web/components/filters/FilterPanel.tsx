@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLocale } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Slider } from '@/components/ui/Slider';
@@ -32,6 +33,7 @@ export interface FilterPanelProps {
   resultCount?: number;
   currencyCode?: string;
   className?: string;
+  locale?: string;
 }
 
 const PROPERTY_TYPES = [
@@ -72,7 +74,12 @@ export function FilterPanel({
   resultCount = 128,
   currencyCode = 'AED',
   className,
+  locale: propLocale,
 }: FilterPanelProps) {
+  const routeLocale = useLocale();
+  const activeLocale = propLocale || routeLocale || 'en';
+  const formatNumber = (num: number) => new Intl.NumberFormat(activeLocale).format(num);
+
   const [selectedType, setSelectedType] = useState(initialFilters.propertyType || 'all');
   const [selectedBeds, setSelectedBeds] = useState(initialFilters.bedrooms || 'All');
   const [priceRange, setPriceRange] = useState<number[]>([
@@ -212,7 +219,7 @@ export function FilterPanel({
             Price range ({currencyCode})
           </label>
           <span className="text-xs text-muted">
-            <bdi>{priceRange[0].toLocaleString()}</bdi> – <bdi>{priceRange[1].toLocaleString()}</bdi>
+            <bdi>{formatNumber(priceRange[0])}</bdi> – <bdi>{formatNumber(priceRange[1])}</bdi>
           </span>
         </div>
 
@@ -224,7 +231,7 @@ export function FilterPanel({
           value={priceRange}
           onValueChange={handlePriceSliderChange}
           aria-label="Filter price range"
-          aria-valuetext={`${currencyCode} ${priceRange[0].toLocaleString()} to ${priceRange[1].toLocaleString()}`}
+          aria-valuetext={`${currencyCode} ${formatNumber(priceRange[0])} to ${formatNumber(priceRange[1])}`}
         />
 
         <div className="grid grid-cols-2 gap-3 pt-1">

@@ -47,6 +47,7 @@ export const COOKIE_COUNTRY = 'wh_country';
 export const COOKIE_LOCALE = 'wh_locale';
 export const COOKIE_CURRENCY = 'wh_currency';
 export const COOKIE_CONSENT = 'wh_consent';
+export const COOKIE_INTRO_SEEN = 'wh_intro_seen';
 
 export function isCountryCode(value: unknown): value is CountryCode {
   return typeof value === 'string' && (COUNTRY_CODES as readonly string[]).includes(value);
