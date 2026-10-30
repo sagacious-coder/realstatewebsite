@@ -12,6 +12,8 @@ export const SAMPLE_RATES_PER_USD: Readonly<Record<CurrencyCode, number>> = {
   EGP: 50,
   GEL: 2.7,
   TRY: 34,
+  EUR: 0.92,
+  GBP: 0.78,
 };
 
 /** Prices are stored in minor units (Section 7); every supported currency uses 2 decimals. */

@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 7: Country home`
+* **Current Stage in Progress:** `Stage 8: Search & Listings directory (/buy)`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 6 (Intro animation and 4-panel Country Chooser)
-* **Next Up After 6:** Stage 7 (Country home)
+* **Latest Completed Milestone:** Stage 7 (Country home: 12 editorial sections across 4 countries with seeded data, hero slideshow, and payment plan calculator)
+* **Next Up After 7:** Stage 8 (Search & Listings directory /buy)
 
 ---
 
@@ -26,7 +26,8 @@
 | **Stage 4** | Layout shell (Navbar, Footer, Country/Lang Switcher) | **DONE** | 2026-10-29 | 61/61 E2E tests pass, zero lint/type errors |
 | **Stage 5** | Contracts freeze, OpenAPI 3.1 & Mock API client | **DONE** | 2026-10-29 | Tag `contract-v1`, 10/10 tests pass, openapi check clean |
 | **Stage 6** | Intro animation & 4-panel Country Chooser | **DONE** | 2026-10-30 | Brand intro, interactive panels, 33/33 static pages build |
-| **Stage 7** | Country Home Page (12 sections, slideshow) | In Progress | — | — |
+| **Stage 7** | Country Home Page (12 sections, slideshow) | **DONE** | 2026-10-30 | 12 editorial sections, hero slideshow, payment plan calculator, 33/33 SSG build clean |
+| **Stage 8** | Search & Listings directory (`/buy`) | In Progress | — | — |
 | **Stage 8** | Search & Listings directory (`/buy`) | Not Started | — | — |
 | **Stage 9** | Property details page, inquiry leads & share cards | Not Started | — | — |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | Not Started | — | — |
@@ -180,3 +181,25 @@
   * `pnpm run lint`: 0 errors across monorepo.
   * `pnpm run typecheck`: 0 errors across monorepo.
   * `pnpm run build`: All 33 static pages generated successfully in `apps/web`.
+
+---
+
+### 2026-10-30 — Stage 7: Country Home Page (`apps/web`)
+* **Action:** Built the comprehensive 12-section editorial country home page (`/[locale]/[country]`) across all 4 countries (UAE, Turkey, Georgia, Egypt) in both English and Arabic with alternating visual rhythm and dynamic contract fixtures.
+* **Outputs Created & Configured:**
+  * `CountryHeroSlideshow` (`apps/web/components/country/CountryHeroSlideshow.tsx`): 3-slide landscape/portrait hero with priority LCP image loading, pause/resume toggle, gold progress bar countdown, and floating rising search bar with location, property type, and budget selectors.
+  * `FeaturedLocationsSection` (`apps/web/components/country/FeaturedLocationsSection.tsx`): Grid of `LocationCard`s displaying local photography, count badges, and empty-state fallback with property alert subscription.
+  * `HotDealsSection` (`apps/web/components/country/HotDealsSection.tsx`): Curated off-plan launches and resale opportunities using `ListingCard` with dual currency conversion and status badges.
+  * `WhyWildHillsSection` (`apps/web/components/country/WhyWildHillsSection.tsx`): 4 value proposition pillars with custom icons on mist background and 4 animated counters (`Counter.tsx`) with reduced-motion support.
+  * `DeveloperStripSection` (`apps/web/components/country/DeveloperStripSection.tsx`): Grayscale-to-color developer logo strip featuring top-tier master developers with sample indicator.
+  * `PaymentPlanCalculatorSection` (`apps/web/components/country/PaymentPlanCalculatorSection.tsx`): Interactive client component calculating down payments, monthly construction installments, and handover balances with live multi-currency formatting.
+  * `BuyingGuideSection` (`apps/web/components/country/BuyingGuideSection.tsx`): Overview of foreign ownership laws, golden visa thresholds, closing costs, and PDF guide download CTA.
+  * `TestimonialsSection` (`apps/web/components/country/TestimonialsSection.tsx`): Verified international investor testimonials with 5-star rating cards.
+  * `FaqSection` (`apps/web/components/country/FaqSection.tsx`): Radix-powered accessible accordion answering top market questions.
+  * `BlogSection` (`apps/web/components/country/BlogSection.tsx`): Market reports and editorial analysis cards with reading times and tags.
+  * `FinalCtaSection` (`apps/web/components/country/FinalCtaSection.tsx`): High-contrast navy advisory band with direct WhatsApp link, local office contact details, and modal lead consultation form.
+  * Universal layout integration: Clean RTL mirroring in Arabic, dynamic OpenGraph metadata per country, and unified data fetching through `lib/data.ts`.
+* **Validation:**
+  * `pnpm run lint`: 0 errors, 0 warnings across monorepo.
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run build`: All 33 static pages compiled and prerendered cleanly.

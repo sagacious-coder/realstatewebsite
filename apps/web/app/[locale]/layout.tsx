@@ -27,6 +27,7 @@ export async function generateMetadata({
     : 'Find a home that fits your life across Egypt, UAE, Georgia, and Turkey.';
 
   return {
+    metadataBase: new URL(process.env.SITE_URL || 'http://localhost:3000'),
     title: {
       default: title,
       template: '%s | Wild Hills Real Estate',

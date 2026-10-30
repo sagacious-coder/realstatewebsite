@@ -1,16 +1,44 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
-import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import type { Metadata } from 'next';
 import {
   getCountrySettings,
   getFeaturedListings,
+  getFeaturedLocations,
+  getDevelopers,
+  getBuyingGuide,
+  getFaqs,
+  getTestimonials,
+  getBlogPosts,
   type CountryCode,
-  type CountrySettings,
-  type ListingSummary,
 } from '@/lib/data';
+import { CountryHeroSlideshow } from '@/components/country/CountryHeroSlideshow';
+import { FeaturedLocationsSection } from '@/components/country/FeaturedLocationsSection';
+import { HotDealsSection } from '@/components/country/HotDealsSection';
+import { WhyWildHillsSection } from '@/components/country/WhyWildHillsSection';
+import { DeveloperStripSection } from '@/components/country/DeveloperStripSection';
+import { PaymentPlanCalculatorSection } from '@/components/country/PaymentPlanCalculatorSection';
+import { BuyingGuideSection } from '@/components/country/BuyingGuideSection';
+import { TestimonialsSection } from '@/components/country/TestimonialsSection';
+import { FaqSection } from '@/components/country/FaqSection';
+import { BlogSection } from '@/components/country/BlogSection';
+import { FinalCtaSection } from '@/components/country/FinalCtaSection';
 
 const VALID_COUNTRIES: readonly CountryCode[] = ['ae', 'eg', 'ge', 'tr'];
+
+const COUNTRY_NAMES_EN: Record<CountryCode, string> = {
+  ae: 'United Arab Emirates',
+  eg: 'Egypt',
+  ge: 'Georgia',
+  tr: 'Turkey',
+};
+
+const COUNTRY_NAMES_AR: Record<CountryCode, string> = {
+  ae: 'الإمارات العربية المتحدة',
+  eg: 'مصر',
+  ge: 'جورجيا',
+  tr: 'تركيا',
+};
 
 export function generateStaticParams() {
   const params: { locale: string; country: string }[] = [];
@@ -23,15 +51,49 @@ export function generateStaticParams() {
   return params;
 }
 
-export default function CountryPage({
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string; country: string }>;
-}) {
-  return <CountryContent params={params} />;
+}): Promise<Metadata> {
+  const { locale, country } = await params;
+  if (!VALID_COUNTRIES.includes(country as CountryCode)) {
+    return {};
+  }
+
+  const countryCode = country as CountryCode;
+  const isArabic = locale === 'ar';
+  const countryName = isArabic
+    ? COUNTRY_NAMES_AR[countryCode]
+    : COUNTRY_NAMES_EN[countryCode];
+
+  const title = isArabic
+    ? `عقارات ${countryName} | وايلد هيلز للعقارات`
+    : `Luxury Real Estate & Homes in ${countryName} | Wild Hills`;
+
+  const description = isArabic
+    ? `استكشف أفضل العقارات والمشاريع قيد الإنشاء في ${countryName}. فلل وشقق ومشاريع بحرية مباشرة من كبار المطورين.`
+    : `Explore premium residential properties, luxury waterfront villas, and off-plan launches in ${countryName} with direct developer installment plans.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: `/images/${countryCode}/hero/hero-01.webp`,
+          width: 2400,
+          height: 1350,
+          alt: `${countryName} Real Estate`,
+        },
+      ],
+    },
+  };
 }
 
-async function CountryContent({
+export default async function CountryPage({
   params,
 }: {
   params: Promise<{ locale: string; country: string }>;
@@ -45,85 +107,108 @@ async function CountryContent({
   setRequestLocale(locale);
 
   const countryCode = country as CountryCode;
-  const [settings, featuredListings] = await Promise.all([
+  const isArabic = locale === 'ar';
+  const countryName = isArabic
+    ? COUNTRY_NAMES_AR[countryCode]
+    : COUNTRY_NAMES_EN[countryCode];
+
+  // Fetch all country domain fixtures via the central typed API client
+  const [
+    settings,
+    locations,
+    featuredListings,
+    developers,
+    buyingGuide,
+    faqs,
+    testimonials,
+    blogPosts,
+  ] = await Promise.all([
     getCountrySettings(countryCode),
-    getFeaturedListings(countryCode, 3),
+    getFeaturedLocations(countryCode),
+    getFeaturedListings(countryCode, 6),
+    getDevelopers(countryCode),
+    getBuyingGuide(countryCode),
+    getFaqs(countryCode),
+    getTestimonials(countryCode),
+    getBlogPosts(countryCode),
   ]);
 
   return (
-    <CountryShell
-      locale={locale}
-      country={countryCode}
-      settings={settings}
-      featuredListings={featuredListings}
-    />
-  );
-}
+    <div className="flex min-h-screen flex-col bg-ivory">
+      {/* 1. Hero Slideshow with Rising Search Bar */}
+      <CountryHeroSlideshow
+        countryCode={countryCode}
+        countryName={countryName}
+        locale={locale}
+        locations={locations}
+      />
 
-/**
- * Temporary country page. Stage 7 replaces it with the full country home.
- * The navy hero band carries `data-nav-hero`, which makes the navbar transparent at the top.
- */
-function CountryShell({
-  locale,
-  country,
-  settings,
-  featuredListings,
-}: {
-  locale: string;
-  country: CountryCode;
-  settings: CountrySettings;
-  featuredListings: ListingSummary[];
-}) {
-  const t = useTranslations('common');
-  const countryName = t(`countries.${country}`);
+      {/* 2. Featured Locations (Cities / Areas) with Empty State Fallback */}
+      <FeaturedLocationsSection
+        countryCode={countryCode}
+        countryName={countryName}
+        locale={locale}
+        locations={locations}
+      />
 
-  return (
-    <section data-nav-hero className="on-navy bg-navy pb-20 pt-28 text-ivory md:pb-28 md:pt-44">
-      <div className="container text-start">
-        <span className="mb-4 inline-block rounded bg-mist px-2.5 py-1 text-xs font-semibold tracking-wider text-emerald">
-          {country.toUpperCase()}
-        </span>
-        <h1 className="h1 mb-4 text-ivory">{countryName}</h1>
-        <p className="mb-8 max-w-xl text-lg text-ivory/80">
-          {locale === 'ar'
-            ? `استكشف أفضل العقارات والمشاريع الاستثمارية في ${countryName}.`
-            : `Explore premium properties, off-plan launches, and verified resale opportunities in ${countryName}.`}
-        </p>
-        <div className="flex flex-wrap items-center gap-4">
-          <Link
-            href="/"
-            className="inline-flex min-h-11 items-center rounded-[4px] border border-ivory px-5 text-sm font-medium text-ivory transition-colors hover:bg-ivory hover:text-navy"
-          >
-            {locale === 'ar' ? 'جميع الدول' : 'All countries'}
-          </Link>
-          <span className="text-xs text-ivory/60">
-            {locale === 'ar' ? `العملة: ${settings.currency}` : `Default currency: ${settings.currency}`}
-          </span>
-        </div>
+      {/* 3. Hot Deals & New Launches */}
+      <HotDealsSection
+        countryCode={countryCode}
+        countryName={countryName}
+        listings={featuredListings}
+      />
 
-        {featuredListings.length > 0 && (
-          <div className="mt-12">
-            <h2 className="mb-4 text-xs font-semibold tracking-wider text-gold-light uppercase">
-              {locale === 'ar' ? 'عقارات مميزة في الدولة' : 'Featured Country Properties'}
-            </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {featuredListings.map((item) => (
-                <div
-                  key={item.id}
-                  className="rounded-card border border-ivory/20 bg-white/5 p-4 text-start backdrop-blur-sm"
-                >
-                  <div className="mb-1 text-xs font-semibold text-gold-light">{item.refNumber}</div>
-                  <div className="font-serif text-lg text-ivory line-clamp-1">{item.title}</div>
-                  <div className="mt-2 text-xs text-ivory/70">
-                    {item.location.city} • {item.bedrooms} {locale === 'ar' ? 'غرف' : 'Beds'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
+      {/* 4. Why Wild Hills Value Proposition & Animated Counters */}
+      <WhyWildHillsSection />
+
+      {/* 5. Developer Logo Strip */}
+      <DeveloperStripSection
+        countryCode={countryCode}
+        countryName={countryName}
+        developers={developers}
+      />
+
+      {/* 6. Payment Plan Calculator */}
+      <PaymentPlanCalculatorSection
+        countryCode={countryCode}
+        countryName={countryName}
+      />
+
+      {/* 7. Country Buying Guide (Foreign Buyer's Handbook) */}
+      <BuyingGuideSection
+        countryCode={countryCode}
+        countryName={countryName}
+        guide={buyingGuide}
+      />
+
+      {/* 8. Testimonials & Client Stories */}
+      <TestimonialsSection
+        countryCode={countryCode}
+        testimonials={testimonials}
+      />
+
+      {/* 9. Frequently Asked Questions Accordion */}
+      <FaqSection
+        countryCode={countryCode}
+        countryName={countryName}
+        faqs={faqs}
+      />
+
+      {/* 10. Blog Posts / Market Insights */}
+      <BlogSection
+        countryCode={countryCode}
+        countryName={countryName}
+        posts={blogPosts}
+      />
+
+      {/* 11. Final High-Impact Advisory CTA */}
+      <FinalCtaSection
+        countryCode={countryCode}
+        countryName={countryName}
+        settings={settings}
+      />
+
+      {/* 12. Footer is rendered universally by apps/web/app/[locale]/layout.tsx */}
+    </div>
   );
 }

@@ -154,5 +154,120 @@
       "errorReference": "Reference:",
       "retry": "Try again"
     }
+  },
+  "countryHome": {
+    "hero": {
+      "tagline": "Exclusive Residences & Investment",
+      "title": "Properties & Off-Plan Developments in {country}",
+      "subtitle": "Discover verified waterfront villas, modern city residences, and direct-developer off-plan launches with favorable payment plans.",
+      "pause": "Pause slideshow",
+      "play": "Play slideshow",
+      "search": {
+        "title": "Find your property",
+        "location": "Location",
+        "allLocations": "All Cities & Areas",
+        "propertyType": "Property Type",
+        "allTypes": "All Types",
+        "apartment": "Apartment",
+        "villa": "Villa",
+        "townhouse": "Townhouse",
+        "penthouse": "Penthouse",
+        "budget": "Budget",
+        "anyBudget": "Any Budget",
+        "under500k": "Under $500,000",
+        "range500kTo1m": "$500,000 – $1,000,000",
+        "above1m": "$1,000,000+",
+        "submit": "Search Properties"
+      }
+    },
+    "featuredLocations": {
+      "kicker": "Destinations",
+      "title": "Prime Locations in {country}",
+      "subtitle": "Explore world-class waterfront master plans, historic districts, and prime high-yield investment zones.",
+      "emptyTitle": "No active listings in this location yet",
+      "emptySubtitle": "Be the first to know when new launches or private resales become available in this area.",
+      "requestAlerts": "Request Alerts"
+    },
+    "hotDeals": {
+      "kicker": "Curated Portfolio",
+      "title": "Hot Deals & New Launches",
+      "subtitle": "Hand-selected developer opportunities with verified escrow accounts and flexible installment schedules.",
+      "viewAll": "View all properties in {country}"
+    },
+    "whyWildHills": {
+      "kicker": "The Wild Hills Standard",
+      "title": "Why International Buyers Choose Us",
+      "subtitle": "Uncompromising advisory integrity, 0% developer commissions, and bespoke end-to-end legal support across four key markets.",
+      "pillars": {
+        "p1Title": "Curated Due Diligence",
+        "p1Desc": "Every developer and off-plan project is screened for escrow accounts, construction track record, and verified land title deeds.",
+        "p2Title": "0% Buyer Commission",
+        "p2Desc": "Through our direct developer partnerships, international buyers pay no agency fees on off-plan purchases.",
+        "p3Title": "Golden Visa & Residency Support",
+        "p3Desc": "Our internal legal advisory manages your residency-by-investment, Golden Visa, or citizenship file from contract to approval.",
+        "p4Title": "Dedicated On-Ground Advisors",
+        "p4Desc": "Local multilingual advisory teams based in Dubai, Istanbul, Tbilisi, and Cairo providing genuine, unbiased market guidance."
+      },
+      "stats": {
+        "volume": "Transacted Volume",
+        "markets": "Strategic Countries",
+        "verified": "Verified Contracts",
+        "satisfaction": "Client Satisfaction"
+      }
+    },
+    "developers": {
+      "title": "Premier Developers & Master Planners in {country}",
+      "subtitle": "Partnered with premier master developers and reputable builders."
+    },
+    "calculator": {
+      "kicker": "Financing Tool",
+      "title": "Payment Plan Calculator",
+      "subtitle": "Simulate developer installment plans and calculate milestone payments across your investment tenure.",
+      "propertyPrice": "Property Price",
+      "downPayment": "Down Payment (%)",
+      "constructionInstallments": "Construction Installments (%)",
+      "handover": "Handover Completion (%)",
+      "postHandover": "Post-Handover Plan (Optional)",
+      "duration": "Installment Duration",
+      "months": "months",
+      "downPaymentAmount": "Down payment due at reservation",
+      "monthlyAmount": "Estimated monthly installment",
+      "handoverAmount": "Due upon handover completion",
+      "totalCheck": "Total breakdown equals 100%",
+      "inquire": "Request Detailed Payment Schedule"
+    },
+    "buyingGuide": {
+      "kicker": "Legal & Tax Overview",
+      "title": "Foreign Buyer's Guide to {country}",
+      "subtitle": "Essential regulations, ownership rights, tax requirements, and residency pathways.",
+      "readFull": "Read complete guide",
+      "downloadPdf": "Download Country Guide (PDF)",
+      "disclaimer": "Informational guide only. For legal or tax structuring, consult licensed local specialists."
+    },
+    "testimonials": {
+      "kicker": "Client Trust",
+      "title": "Client Experiences",
+      "subtitle": "Read how global homeowners and portfolio investors navigate their cross-border property acquisitions with us."
+    },
+    "faq": {
+      "kicker": "Advisory Knowledge",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Answers to the most common questions regarding buying real estate in {country}."
+    },
+    "blog": {
+      "kicker": "Market Intelligence",
+      "title": "Market Reports & Editorial",
+      "subtitle": "In-depth quarterly analysis, regulatory updates, and yield projections from our research desk.",
+      "readTime": "min read",
+      "readArticle": "Read Article"
+    },
+    "cta": {
+      "title": "Ready to discover exceptional properties in {country}?",
+      "subtitle": "Connect directly with our dedicated private advisory desk for bespoke portfolios, private off-market listings, and virtual walkthroughs.",
+      "whatsapp": "Message on WhatsApp",
+      "bookConsultation": "Book Private Consultation",
+      "office": "Local Office",
+      "phone": "Direct Telephone"
+    }
   }
 }
