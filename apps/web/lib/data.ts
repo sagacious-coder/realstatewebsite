@@ -48,6 +48,10 @@ export async function getLocations(countryCode?: CountryCode): Promise<Location[
   return apiClient.getLocations(countryCode);
 }
 
+export async function getLocationBySlug(slug: string): Promise<Location | null> {
+  return apiClient.getLocationBySlug(slug);
+}
+
 export async function getFeaturedLocations(countryCode: CountryCode): Promise<Location[]> {
   return apiClient.getFeaturedLocations(countryCode);
 }
@@ -58,6 +62,10 @@ export async function getDevelopers(countryCode?: CountryCode): Promise<Develope
 
 export async function getDeveloper(id: string): Promise<Developer | null> {
   return apiClient.getDeveloper(id);
+}
+
+export async function getDeveloperBySlug(slug: string): Promise<Developer | null> {
+  return apiClient.getDeveloperBySlug(slug);
 }
 
 export async function getProjects(countryCode?: CountryCode): Promise<Project[]> {

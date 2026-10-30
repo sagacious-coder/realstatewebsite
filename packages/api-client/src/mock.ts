@@ -69,14 +69,23 @@ export class MockApiClient implements ApiClient {
     // Filter by city
     if (query.city) {
       const qCity = normalizeSearchText(query.city);
-      filtered = filtered.filter((l) => normalizeSearchText(l.location.city).includes(qCity));
+      filtered = filtered.filter(
+        (l) =>
+          normalizeSearchText(l.location.city).includes(qCity) ||
+          normalizeSearchText(l.location.city.replace(/\s+/g, '-')) === qCity ||
+          l.location.id.toLowerCase() === query.city?.toLowerCase()
+      );
     }
 
     // Filter by area
     if (query.area) {
       const qArea = normalizeSearchText(query.area);
       filtered = filtered.filter(
-        (l) => l.location.area && normalizeSearchText(l.location.area).includes(qArea)
+        (l) =>
+          l.location.area &&
+          (normalizeSearchText(l.location.area).includes(qArea) ||
+            normalizeSearchText(l.location.area.replace(/\s+/g, '-')) === qArea ||
+            l.location.id.toLowerCase() === query.area?.toLowerCase())
       );
     }
 
@@ -160,6 +169,28 @@ export class MockApiClient implements ApiClient {
     if (query.isNewLaunch) filtered = filtered.filter((l) => l.isNewLaunch);
     if (query.isVerified) filtered = filtered.filter((l) => l.isVerified);
     if (query.hasInstallments) filtered = filtered.filter((l) => Boolean(l.paymentPlan));
+
+    // Filter by developer
+    if (query.developer) {
+      const qDev = normalizeSearchText(query.developer);
+      filtered = filtered.filter(
+        (l) =>
+          l.developer?.id?.toLowerCase() === query.developer?.toLowerCase() ||
+          l.developer?.slug?.toLowerCase() === query.developer?.toLowerCase() ||
+          (l.developer?.name && normalizeSearchText(l.developer.name).includes(qDev))
+      );
+    }
+
+    // Filter by project
+    if (query.project) {
+      const qProj = normalizeSearchText(query.project);
+      filtered = filtered.filter(
+        (l) =>
+          l.project?.id?.toLowerCase() === query.project?.toLowerCase() ||
+          l.project?.slug?.toLowerCase() === query.project?.toLowerCase() ||
+          (l.project?.name && normalizeSearchText(l.project.name).includes(qProj))
+      );
+    }
 
     // Full-text search keyword query
     if (query.q) {
@@ -271,6 +302,15 @@ export class MockApiClient implements ApiClient {
     return FIXTURE_LOCATIONS.filter((loc) => loc.countryCode === countryCode);
   }
 
+  async getLocationBySlug(slug: string): Promise<Location | null> {
+    await delay();
+    const normalized = slug.toLowerCase();
+    const loc = FIXTURE_LOCATIONS.find(
+      (l) => l.slug.toLowerCase() === normalized || l.id.toLowerCase() === normalized
+    );
+    return loc || null;
+  }
+
   async getFeaturedLocations(countryCode: CountryCode): Promise<Location[]> {
     await delay();
     return FIXTURE_LOCATIONS.filter((loc) => loc.countryCode === countryCode && loc.isFeatured).sort(
@@ -291,6 +331,10 @@ export class MockApiClient implements ApiClient {
       (d) => d.id.toLowerCase() === normalized || d.slug.toLowerCase() === normalized
     );
     return dev || null;
+  }
+
+  async getDeveloperBySlug(slug: string): Promise<Developer | null> {
+    return this.getDeveloper(slug);
   }
 
   async getProjects(countryCode?: CountryCode): Promise<Project[]> {

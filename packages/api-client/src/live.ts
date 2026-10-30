@@ -144,6 +144,14 @@ export class LiveApiClient implements ApiClient {
     return this.request(`/v1/locations${qs}`, { method: 'GET' });
   }
 
+  async getLocationBySlug(slug: string): Promise<Location | null> {
+    try {
+      return await this.request(`/v1/locations/${encodeURIComponent(slug)}`, { method: 'GET' });
+    } catch {
+      return null;
+    }
+  }
+
   async getFeaturedLocations(countryCode: CountryCode): Promise<Location[]> {
     const locations = await this.getLocations(countryCode);
     return locations.filter((loc) => loc.isFeatured);
@@ -160,6 +168,10 @@ export class LiveApiClient implements ApiClient {
     } catch {
       return null;
     }
+  }
+
+  async getDeveloperBySlug(slug: string): Promise<Developer | null> {
+    return this.getDeveloper(slug);
   }
 
   async getProjects(countryCode?: CountryCode): Promise<Project[]> {

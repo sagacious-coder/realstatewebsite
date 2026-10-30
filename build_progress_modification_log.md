@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 10: Remaining public pages (City, Area, Projects, Developers, Sell with us, About, Contact)`
+* **Current Stage in Progress:** `Stage 11: Admin App foundation, listings management & uploads`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 9 (Property details page /buy/[slug]: media mosaic, lightbox, zoom floor plan, attributes, payment plan timeline, amenities checklist, landmark vicinity, sticky agent sidebar, mobile inquiry dock, and share card)
-* **Next Up After 9:** Stage 10 (Remaining public pages)
+* **Latest Completed Milestone:** Stage 10 (Remaining public pages: Destinations/Location hubs with lifestyle guides, Developer directory & detail profiles, and 4-step Sell With Us intake wizard with strict Zod submission pipeline; 465/465 SSG routes prerendered clean)
+* **Next Up After 10:** Stage 11 (Admin App foundation, listings management & uploads)
 
 ---
 
@@ -29,8 +29,8 @@
 | **Stage 7** | Country Home Page (12 sections, slideshow) | **DONE** | 2026-10-30 | 12 editorial sections, hero slideshow, payment plan calculator, 33/33 SSG build clean |
 | **Stage 8** | Search & Listings directory (`/buy`) | **DONE** | 2026-10-31 | 53/53 SSG build clean, zero lint/typecheck errors |
 | **Stage 9** | Property details page, inquiry leads & share cards | **DONE** | 2026-10-31 | 149/149 SSG build clean, zero lint/typecheck errors |
-| **Stage 10** | Remaining public pages (City, Area, Sell with us) | NEXT TO RUN | — | — |
-| **Stage 11** | Admin App foundation, listings management & uploads | Not Started | — | — |
+| **Stage 10** | Remaining public pages (City, Area, Sell with us) | **DONE** | 2026-10-31 | 465/465 SSG build clean, zero lint/typecheck errors |
+| **Stage 11** | Admin App foundation, listings management & uploads | NEXT TO RUN | — | — |
 | **Stage 12** | Admin CRM, leads, locations, settings & users | Not Started | — | — |
 | **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | Not Started | — | — |
 | **Stage 14** | Security audit, end-to-end tests & launch prep | Not Started | — | — |
@@ -243,3 +243,24 @@
   * `pnpm run typecheck`: 0 errors across all 7 packages.
   * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
   * `pnpm run build`: All 149 static routes compiled and prerendered cleanly (including 96 localized property detail pages).
+
+---
+
+### 2026-10-31 — Stage 10: Destinations, Developers & "Sell With Us" Pages
+* **Action:** Built the complete set of public destination hubs, developer directories and profiles, and the 4-step property submission intake wizard ("Sell With Us") across all four target markets (UAE, Egypt, Georgia, Turkey) with full localized static prerendering, RTL mirroring, and strict Zod boundary validation.
+* **Outputs Created & Configured:**
+  * `LocationDetailPage` (`apps/web/app/[locale]/[country]/locations/[slug]/page.tsx`): High-resolution hero banner with destination imagery, localized taglines, breadcrumb hierarchy, key investment metrics (average price per sqm, net rental yields, active inventory), lifestyle & investment editorial guide with transit, amenities, and regulatory advantage highlights, responsive grid of active properties (`LocationListingsGrid`), and explore neighboring districts cards. Static params generated for all 204 location/locale combinations.
+  * `LocationsDirectoryPage` (`apps/web/app/[locale]/[country]/locations/page.tsx`): Destination directory grouping prime cities and featured districts with thumbnail cards, counts, and direct routing.
+  * `DevelopersDirectoryPage` (`apps/web/app/[locale]/[country]/developers/page.tsx`): Verification pledge hero highlighting strict developer auditing criteria (government escrow compliance, milestone-linked handover track records, 0% brokerage markups), and responsive grid of developer cards with logos, operating country badges, and project/inventory metrics.
+  * `DeveloperDetailPage` (`apps/web/app/[locale]/[country]/developers/[slug]/page.tsx`): Master developer profile route with escrow verification badge, official external website links, corporate biography, architectural & master planning standards pillars, and curated portfolio grid of active listings with direct `/buy?developer=...` search links. Static params generated for all 52 developer/country combinations.
+  * `SellWithUsPage` (`apps/web/app/[locale]/[country]/sell/page.tsx`): Private Client Services value proposition hero highlighting direct syndication to 45,000+ verified HNW international investors, transparent 0% hidden fee pledge, and 3 advisory benefit pillars (Global Buyer Syndication, Bespoke Architectural Media, Turnkey Transaction Advisory).
+  * `SellPropertyForm` (`apps/web/components/forms/SellPropertyForm.tsx`): 4-step intake wizard (Step 1: Property Details with type, beds, baths, size, asking price; Step 2: Location & Address with country, city, area; Step 3: Highlights & Ownership with description and viewing notes; Step 4: Contact & Consent with full name, email, international phone prefix, and mandatory privacy authorization). Validates payload strictly via `SubmissionCreateSchema` from `@wild-hills/contracts` and dispatches via `createSubmission`. Features success confirmation state with unique submission reference ID, next steps timeline, and direct WhatsApp concierge CTA.
+  * `LocationListingsGrid` (`apps/web/components/locations/LocationListingsGrid.tsx`): Reusable client grid formatting prices with `useCurrency` and `useLocale` without hydration mismatches.
+  * Top-Level Redirects (`apps/web/app/[locale]/locations/page.tsx`, `developers/page.tsx`, `sell/page.tsx`): Smooth redirection from global routes to the visitor's preferred country.
+  * API Client Extension (`packages/api-client/src/types.ts`, `mock.ts`, `live.ts`): Added `getLocationBySlug` and `getDeveloperBySlug`, plus multi-field filtering on developer slug/name and city/area normalization.
+  * Internationalization: Comprehensive English and Arabic dictionaries added to `en.json` and `ar.json` for `locations`, `developers`, and `sell`.
+* **Validation:**
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
+  * `pnpm run build`: All 465 static routes compiled and prerendered cleanly.
+  * `graphify update .`: Knowledge graph re-extracted (1322 nodes, 3181 edges, 99 communities).

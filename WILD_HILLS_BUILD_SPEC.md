@@ -65,9 +65,9 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 8 Search and listings page | Frontend | 7 (B4 for live data) | Done |
 | B5 Leads, submissions, files, jobs | Backend | B3, B4 | Not started |
 | 9 Property page, leads, share cards | Frontend | 8 (B5 for live leads) | Done |
-| 10 Remaining public pages | Frontend | 9 | **NEXT TO RUN** |
+| 10 Remaining public pages | Frontend | 9 | Done |
 | B6 Admin API | Backend | B3, B5 | Not started |
-| 11 Admin app foundation and listings | Frontend | B6 | Not started |
+| 11 Admin app foundation and listings | Frontend | B6 | **NEXT TO RUN** |
 | 12 Admin: leads, locations, content, users | Frontend | 11 | Not started |
 | 13 Arabic, accessibility, SEO, performance pass | Both | 10, 12 | Not started |
 | 14 Security review, QA, launch preparation | Both | 13 | Not started |

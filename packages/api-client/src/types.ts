@@ -36,9 +36,11 @@ export interface ApiClient {
   getListingBySlug(slug: string): Promise<ListingDetail | null>;
   getFeaturedListings(countryCode?: CountryCode, limit?: number): Promise<ListingSummary[]>;
   getLocations(countryCode?: CountryCode): Promise<Location[]>;
+  getLocationBySlug(slug: string): Promise<Location | null>;
   getFeaturedLocations(countryCode: CountryCode): Promise<Location[]>;
   getDevelopers(countryCode?: CountryCode): Promise<Developer[]>;
   getDeveloper(id: string): Promise<Developer | null>;
+  getDeveloperBySlug(slug: string): Promise<Developer | null>;
   getProjects(countryCode?: CountryCode): Promise<Project[]>;
   getSearchSuggestions(query: string, countryCode?: CountryCode): Promise<SmartSearchSuggestionGroup>;
   getCountrySettings(countryCode: CountryCode): Promise<CountrySettings>;

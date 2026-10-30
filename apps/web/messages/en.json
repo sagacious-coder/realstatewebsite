@@ -439,5 +439,115 @@
       "copiedLink": "Property link copied to clipboard",
       "shareVia": "Share via..."
     }
+  },
+  "locations": {
+    "badge": "Destination Hub",
+    "overview": "Overview & Lifestyle",
+    "avgPrice": "Avg. Price / m²",
+    "rentalYield": "Rental Yield",
+    "activeProperties": "Active Properties",
+    "lifestyleGuide": "Lifestyle & Investment Guide",
+    "lifestyleHighlights": "District Highlights",
+    "transport": "Connectivity & Transit",
+    "transportDesc": "Convenient access to international airports, rapid metro lines, and central arterial motorways.",
+    "amenities": "World-Class Infrastructure",
+    "amenitiesDesc": "Surrounded by accredited international schools, private beach clubs, golf academies, and luxury retail.",
+    "investment": "Investment Advantages",
+    "investmentDesc": "Tax-efficient ownership structures, strong capital appreciation prospects, and investor residency eligibility.",
+    "activeListings": "Available Properties in {location}",
+    "activeListingsSubtitle": "Curated residential developments and off-plan releases available for acquisition",
+    "viewAllIn": "View all properties in {location}",
+    "nearby": "Explore Nearby Destinations",
+    "nearbySubtitle": "Discover neighboring residential communities and investment hotspots in {country}",
+    "noListings": "No active listings currently available in this specific location.",
+    "exploreAllCountry": "Browse all properties in {country}",
+    "allLocationsTitle": "Destinations & Communities in {country}",
+    "allLocationsSubtitle": "Explore prime cities and coastal regions curated by Wild Hills"
+  },
+  "developers": {
+    "pledgeBadge": "Verified Master Developers",
+    "pledgeTitle": "Exclusively Licensed & Vetted Partners",
+    "pledgeSubtitle": "Every developer represented across the Wild Hills portfolio is audited for financial solvency, escrow compliance, construction milestone delivery, and statutory licensing.",
+    "directoryTitle": "Master Developers in {country}",
+    "directorySubtitle": "Partnering with visionary architects and master builders shaping global skylines",
+    "totalProjects": "{count} Projects",
+    "activeListings": "{count} Active Listings",
+    "viewProfile": "View Developer Portfolio",
+    "established": "Master Developer",
+    "trackRecord": "Developer Track Record",
+    "trackRecordSubtitle": "Demonstrated delivery performance, master planning expertise, and quality craftsmanship.",
+    "completedProjects": "Delivered Projects",
+    "activeProperties": "Properties Available",
+    "headquarters": "Operating Markets",
+    "officialWebsite": "Visit Official Website",
+    "escrowBadge": "Government Escrow Compliant",
+    "portfolioTitle": "Properties by {name}",
+    "portfolioSubtitle": "Current inventory of luxury residences, apartments, and off-plan releases",
+    "viewAllListings": "View all listings by {name}",
+    "noListings": "No active public listings currently available for this developer."
+  },
+  "sell": {
+    "heroBadge": "Private Client Services",
+    "heroTitle": "List Your Property with Wild Hills",
+    "heroSubtitle": "Access an elite network of 45,000+ verified high-net-worth international investors across the Gulf, Europe, and Central Asia.",
+    "commissionPledge": "Transparent 0% Hidden Fees · Vetted Escrow Protection · VIP International Marketing",
+    "advisoryTitle": "Why Sell With Wild Hills",
+    "benefits": {
+      "global": {
+        "title": "Global Buyer Syndication",
+        "description": "Direct exposure to qualified luxury purchasers through our private client desks in Dubai, Istanbul, Batumi, and Cairo."
+      },
+      "media": {
+        "title": "Bespoke Architectural Media",
+        "description": "Complimentary 4K HDR drone cinematography, architectural floor plan modeling, and VIP virtual tours."
+      },
+      "legal": {
+        "title": "Turnkey Transaction Advisory",
+        "description": "Full legal assistance, deed transfer coordination, escrow oversight, and compliant international currency repatriation."
+      }
+    },
+    "form": {
+      "step1Title": "Property Details",
+      "step1Subtitle": "Tell us about the home you are presenting",
+      "propertyType": "Property Type",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "size": "Property Size (m²)",
+      "expectedPrice": "Expected Asking Price",
+      "currency": "Currency",
+      "step2Title": "Location & Address",
+      "step2Subtitle": "Where is the property situated?",
+      "country": "Country",
+      "city": "City",
+      "area": "District / Neighborhood (optional)",
+      "step3Title": "Property Highlights & Ownership",
+      "step3Subtitle": "Add key architectural features and condition",
+      "description": "Description & Key Highlights",
+      "descriptionPlaceholder": "E.g., high floor corner unit, private plunge pool, panoramic sea view, recently renovated with Italian marble...",
+      "notes": "Internal Notes / Preferred Viewing Times (optional)",
+      "notesPlaceholder": "Any specific instructions, tenant status, or handover timeline...",
+      "step4Title": "Owner Information & Contact",
+      "step4Subtitle": "How should our advisory desk reach you?",
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number (with country code)",
+      "consent": "I agree to the privacy policy and authorize Wild Hills Real Estate to contact me regarding the valuation and marketing of my property.",
+      "submit": "Submit Property for Review",
+      "submitting": "Submitting Property...",
+      "prevStep": "Previous Step",
+      "nextStep": "Continue"
+    },
+    "success": {
+      "title": "Property Submitted Successfully",
+      "subtitle": "Thank you for trusting Wild Hills with your property listing.",
+      "refLabel": "Submission Reference ID",
+      "timelineTitle": "What happens next?",
+      "timelineStep1": "Our senior valuation specialist reviews your property within 4 business hours.",
+      "timelineStep2": "We verify documentation, comparable market transactions, and current escrow guidelines.",
+      "timelineStep3": "A dedicated private client advisor will contact you via WhatsApp or phone to coordinate professional media capture and listing launch.",
+      "whatsappButton": "Speak to an Advisor Immediately",
+      "submitAnother": "Submit Another Property",
+      "backHome": "Return to Homepage"
+    }
   }
 }
