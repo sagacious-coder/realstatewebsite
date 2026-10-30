@@ -28,7 +28,6 @@
 | **Stage 6** | Intro animation & 4-panel Country Chooser | **DONE** | 2026-10-30 | Brand intro, interactive panels, 33/33 static pages build |
 | **Stage 7** | Country Home Page (12 sections, slideshow) | **DONE** | 2026-10-30 | 12 editorial sections, hero slideshow, payment plan calculator, 33/33 SSG build clean |
 | **Stage 8** | Search & Listings directory (`/buy`) | In Progress | — | — |
-| **Stage 8** | Search & Listings directory (`/buy`) | Not Started | — | — |
 | **Stage 9** | Property details page, inquiry leads & share cards | Not Started | — | — |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | Not Started | — | — |
 | **Stage 11** | Admin App foundation, listings management & uploads | Not Started | — | — |
