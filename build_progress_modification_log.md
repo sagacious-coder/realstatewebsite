@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 12: Admin CRM, leads, locations, settings & users`
+* **Current Stage in Progress:** `Stage 13: Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 11 (Admin App foundation, responsive navigation shell, listings management data table with search/filters/sorting/bulk actions, and 7-section Zod-validated create/edit form; 8/8 admin routes + 465/465 web routes build clean)
-* **Next Up After 11:** Stage 12 (Admin CRM, leads, locations, settings & users)
+* **Latest Completed Milestone:** Stage 12 (Admin CRM, leads pipeline, seller submissions inbox with draft conversion, developer escrow directory, locations management with yield highlights, editable FX rates & corporate settings, high-res image quality upgrade; 9/9 admin routes + 465/465 web routes build clean)
+* **Next Up After 12:** Stage 13 (Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals)
 
 ---
 
@@ -31,9 +31,8 @@
 | **Stage 9** | Property details page, inquiry leads & share cards | **DONE** | 2026-10-31 | 149/149 SSG build clean, zero lint/typecheck errors |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | **DONE** | 2026-10-31 | 465/465 SSG build clean, zero lint/typecheck errors |
 | **Stage 11** | Admin App foundation, listings management & uploads | **DONE** | 2026-10-31 | 8/8 admin routes build clean, zero lint/typecheck errors |
-| **Stage 12** | Admin CRM, leads, locations, settings & users | NEXT TO RUN | — | — |
-| **Stage 12** | Admin CRM, leads, locations, settings & users | Not Started | — | — |
-| **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | Not Started | — | — |
+| **Stage 12** | Admin CRM, leads, locations, settings & users | **DONE** | 2026-10-31 | Formula-safe CSV export, 9/9 admin routes build clean, zero type/lint errors |
+| **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | **NEXT TO RUN** | — | — |
 | **Stage 14** | Security audit, end-to-end tests & launch prep | Not Started | — | — |
 
 ### Backend Track (Custom Fastify + PostgreSQL + Worker)
@@ -286,3 +285,24 @@
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: 8/8 admin routes and 465/465 web routes compiled cleanly in production build.
   * `graphify update .`: Knowledge graph re-extracted (1431 nodes, 3429 edges, 92 communities).
+
+---
+
+### 2026-10-31 — Stage 12: Admin CRM, Leads & Inquiries, Submissions Inbox, Locations, Developers & Settings
+* **Action:** Implemented the complete administrative back-office CRM suite in `apps/admin`, including the buyer inquiry CRM pipeline, private seller property submissions inbox with one-click draft listing conversion, master developer registry with escrow audit tracking, location & regional desks management with yield highlights, corporate settings & live FX currency exchange rates table, and the monorepo-wide high-resolution image quality upgrade.
+* **Outputs Created & Configured:**
+  * `High-Res Image Upgrade` (`apps/web/components/SiteImage.tsx`): Configured Next.js `<Image />` default `quality={85}` and accurate responsive `sizes` breakpoints for desktop hero/lightbox (`(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1600px`) and grid cards (`(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw`). Verified fixture image paths and manifests across monorepo.
+  * `Contracts & Fixtures` (`packages/contracts/src/leads.ts`, `fixtures/leads.ts`, `enums.ts`): Defined strict Zod schemas and types for `LeadRecord` and `SubmissionRecord`, expanded `LEAD_STATUSES` (`new`, `contacted`, `qualified`, `viewing_scheduled`, `closed_won`, `closed_lost`) and `SUBMISSION_STATUSES` (`pending_review`, `reviewing`, `approved`, `rejected`, `converted_to_draft`, `archived`), and seeded 5 realistic international client leads and 3 verified seller submissions.
+  * `API Client Extension` (`packages/api-client/src/types.ts`, `mock.ts`, `live.ts`): Added `getLeads`, `getSubmissions`, `updateLeadStatus`, and `updateSubmissionStatus` to `ApiClient` contract interface with in-memory stores in mock mode and REST endpoint routing in live mode.
+  * `Leads & Inquiries CRM` (`apps/admin/app/leads/page.tsx`): Comprehensive CRM data table and pipeline featuring metric cards (Total Leads, New Inquiries, Viewings Scheduled, Deals Won), text search and multi-criteria filters (Market, Pipeline Status), client contact quick-actions (direct WhatsApp and email triggers), slide-over detail modal displaying full inquirer information, referenced listing with direct link to listing editor, inquiry message, and campaign attribution (UTM source & campaign), private staff notes editor with immediate status updating, and formula-injection-safe CSV export neutralizing spreadsheet-sensitive characters (`=`, `+`, `-`, `@`).
+  * `Seller Submissions Inbox` (`apps/admin/app/submissions/page.tsx`): Operational review queue for inbound property listings submitted via the "Sell With Us" portal, featuring submission specs (type, beds, baths, size, asking price), seller contacts, review modal with photo thumbnails and private seller notes, status progression (`approved`, `rejected`, `converted_to_draft`), and "Convert to Listing Draft" action pre-populating `/listings/new` via query parameters.
+  * `Listing Form Pre-Population` (`apps/admin/components/listings/ListingForm.tsx` & `apps/admin/app/listings/new/page.tsx`): Wrapped in `<Suspense>` boundary and integrated `useSearchParams` to seamlessly pre-populate title, property type, asking price, country, city, area, beds, baths, size, and description when converting from seller submissions.
+  * `Master Developers Directory` (`apps/admin/app/developers/page.tsx`): Partner management directory showcasing project and active listing counts, operating market badges, escrow audit pledges, official portal links, search filtering, and "Add Developer" modal with schema validation.
+  * `Locations Management` (`apps/admin/app/locations/page.tsx`): Geographic desks and location metadata management covering cities and luxury districts across all 4 countries, coordinates display, active property count, and quick-edit modal for investment tag labels, lifestyle descriptions, and featured pin toggles.
+  * `Settings & Currency Exchange` (`apps/admin/app/settings/page.tsx`): Corporate communication settings (company legal name, concierge email, WhatsApp alerts line, emergency contact), FX exchange rates table (`AED`, `USD`, `EUR`, `TRY`, `GEL`, `EGP`) with editable multipliers and timestamp tracking, and FIDO2/WebAuthn hardware-backed passkey security status.
+  * `Admin Navigation` (`apps/admin/components/layout/Sidebar.tsx`): Added "Seller Submissions" with icon to the main navigation menu.
+* **Validation:**
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: 9/9 admin routes and 465/465 web routes compiled and prerendered cleanly.
+  * `graphify update .`: Knowledge graph re-extracted (1483 nodes, 3598 edges, 102 communities).

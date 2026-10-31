@@ -7,7 +7,9 @@ import {
   ExchangeRates,
   FaqItem,
   LeadCreate,
+  LeadRecord,
   LeadResponse,
+  LeadStatus,
   ListingDetail,
   ListingSummary,
   Location,
@@ -17,7 +19,9 @@ import {
   SearchResult,
   SmartSearchSuggestionGroup,
   SubmissionCreate,
+  SubmissionRecord,
   SubmissionResponse,
+  SubmissionStatus,
   Testimonial,
 } from '@wild-hills/contracts';
 
@@ -51,5 +55,9 @@ export interface ApiClient {
   getBlogPosts(countryCode?: CountryCode): Promise<BlogPost[]>;
   createLead(data: LeadCreate): Promise<LeadResponse>;
   createSubmission(data: SubmissionCreate): Promise<SubmissionResponse>;
+  getLeads(countryCode?: CountryCode): Promise<LeadRecord[]>;
+  getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]>;
+  updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean>;
+  updateSubmissionStatus(submissionId: string, status: SubmissionStatus): Promise<boolean>;
 }
 

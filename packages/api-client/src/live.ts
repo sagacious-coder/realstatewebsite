@@ -8,8 +8,10 @@ import {
   FaqItem,
   LeadCreate,
   LeadCreateSchema,
+  LeadRecord,
   LeadResponse,
   LeadResponseSchema,
+  LeadStatus,
   ListingDetail,
   ListingDetailSchema,
   ListingSummary,
@@ -25,8 +27,10 @@ import {
   SmartSearchSuggestionGroupSchema,
   SubmissionCreate,
   SubmissionCreateSchema,
+  SubmissionRecord,
   SubmissionResponse,
   SubmissionResponseSchema,
+  SubmissionStatus,
   Testimonial,
 } from '@wild-hills/contracts';
 import { ApiClient, ApiClientConfig, ApiMode } from './types.js';
@@ -252,6 +256,32 @@ export class LiveApiClient implements ApiClient {
       },
       SubmissionResponseSchema
     );
+  }
+
+  async getLeads(countryCode?: CountryCode): Promise<LeadRecord[]> {
+    const qs = countryCode ? `?country=${encodeURIComponent(countryCode)}` : '';
+    return this.request(`/v1/admin/leads${qs}`, { method: 'GET' });
+  }
+
+  async getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]> {
+    const qs = countryCode ? `?country=${encodeURIComponent(countryCode)}` : '';
+    return this.request(`/v1/admin/submissions${qs}`, { method: 'GET' });
+  }
+
+  async updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean> {
+    await this.request(`/v1/admin/leads/${encodeURIComponent(leadId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, notes }),
+    });
+    return true;
+  }
+
+  async updateSubmissionStatus(submissionId: string, status: SubmissionStatus): Promise<boolean> {
+    await this.request(`/v1/admin/submissions/${encodeURIComponent(submissionId)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+    return true;
   }
 }
 

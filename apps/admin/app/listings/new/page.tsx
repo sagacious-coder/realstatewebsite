@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ListingForm } from '@/components/listings/ListingForm';
 
 export default function NewListingPage() {
-  return <ListingForm mode="create" />;
+  return (
+    <Suspense fallback={<div className="p-12 text-center text-sm text-muted">Loading listing editor...</div>}>
+      <ListingForm mode="create" />
+    </Suspense>
+  );
 }
-

@@ -9,12 +9,13 @@ export interface SiteImageProps extends Omit<ImageProps, 'src'> {
   alt: string;
   showSampleBadge?: boolean;
   fallbackLabel?: string;
+  quality?: number;
 }
 
 /**
  * SiteImage: Brand wrapper around Next.js <Image /> adhering to Section 5:
  * - Reads real dimensions & blur placeholders from lib/image-manifest.ts
- * - Sets sizes, blur placeholder, and lazy loading by default
+ * - Sets sizes, blur placeholder, quality=85, and lazy loading by default
  * - Gracefully falls back to PlaceholderImage for missing/placeholder assets
  */
 export function SiteImage({
@@ -23,8 +24,9 @@ export function SiteImage({
   width,
   height,
   fill,
-  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+  sizes,
   priority = false,
+  quality = 85,
   className,
   showSampleBadge = false,
   fallbackLabel,
@@ -46,6 +48,13 @@ export function SiteImage({
   const finalWidth = width || (fill ? undefined : meta?.width || 1200);
   const finalHeight = height || (fill ? undefined : meta?.height || 800);
 
+  // Accurate responsive sizes defaults
+  const resolvedSizes =
+    sizes ||
+    (fill || priority
+      ? '(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1600px'
+      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw');
+
   const blurProps: Partial<ImageProps> =
     meta?.blurDataURL && !priority
       ? {
@@ -62,8 +71,9 @@ export function SiteImage({
         width={finalWidth}
         height={finalHeight}
         fill={fill}
-        sizes={sizes}
+        sizes={resolvedSizes}
         priority={priority}
+        quality={quality}
         loading={priority ? undefined : 'lazy'}
         {...blurProps}
         className={cn(

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   Save,
@@ -55,6 +55,19 @@ const COMMON_AMENITIES = [
 
 export function ListingForm({ initialListing, mode = 'create' }: ListingFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // URL query pre-fills for conversion from seller submissions
+  const paramTitle = searchParams?.get('title');
+  const paramCity = searchParams?.get('city');
+  const paramArea = searchParams?.get('area');
+  const paramCountry = searchParams?.get('country') as CountryCode | null;
+  const paramType = searchParams?.get('type') as PropertyType | null;
+  const paramPrice = searchParams?.get('price');
+  const paramBeds = searchParams?.get('beds');
+  const paramBaths = searchParams?.get('baths');
+  const paramSize = searchParams?.get('size');
+  const paramDesc = searchParams?.get('desc');
 
   // Active section tab
   const [activeTab, setActiveTab] = useState<'basic' | 'pricing' | 'location' | 'specs' | 'media' | 'developer' | 'amenities'>('basic');
@@ -66,18 +79,18 @@ export function ListingForm({ initialListing, mode = 'create' }: ListingFormProp
 
   // Form Fields
   // 1. Basic Info
-  const [title, setTitle] = useState(initialListing?.title || '');
-  const [titleAr, setTitleAr] = useState(initialListing?.title || '');
+  const [title, setTitle] = useState(initialListing?.title || paramTitle || '');
+  const [titleAr, setTitleAr] = useState(initialListing?.title || paramTitle || '');
   const [slug, setSlug] = useState(initialListing?.slug || '');
   const [refNumber, setRefNumber] = useState(initialListing?.refNumber || 'WH-AE-105');
-  const [propertyType, setPropertyType] = useState<PropertyType>(initialListing?.propertyType || 'apartment');
+  const [propertyType, setPropertyType] = useState<PropertyType>(initialListing?.propertyType || paramType || 'apartment');
   const [status, setStatus] = useState<PropertyStatus>(initialListing?.status || 'ready');
   const [completionYear, setCompletionYear] = useState<string>(initialListing?.completionYear ? String(initialListing.completionYear) : '2025');
-  const [description, setDescription] = useState(initialListing?.description || '');
+  const [description, setDescription] = useState(initialListing?.description || paramDesc || '');
 
   // 2. Pricing & Payment
   const [price, setPrice] = useState<string>(
-    initialListing ? String(initialListing.priceMinor / 100) : '2500000'
+    initialListing ? String(initialListing.priceMinor / 100) : (paramPrice || '2500000')
   );
   const [currency, setCurrency] = useState<CurrencyCode>(initialListing?.currency || 'AED');
   const [downPaymentPercent, setDownPaymentPercent] = useState<string>(
@@ -86,9 +99,9 @@ export function ListingForm({ initialListing, mode = 'create' }: ListingFormProp
   const [hasInstallments, setHasInstallments] = useState<boolean>(Boolean(initialListing?.paymentPlan));
 
   // 3. Location Details
-  const [countryCode, setCountryCode] = useState<CountryCode>(initialListing?.location.countryCode || 'ae');
-  const [city, setCity] = useState(initialListing?.location.city || 'Dubai');
-  const [area, setArea] = useState(initialListing?.location.area || 'Downtown Dubai');
+  const [countryCode, setCountryCode] = useState<CountryCode>(initialListing?.location.countryCode || paramCountry || 'ae');
+  const [city, setCity] = useState(initialListing?.location.city || paramCity || 'Dubai');
+  const [area, setArea] = useState(initialListing?.location.area || paramArea || 'Downtown Dubai');
   const [latitude, setLatitude] = useState<string>(
     initialListing?.coordinates?.lat ? String(initialListing.coordinates.lat) : '25.1972'
   );
@@ -97,9 +110,9 @@ export function ListingForm({ initialListing, mode = 'create' }: ListingFormProp
   );
 
   // 4. Specifications
-  const [bedrooms, setBedrooms] = useState<number>(initialListing ? initialListing.bedrooms : 2);
-  const [bathrooms, setBathrooms] = useState<number>(initialListing ? initialListing.bathrooms : 2);
-  const [sizeSqm, setSizeSqm] = useState<string>(initialListing ? String(initialListing.sizeSqm) : '140');
+  const [bedrooms, setBedrooms] = useState<number>(initialListing ? initialListing.bedrooms : (paramBeds ? Number(paramBeds) : 2));
+  const [bathrooms, setBathrooms] = useState<number>(initialListing ? initialListing.bathrooms : (paramBaths ? Number(paramBaths) : 2));
+  const [sizeSqm, setSizeSqm] = useState<string>(initialListing ? String(initialListing.sizeSqm) : (paramSize || '140'));
   const [isFeatured, setIsFeatured] = useState<boolean>(initialListing?.isFeatured ?? false);
   const [isHotDeal, setIsHotDeal] = useState<boolean>(initialListing?.isHotDeal ?? false);
   const [isNewLaunch, setIsNewLaunch] = useState<boolean>(initialListing?.isNewLaunch ?? false);

@@ -3,19 +3,48 @@ import {
   FIXTURE_LISTINGS,
   FIXTURE_DEVELOPERS,
   FIXTURE_LOCATIONS,
+  FIXTURE_EXCHANGE_RATES,
   type ListingDetail,
   type ListingSummary,
   type Developer,
   type Location,
   type CountryCode,
   type SearchQueryInput,
+  type LeadRecord,
+  type LeadStatus,
+  type SubmissionRecord,
+  type SubmissionStatus,
+  type ExchangeRates,
   toListingSummary,
 } from '@wild-hills/contracts';
 
 export const apiClient = createApiClient();
 
-// In-memory mutable listings store for live local admin updates in mock mode
+// In-memory mutable stores for live local admin updates in mock mode
 let adminListingsStore: ListingDetail[] = [...FIXTURE_LISTINGS];
+let adminDevelopersStore: Developer[] = [...FIXTURE_DEVELOPERS];
+let adminLocationsStore: Location[] = [...FIXTURE_LOCATIONS];
+let adminRatesStore: ExchangeRates = { ...FIXTURE_EXCHANGE_RATES, rates: { ...FIXTURE_EXCHANGE_RATES.rates } };
+
+export interface AdminGeneralSettings {
+  companyName: string;
+  contactEmail: string;
+  whatsappAlertPhone: string;
+  emergencyPhone: string;
+  defaultCurrency: string;
+  autoApproveDrafts: boolean;
+  leadNotificationEmail: boolean;
+}
+
+let adminGeneralSettingsStore: AdminGeneralSettings = {
+  companyName: 'Wild Hills Luxury Properties LLC',
+  contactEmail: 'concierge@wildhills.com',
+  whatsappAlertPhone: '+971 50 123 4567',
+  emergencyPhone: '+971 4 321 0000',
+  defaultCurrency: 'USD',
+  autoApproveDrafts: false,
+  leadNotificationEmail: true,
+};
 
 export async function getAdminListings(filters?: {
   country?: CountryCode;
@@ -130,10 +159,85 @@ export async function duplicateAdminListing(id: string): Promise<ListingDetail |
 }
 
 export async function getAdminDevelopers(countryCode?: CountryCode): Promise<Developer[]> {
-  return apiClient.getDevelopers(countryCode);
+  if (!countryCode) return [...adminDevelopersStore];
+  return adminDevelopersStore.filter((d) => d.countryCodes.includes(countryCode));
+}
+
+export async function saveAdminDeveloper(dev: Developer): Promise<Developer> {
+  const idx = adminDevelopersStore.findIndex((d) => d.id === dev.id);
+  if (idx >= 0) {
+    adminDevelopersStore[idx] = { ...dev };
+    return adminDevelopersStore[idx];
+  } else {
+    adminDevelopersStore.unshift(dev);
+    return dev;
+  }
 }
 
 export async function getAdminLocations(countryCode?: CountryCode): Promise<Location[]> {
-  return apiClient.getLocations(countryCode);
+  if (!countryCode) return [...adminLocationsStore];
+  return adminLocationsStore.filter((l) => l.countryCode === countryCode);
+}
+
+export async function saveAdminLocation(location: Location): Promise<Location> {
+  const idx = adminLocationsStore.findIndex((l) => l.id === location.id);
+  if (idx >= 0) {
+    adminLocationsStore[idx] = { ...location };
+    return adminLocationsStore[idx];
+  } else {
+    adminLocationsStore.push(location);
+    return location;
+  }
+}
+
+export async function getAdminLeads(countryCode?: CountryCode): Promise<LeadRecord[]> {
+  return apiClient.getLeads(countryCode);
+}
+
+export async function updateAdminLeadStatus(
+  leadId: string,
+  status: LeadStatus,
+  notes?: string
+): Promise<boolean> {
+  return apiClient.updateLeadStatus(leadId, status, notes);
+}
+
+export async function getAdminSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]> {
+  return apiClient.getSubmissions(countryCode);
+}
+
+export async function updateAdminSubmissionStatus(
+  submissionId: string,
+  status: SubmissionStatus
+): Promise<boolean> {
+  return apiClient.updateSubmissionStatus(submissionId, status);
+}
+
+export async function getAdminExchangeRates(): Promise<ExchangeRates> {
+  return { ...adminRatesStore, rates: { ...adminRatesStore.rates } };
+}
+
+export async function saveAdminExchangeRates(newRates: Record<string, number>): Promise<ExchangeRates> {
+  adminRatesStore = {
+    ...adminRatesStore,
+    timestamp: new Date().toISOString(),
+    rates: {
+      ...adminRatesStore.rates,
+      ...newRates,
+    },
+  };
+  return { ...adminRatesStore, rates: { ...adminRatesStore.rates } };
+}
+
+export async function getAdminGeneralSettings(): Promise<AdminGeneralSettings> {
+  return { ...adminGeneralSettingsStore };
+}
+
+export async function saveAdminGeneralSettings(settings: Partial<AdminGeneralSettings>): Promise<AdminGeneralSettings> {
+  adminGeneralSettingsStore = {
+    ...adminGeneralSettingsStore,
+    ...settings,
+  };
+  return { ...adminGeneralSettingsStore };
 }
 

@@ -12,14 +12,18 @@ import {
   FIXTURE_DEVELOPERS,
   FIXTURE_EXCHANGE_RATES,
   FIXTURE_FAQS,
+  FIXTURE_LEADS,
   FIXTURE_LISTINGS,
   FIXTURE_LOCATIONS,
   FIXTURE_PROJECTS,
+  FIXTURE_SUBMISSIONS,
   FIXTURE_TESTIMONIALS,
   fromMinorUnits,
   LeadCreate,
   LeadCreateSchema,
+  LeadRecord,
   LeadResponse,
+  LeadStatus,
   ListingDetail,
   ListingSummary,
   Location,
@@ -33,7 +37,9 @@ import {
   SmartSearchSuggestionGroup,
   SubmissionCreate,
   SubmissionCreateSchema,
+  SubmissionRecord,
   SubmissionResponse,
+  SubmissionStatus,
   Testimonial,
   toListingSummary,
   toMinorUnits,
@@ -51,6 +57,9 @@ function normalizeSearchText(text: string): string {
     .replace(/[\u0300-\u036f]/g, '')
     .trim();
 }
+
+const mockLeadsStore: LeadRecord[] = [...FIXTURE_LEADS];
+const mockSubmissionsStore: SubmissionRecord[] = [...FIXTURE_SUBMISSIONS];
 
 export class MockApiClient implements ApiClient {
   public readonly mode: ApiMode = 'mock';
@@ -481,9 +490,28 @@ export class MockApiClient implements ApiClient {
   async createLead(data: LeadCreate): Promise<LeadResponse> {
     await delay();
     const parsed = LeadCreateSchema.parse(data);
+    const leadId = `lead-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const newRecord: LeadRecord = {
+      id: leadId,
+      name: parsed.name,
+      email: parsed.email,
+      phone: parsed.phone,
+      countryCode: parsed.countryCode,
+      status: 'new',
+      listingId: parsed.listingId,
+      propertyRef: parsed.propertyRef,
+      budgetMin: parsed.budgetMin,
+      budgetMax: parsed.budgetMax,
+      currency: parsed.currency,
+      message: parsed.message,
+      preferredContact: parsed.preferredContact || 'whatsapp',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    mockLeadsStore.unshift(newRecord);
     return {
       success: true,
-      leadId: `lead-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      leadId,
       message: `Lead registered successfully for ${parsed.name}`,
     };
   }
@@ -491,11 +519,66 @@ export class MockApiClient implements ApiClient {
   async createSubmission(data: SubmissionCreate): Promise<SubmissionResponse> {
     await delay();
     const parsed = SubmissionCreateSchema.parse(data);
+    const submissionId = `sub-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const newRecord: SubmissionRecord = {
+      id: submissionId,
+      sellerName: parsed.sellerName,
+      sellerEmail: parsed.sellerEmail,
+      sellerPhone: parsed.sellerPhone,
+      countryCode: parsed.countryCode,
+      city: parsed.city,
+      area: parsed.area,
+      propertyType: parsed.propertyType,
+      bedrooms: parsed.bedrooms,
+      bathrooms: parsed.bathrooms,
+      sizeSqm: parsed.sizeSqm,
+      expectedPriceMinor: parsed.expectedPriceMinor,
+      currency: parsed.currency,
+      description: parsed.description,
+      notes: parsed.notes,
+      images: parsed.images || [],
+      status: 'pending_review',
+      consentGiven: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    mockSubmissionsStore.unshift(newRecord);
     return {
       success: true,
-      submissionId: `sub-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      submissionId,
       message: `Property submission registered successfully for ${parsed.sellerName}`,
     };
+  }
+
+  async getLeads(countryCode?: CountryCode): Promise<LeadRecord[]> {
+    await delay();
+    if (!countryCode) return [...mockLeadsStore];
+    return mockLeadsStore.filter((l) => l.countryCode === countryCode);
+  }
+
+  async getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]> {
+    await delay();
+    if (!countryCode) return [...mockSubmissionsStore];
+    return mockSubmissionsStore.filter((s) => s.countryCode === countryCode);
+  }
+
+  async updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean> {
+    await delay();
+    const item = mockLeadsStore.find((l) => l.id === leadId);
+    if (!item) return false;
+    item.status = status;
+    if (notes !== undefined) item.internalNotes = notes;
+    item.updatedAt = new Date().toISOString();
+    return true;
+  }
+
+  async updateSubmissionStatus(submissionId: string, status: SubmissionStatus): Promise<boolean> {
+    await delay();
+    const item = mockSubmissionsStore.find((s) => s.id === submissionId);
+    if (!item) return false;
+    item.status = status;
+    item.updatedAt = new Date().toISOString();
+    return true;
   }
 }
 

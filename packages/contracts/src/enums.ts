@@ -64,11 +64,28 @@ export const LEAD_TYPES = [
 export const LeadTypeSchema = z.enum(LEAD_TYPES);
 export type LeadType = z.infer<typeof LeadTypeSchema>;
 
-export const LEAD_STATUSES = ['new', 'contacted', 'qualified', 'lost', 'closed'] as const;
+export const LEAD_STATUSES = [
+  'new',
+  'contacted',
+  'qualified',
+  'viewing_scheduled',
+  'closed_won',
+  'closed_lost',
+  'lost',
+  'closed',
+] as const;
 export const LeadStatusSchema = z.enum(LEAD_STATUSES);
 export type LeadStatus = z.infer<typeof LeadStatusSchema>;
 
-export const SUBMISSION_STATUSES = ['pending', 'reviewing', 'approved', 'rejected'] as const;
+export const SUBMISSION_STATUSES = [
+  'pending',
+  'reviewing',
+  'approved',
+  'rejected',
+  'converted_to_draft',
+  'pending_review',
+  'archived',
+] as const;
 export const SubmissionStatusSchema = z.enum(SUBMISSION_STATUSES);
 export type SubmissionStatus = z.infer<typeof SubmissionStatusSchema>;
 

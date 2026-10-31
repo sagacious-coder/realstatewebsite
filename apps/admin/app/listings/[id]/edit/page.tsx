@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { getAdminListingById } from '@/lib/data';
 import { ListingForm } from '@/components/listings/ListingForm';
@@ -19,6 +19,9 @@ export default async function EditListingPage({ params }: EditListingPageProps) 
     notFound();
   }
 
-  return <ListingForm initialListing={listing} mode="edit" />;
+  return (
+    <Suspense fallback={<div className="p-12 text-center text-sm text-muted">Loading listing editor...</div>}>
+      <ListingForm initialListing={listing} mode="edit" />
+    </Suspense>
+  );
 }
-
