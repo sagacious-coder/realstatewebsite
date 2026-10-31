@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage 11: Admin App foundation, listings management & uploads`
+* **Current Stage in Progress:** `Stage 12: Admin CRM, leads, locations, settings & users`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 10 (Remaining public pages: Destinations/Location hubs with lifestyle guides, Developer directory & detail profiles, and 4-step Sell With Us intake wizard with strict Zod submission pipeline; 465/465 SSG routes prerendered clean)
-* **Next Up After 10:** Stage 11 (Admin App foundation, listings management & uploads)
+* **Latest Completed Milestone:** Stage 11 (Admin App foundation, responsive navigation shell, listings management data table with search/filters/sorting/bulk actions, and 7-section Zod-validated create/edit form; 8/8 admin routes + 465/465 web routes build clean)
+* **Next Up After 11:** Stage 12 (Admin CRM, leads, locations, settings & users)
 
 ---
 
@@ -30,7 +30,8 @@
 | **Stage 8** | Search & Listings directory (`/buy`) | **DONE** | 2026-10-31 | 53/53 SSG build clean, zero lint/typecheck errors |
 | **Stage 9** | Property details page, inquiry leads & share cards | **DONE** | 2026-10-31 | 149/149 SSG build clean, zero lint/typecheck errors |
 | **Stage 10** | Remaining public pages (City, Area, Sell with us) | **DONE** | 2026-10-31 | 465/465 SSG build clean, zero lint/typecheck errors |
-| **Stage 11** | Admin App foundation, listings management & uploads | NEXT TO RUN | — | — |
+| **Stage 11** | Admin App foundation, listings management & uploads | **DONE** | 2026-10-31 | 8/8 admin routes build clean, zero lint/typecheck errors |
+| **Stage 12** | Admin CRM, leads, locations, settings & users | NEXT TO RUN | — | — |
 | **Stage 12** | Admin CRM, leads, locations, settings & users | Not Started | — | — |
 | **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | Not Started | — | — |
 | **Stage 14** | Security audit, end-to-end tests & launch prep | Not Started | — | — |
@@ -264,3 +265,24 @@
   * `pnpm run lint`: 0 warnings, 0 errors across monorepo.
   * `pnpm run build`: All 465 static routes compiled and prerendered cleanly.
   * `graphify update .`: Knowledge graph re-extracted (1322 nodes, 3181 edges, 99 communities).
+
+---
+
+### 2026-10-31 — Stage 11: Admin App Foundation & Listings Management (`apps/admin`)
+* **Action:** Configured and launched the isolated `apps/admin` Next.js application with operational navigation shell, session guard hooks, high-level overview dashboard, listings management data table with instant search and multi-axis filters, and a comprehensive 7-section Zod-validated property creation/editing form.
+* **Outputs Created & Configured:**
+  * `AdminShell` (`apps/admin/components/layout/AdminShell.tsx`): Responsive operational container coordinating the sidebar, dynamic breadcrumb header, country selector, and owner profile menu.
+  * `Sidebar` (`apps/admin/components/layout/Sidebar.tsx`): Navigation panel covering Dashboard (`/`), Listings (`/listings`), Leads & Inquiries (`/leads`), Developers (`/developers`), Locations (`/locations`), and Settings (`/settings`), with mobile drawer toggle and link to live public site.
+  * `Header` (`apps/admin/components/layout/Header.tsx`): Sticky top navigation with dynamic route breadcrumbs, multi-country quick filter, and owner profile avatar ("Elena Rostova · Super Admin").
+  * `AdminAuthGuard` (`apps/admin/lib/auth.tsx`): Session provider delivering immediate owner access in mock mode while preserving hooks for WebAuthn passkey assertion.
+  * `AdminData` (`apps/admin/lib/data.ts`): In-memory mutable listings store initialized with fixture datasets, enabling local create, update, duplicate, and delete operations with instant reactivity.
+  * `ListingsTable` (`apps/admin/components/listings/ListingsTable.tsx`): Full data table with thumbnail, monospace reference code, property title, country/city badges, property type, formatted pricing, status badges (`ready`, `off_plan`, `under_construction`, `draft`, `sold`), search filter, country filter, type filter, status filter, sorting (newest, price, ref), bulk selection bar, and row action buttons (View on public site, Edit, Duplicate, Delete).
+  * `ListingForm` (`apps/admin/components/listings/ListingForm.tsx`): 7-section form covering Basic Info (EN/AR titles, slug generator, ref code, status), Pricing & Payment (asking price, currency, down payment %, installment breakdown), Location Details (country, city, area, coordinates), Specs & Metrics (beds, baths, sqm, sqft, feature flags), Media & Gallery (hero photo, multi-slot gallery, floor plan), Developer Assignment (master developer selector), and Amenities Checklist (12 interactive amenities). Validates payload strictly with `ListingDetailSchema` from `@wild-hills/contracts`.
+  * `DeleteListingDialog` (`apps/admin/components/listings/DeleteListingDialog.tsx`): Accessible modal confirming safe listing deletion.
+  * Admin Routes: Dashboard (`/`), Listings directory (`/listings`), Create listing (`/listings/new`), Edit listing (`/listings/[id]/edit`), Leads CRM (`/leads`), Developers (`/developers`), Locations (`/locations`), and Settings (`/settings`).
+  * Admin Config: Strict CSP headers, `X-Robots-Tag: noindex, nofollow, noarchive`, Tailwind CSS design tokens, and TypeScript configuration extending `@wild-hills/config/tsconfig.next.json`.
+* **Validation:**
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: 8/8 admin routes and 465/465 web routes compiled cleanly in production build.
+  * `graphify update .`: Knowledge graph re-extracted (1431 nodes, 3429 edges, 92 communities).

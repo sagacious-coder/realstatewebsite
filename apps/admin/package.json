@@ -3,23 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node -e \"console.log('admin dev placeholder')\"",
-    "build": "node -e \"console.log('admin build placeholder')\"",
-    "start": "node -e \"console.log('admin start placeholder')\"",
-    "lint": "node -e \"console.log('admin lint pass')\"",
-    "typecheck": "node -e \"console.log('admin typecheck pass')\""
+    "dev": "next dev --port 3001",
+    "build": "next build",
+    "start": "next start --port 3001",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@wild-hills/api-client": "workspace:*",
+    "@wild-hills/contracts": "workspace:*",
     "@wild-hills/ui": "workspace:*",
-    "next": "15.5.28",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.16.0",
+    "next": "^15.2.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.0.2"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@wild-hills/config": "workspace:*",
-    "typescript": "^5.7.0"
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.21.0",
+    "eslint-config-next": "^15.2.1",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2"
   }
 }
