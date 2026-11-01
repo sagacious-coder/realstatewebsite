@@ -1,9 +1,10 @@
-# Wild Hills Real Estate: Website Build Spec (v2.1, custom backend & Stages 1–3 reconciled)
+# Wild Hills Real Estate: Website Build Spec (v2.3, custom backend, Lean Free Mode)
 
 Put this file in the project root. Tell the agent: "Read WILD_HILLS_BUILD_SPEC.md. Do only the stage I name, then stop."
 
 **Revision:** October 2026. External BaaS is removed. The backend is now a custom API built in this repository: PostgreSQL, a TypeScript API service, a job worker, and S3-compatible storage. 
-**Current Repo State:** Stages 1, 2, and 3 are already executed, validated, and committed in the root directory. Stage 1b reconciles existing work into the monorepo architecture (`apps/web` and `packages/ui`) while strictly preserving all generated images, manifests, design tokens, and components.
+**Lean Free Mode (v2.3):** until the site earns revenue, pay only for the domain and the host. Every other service uses a free tier or open source. Do not build operations tooling (dashboards, drills, load tests) before it is needed. What to do now, at launch, and later is in section 18.1.
+**Current Repo State:** Frontend Stages 1 to 12 are done and run in `API_MODE=mock`. There is no database, no server process, and no real data yet. Next to run: Stage 13 (mock mode). Database work starts at Stage B1, not before.
 
 ## Contents
 
@@ -26,7 +27,8 @@ Put this file in the project root. Tell the agent: "Read WILD_HILLS_BUILD_SPEC.m
 | 14 | Performance, SEO, analytics | Unchanged |
 | 15 | Asset map | Output verified in Stage 2 |
 | 16 | Build stages | Reconciled Stage 1b prompt; Stages 2 & 3 marked Done |
-| 17 | Going public | Infrastructure checklist |
+| 17 | Going public | Lean launch checklist and upgrade triggers (17.4) |
+| 18 | Lean Free Mode: pay only for domain and host | NEW in v2.3 |
 
 ---
 
@@ -69,8 +71,11 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | B6 Admin API | Backend | B3, B5 | Not started |
 | 11 Admin app foundation and listings | Frontend | B6 | Done |
 | 12 Admin: leads, locations, content, users | Frontend | 11 | Done |
+| 12b Admin: usage panel (optional) | Frontend | B6 | Optional, only after launch |
 | 13 Arabic, accessibility, SEO, performance pass | Both | 10, 12 | **NEXT TO RUN** |
-| 14 Security review, QA, launch preparation | Both | 13 | Not started |
+| 14 Security review, QA, launch preparation | Both | 13, B6 | Not started |
+
+**Run order from here:** 13 (mock mode) -> B1 -> B2 -> B3 -> B4 -> B5 -> B6 -> 14. Stage 12b is optional and can wait until after launch. Stage 13 runs now against `API_MODE=mock`; its check of ISR with the API stopped moves to Stage 14 because it needs the live API from B4.
 
 ### 0.3 Reading map
 
@@ -78,13 +83,20 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 |---|---|
 | Frontend stages | Sections 1 to 3, then the sections the stage names |
 | Backend stages (B1 to B6) | Sections 1 to 3, 7, 9, all of 10, and 11 (for B6) or 12 (for B5) |
-| Stage 14 | Sections 10.13, 10.14, 13.8, 14, and 17 |
+| Stage 14 | Sections 10.13, 10.14, 13.8, 14, 17, and 18 |
+| Any stage touching email, storage, backups, CI, or scanning | Section 18 |
 
 ### 0.4 What changed from v1
 
 - External BaaS is completely removed in favor of a custom PostgreSQL + Fastify API + worker queue.
 - Work from Stages 1, 2, and 3 has already been completed in the root. Stage 1b transitions the existing code cleanly into `apps/web` and `packages/ui` using `git mv` without losing git history or re-processing assets.
 - Generic design primitives move to `packages/ui` so `apps/web` and `apps/admin` can share them.
+- v2.3 replaces the heavy Free Mode of v2.2 with Lean Free Mode (section 18): pay only for the domain and host; decide the database at Stage B1; keep only the non-negotiables (database not reachable from the internet, nightly backup, one restore test before launch, free uptime monitor).
+- v2.3 makes Stage 12b optional, trims Stage 14 (free scans, one restore test, no mandatory load tests or drills), and keeps only the quota limits that can silently lose data (email and storage, 18.3).
+
+### 0.5 Missing references (read this)
+
+Stage prompts cite subsections such as 10.2 to 10.17, 13.8, and 14.1 to 14.3. This file holds only a short summary of sections 10 to 14. Before running a backend stage, check that every cited subsection exists in files the agent can read. If it does not, paste the full backend blueprint into the project (for example `docs/backend-blueprint.md`) and point the agent to it. Rule 22 makes the agent stop instead of guessing.
 
 ---
 
@@ -128,6 +140,15 @@ Business model: buyers browse listings, send an inquiry, and the Wild Hills team
 16. Migrations are forward-only and numbered. Never edit an applied migration.
 17. Never log secrets, tokens, passwords, cookies, full emails, phone numbers, or message bodies.
 
+### 2.3 Lean Free Mode rules
+
+18. Do not add any paid service, paid SDK, or subscription. Only the services in section 18.5 are allowed. If a feature needs anything else, stop and record the need in `DECISIONS.md`.
+19. Every external service sits behind an interface with an environment-selected adapter (`EmailProvider`, `ObjectStorage`, `FxProvider`, `CaptchaVerifier`), so a paid upgrade is a configuration change and not a rewrite.
+20. Free-tier limits that can silently lose data (email caps and storage) are enforced in code (section 18.3): throttle, queue, and alert. Never drop a lead, an email, or an upload without telling an admin. Do not build other quota dashboards before launch.
+21. Do not build or call: the WhatsApp Business API, SMS or phone verification, paid captcha, paid map, analytics, or error-tracking services, a paid CMS, or a machine-translation API.
+22. If a stage names a section number that does not exist in this file, STOP and list the missing section numbers. Do not invent their content.
+23. Do not build operations tooling before it is needed. No dashboards, drills, runbooks, or load tests unless a stage explicitly asks for them.
+
 ---
 
 ## 3. Tech stack, monorepo structure, and environment
@@ -137,8 +158,12 @@ Business model: buyers browse listings, send an inquiry, and the Wild Hills team
 - **Public Site (`apps/web`):** Next.js App Router, TypeScript (strict), Tailwind CSS, next-intl (`en`, `ar`), Lucide icons, Framer Motion (subtle reveals only), react-hook-form + Zod.
 - **Admin App (`apps/admin`):** Next.js App Router, English only, separate origin, strict CSP.
 - **Backend (`apps/api`):** Fastify + TypeScript, Zod, OpenAPI 3.1, Drizzle ORM + PostgreSQL, `pg-boss` worker.
-- **Storage:** S3-compatible (Cloudflare R2 default).
-- **Email & Spam:** Resend (worker only), Cloudflare Turnstile (forms).
+- **Storage:** S3-compatible. Cloudflare R2 free tier in production, MinIO locally.
+- **Email & Spam:** Resend Free (worker only, throttled to its daily and monthly caps), Cloudflare Turnstile (free).
+- **Hosting (the one paid item, with the domain):** one small server running Docker Compose with web, admin, api, worker, and Caddy (automatic HTTPS). Start with 2 GB RAM plus swap (my estimate, not a measurement) and build images in CI or locally, never on the server.
+- **Database:** PostgreSQL behind one `DATABASE_URL`. The choice is made in Stage B1 (section 18.2): Postgres in Docker on the host for production (recommended), or a managed free Postgres for development and staging.
+- **DNS, CDN, WAF:** Cloudflare Free plan. **Analytics:** Cloudflare Web Analytics (free).
+- **CI:** GitHub Actions free minutes with caching and path filters. **Scans:** free open-source tools only (18.5).
 
 ### 3.2 Monorepo structure
 
@@ -160,7 +185,7 @@ wild-hills/
     api-client/          typed client with mock and live adapters
     ui/                  shared tokens, Tailwind preset, generic primitives (Button, Input, Badge, etc.)
     config/              tsconfig, eslint, prettier presets
-  infra/                 docker-compose.yml
+  infra/                 docker-compose.yml (dev), docker-compose.prod.yml, Caddyfile, scripts/ (backup)
   source-images/         (git-ignored, never touched)
   DECISIONS.md  CHANGELOG.md  SECURITY.md  LAUNCH_CHECKLIST.md
 ```
@@ -179,6 +204,11 @@ wild-hills/
 | `DATABASE_URL` | `apps/api` | PostgreSQL connection string |
 | `S3_ENDPOINT`, `S3_BUCKET_PUBLIC`, etc. | `apps/api` | Storage configuration |
 | `RESEND_API_KEY` | `apps/api` (worker) | Email sending |
+| `EMAIL_DAILY_CAP`, `EMAIL_MONTHLY_CAP` | `apps/api` (worker) | Free Mode email throttle (defaults 90 and 2700) |
+| `STORAGE_SOFT_LIMIT_GB`, `STORAGE_HARD_LIMIT_GB` | `apps/api` | Free Mode storage guard (defaults 7 and 9.5) |
+| `FX_PROVIDER`, `FX_API_KEY` | `apps/api` (worker) | Exchange-rate adapter and its free key |
+| `BACKUP_AGE_PUBLIC_KEY`, `S3_BUCKET_BACKUPS` | server (cron) | Encrypted nightly database backups |
+| `MAP_TILE_URL` | `apps/web` | Map tile source, swappable without code changes |
 
 ---
 
@@ -260,6 +290,7 @@ Smart search with `pg_trgm`, `unaccent`, and `normalize_search()` folding. Filte
 - **Multilingual Content:** Dedicated `*_translations` tables with translation review status.
 - **Security:** CSRF origin checks, `__Host-` cookies, mandatory MFA for staff, rate limiting, parameterized queries, least-privilege DB roles (`wh_owner`, `wh_api`, `wh_public_ro`, `wh_worker`).
 - **Worker (`pg-boss`):** Image re-encoding with `sharp`, email sending with Resend, FX rate sync, ISR revalidation triggers.
+- **Lean Free Mode additions:** a small `usage_counters` table for the email and storage limits, and email outbox columns `priority` and `scheduled_for` (see 18.3).
 
 ---
 
@@ -283,7 +314,7 @@ Semantic HTML, logical CSS properties (`margin-inline`, `padding-inline`), visib
 
 ## 14. Performance, SEO, and analytics
 
-Mobile LCP < 2.5s, CLS < 0.1, INP < 200ms. JSON-LD structured data on all pages. OpenGraph dynamic share cards via `opengraph-image.tsx`. Cookieless privacy-friendly analytics.
+Mobile LCP < 2.5s, CLS < 0.1, INP < 200ms. JSON-LD structured data on all pages. OpenGraph dynamic share cards via `opengraph-image.tsx`. Free analytics only (Cloudflare Web Analytics). Check and state in the privacy text how it handles cookies and data before launch.
 
 ---
 
@@ -349,7 +380,7 @@ Done when: apps/web renders data in API_MODE=mock, openapi.json is committed, co
 ### Stage B1: Backend foundation
 
 ```
-Read sections 2, 3, 10.1 to 10.3, 10.9, 10.13 (items H, D5), and 10.16. Do only Stage B1.
+Read sections 2, 3, 10.1 to 10.3, 10.9, 10.13 (items H, D5), 10.16, and 18. Do only Stage B1.
 - Create apps/api: Fastify with fastify-type-provider-zod, TypeScript strict, two entrypoints (server.ts and worker.ts), one Docker image.
 - Config: single Zod-validated environment module.
 - Plugins: request id, pino logging with redaction (item D5), RFC 9457 error handler, security headers, body size limits, graceful shutdown.
@@ -357,7 +388,14 @@ Read sections 2, 3, 10.1 to 10.3, 10.9, 10.13 (items H, D5), and 10.16. Do only 
 - Health endpoints: /v1/internal/healthz and /v1/internal/readyz. OpenAPI at /docs (non-prod).
 - Local stack: infra/docker-compose.yml with PostgreSQL, MinIO, Mailpit, plus dev scripts.
 - Multi-stage non-root Dockerfile and Vitest test harness with Testcontainers.
-Done when: docker compose up works, /readyz is green, an unknown route returns problem+json, a fake auth header is logged as [REDACTED], and CI is green. Then stop.
+- DATABASE DECISION FIRST: read section 18.2, ask me which option I choose (Postgres in Docker on the host, or a managed free Postgres for development and staging), record it in ADR-002, and wire only that option. DATABASE_URL stays the single switch.
+- The worker and the migrations use a direct (non-pooled, session-level) database connection. Verify that pg-boss works with the chosen database before moving on.
+- infra/docker-compose.prod.yml with web, admin, api, worker, and caddy, plus postgres only if I chose Docker Postgres. Postgres joins the internal Docker network only and is never published on a host port. Only ports 80 and 443 are open. Add restart policies, health checks, and memory limits.
+- A Caddyfile with automatic HTTPS (web on the main domain, admin and api on subdomains).
+- scripts/backup-db.sh as described in 18.4 (pg_dump, encrypt, upload to a private R2 bucket). It must work with any DATABASE_URL.
+- Provider interfaces EmailProvider, ObjectStorage, FxProvider, and CaptchaVerifier with local adapters (Mailpit, MinIO, a fixture FX adapter, a Turnstile test-key adapter).
+- Add ADR-002 to DECISIONS.md recording D9 to D14 from 18.6.
+Done when: docker compose up works, docker compose -f infra/docker-compose.prod.yml config validates, /readyz is green, an unknown route returns problem+json, a fake auth header is logged as [REDACTED], and CI is green. Then stop.
 ```
 
 ### Stage B2: Database
@@ -430,12 +468,13 @@ Done when: a shared search URL reproduces identical results and no filtering occ
 ### Stage B5: Leads, submissions, files, and jobs
 
 ```
-Read sections 2, 8.5, 8.6, 10.7, 10.9 to 10.11, 10.13, 10.15, 12, and 10.17. Do only Stage B5.
+Read sections 2, 8.5, 8.6, 10.7, 10.9 to 10.11, 10.13, 10.15, 12, 10.17, and 18. Do only Stage B5.
 - Lead intake: POST /v1/public/leads with Turnstile verification, honeypot, fill-time checks, rate limits, Idempotency-Key, consents, and outbox row in one transaction.
 - Submissions intake with capability links and token exchange.
-- Presigned upload pipeline for assets; worker image processing with sharp, EXIF stripping, and WebP generation.
-- Worker background jobs: send-email, fx-refresh, location-count, nightly-stats, expiry, retention, revalidate HMAC webhook.
-Done when: a lead and a submission with photos can be submitted through the API, alert email arrives in Mailpit, and file security tests pass. Then stop.
+- Presigned upload pipeline for assets with the per-listing limits and the global storage guard from 18.3; worker image processing with sharp, EXIF stripping, and WebP generation within the weight budgets (photos 250 KB, floor plans 250 KB).
+- Worker background jobs: send-email (with the throttle in 18.3: priorities, daily and monthly caps, scheduled_for deferral), fx-refresh (one call per day through FxProvider, keep the last good rates), location-count, nightly-stats, expiry, retention (delete abandoned submission photos after 30 days), revalidate HMAC webhook.
+- usage_counters table and the quota helpers from 18.3, with tests for the email cap and the storage guard.
+Done when: a lead and a submission with photos can be submitted through the API, alert email arrives in Mailpit, file security tests pass, and the email throttle and storage guard tests pass. Then stop.
 ```
 
 ### Stage 9: Property page, leads, and share cards
@@ -495,6 +534,16 @@ Read sections 2, 7.2, 10.8, and 11. Do only Stage 12.
 Done when: an editor can update hero copy, contact numbers, and location pins without code changes, and agent scopes are strictly enforced. Then stop.
 ```
 
+### Stage 12b (optional, after launch): Admin usage panel
+
+```
+Skip this stage until the site has real traffic. Read sections 2, 11, and 18.3. Do only Stage 12b.
+- Add GET /v1/admin/usage in apps/api (admin role only) returning the usage counters with their limits and the last run of each worker job.
+- Add a "System and usage" page in apps/admin with simple gauges (amber at 70 percent, red at 90 percent) for object storage, emails today and this month, and exchange-rate calls this month.
+- No third-party widgets or services.
+Done when: forcing a counter above its threshold in the test database shows the right gauge color, and the page makes no external requests. Then stop.
+```
+
 ### Stage 13: Arabic, accessibility, SEO, and performance pass
 
 ```
@@ -502,7 +551,8 @@ Read sections 13, 14, and 10.12. Do only Stage 13.
 - Audit all pages in /ar across mobile and desktop; resolve bidirectional layout, spacing, and digit formatting issues.
 - Run WCAG 2.2 AA audit (axe, Lighthouse accessibility >= 95, keyboard navigation pass).
 - Verify Core Web Vitals on mobile throttled 4G (LCP < 2.5s, CLS < 0.1, INP < 200ms).
-- Confirm ISR revalidation and stale-while-revalidate behavior when API is stopped.
+- Run everything against API_MODE=mock. The ISR and stale-while-revalidate check with the API stopped moves to Stage 14, because it needs the live API.
+- Use free tools only: axe-core, Lighthouse (CLI), and keyboard testing.
 - Move public site CSP from Report-Only to enforced.
 Done when: a before-and-after audit table proves all Section 14.1 targets and accessibility requirements are met. Then stop.
 ```
@@ -510,11 +560,13 @@ Done when: a before-and-after audit table proves all Section 14.1 targets and ac
 ### Stage 14: Security review, QA, and launch preparation
 
 ```
-Read sections 10.13, 10.14, 10.15, 10.16, 10.17, 13.8, 14, and 17. Do only Stage 14.
+Read sections 10.13, 10.14, 10.15, 10.16, 10.17, 13.8, 14, 17, and 18. Do only Stage 14.
 - Verify security checklist in 10.13 item-by-item (headers, RLS, input schemas, rate limits, audit trail).
-- Run security scanning tools: Semgrep/CodeQL, pnpm audit, gitleaks history scan, OWASP ZAP baseline scan.
-- Execute performance load tests (k6 search and lead endpoints) and failure recovery drills.
-- Perform database backup and restoration drill; document in docs/runbooks/restore-database.md.
+- Run free scans: gitleaks history scan, pnpm audit, and Semgrep (OSS CLI). The OWASP ZAP baseline scan and Trivy image scan are optional. Use CodeQL only if the repository is public.
+- With the live API running (API_MODE=live), confirm ISR revalidation and stale-while-revalidate behavior when the API is stopped.
+- Test the email cap and the storage guard once each (18.3): each must queue or block with a clear message and lose no data.
+- Optional: a k6 load test of the search and lead endpoints.
+- Perform ONE restore test before launch: restore the latest R2 backup onto a clean database and confirm the data is readable. Write the steps on one page in docs/runbooks/restore-database.md.
 - Complete end-to-end user journeys for all 4 countries on mobile screen sizes.
 - Generate LAUNCH_CHECKLIST.md with each launch item marked Done, Blocked, or Needs Owner Input.
 Do NOT set SITE_PRIVATE=false. Then stop.
@@ -526,12 +578,14 @@ Do NOT set SITE_PRIVATE=false. Then stop.
 
 The site remains PRIVATE (`SITE_PRIVATE=true`, noindex) until this checklist is signed off.
 
-### 17.1 Infrastructure & Security
-- Scale database and hosting to production tiers.
-- Secrets isolated per environment in secrets manager; rotate any keys used in development.
-- Configure production domain, HTTPS with HSTS, DNSSEC, CAA records.
-- Set up Cloudflare WAF, Turnstile production keys, and verify Resend sending domain (SPF/DKIM/DMARC).
-- Verify automated daily backups and point-in-time recovery.
+### 17.1 Infrastructure & Security (Lean Free Mode)
+- No paid plan is active other than the host and the domain.
+- The database is not reachable from the internet (18.4, item 1). The `DATABASE_URL` is a secret and never appears in client code or in git.
+- Nightly encrypted backups to the private R2 bucket are running, and one restore test has passed (18.4).
+- A free uptime monitor watches the home page and the API health endpoint, and alerts the owner by email or phone (18.4).
+- Secrets live in server environment files (permissions 600, outside git) and in GitHub encrypted secrets. Keys used in development are rotated before launch.
+- Production domain on Cloudflare DNS with HTTPS (Full strict), HSTS, and CAA records. The Cloudflare Free plan's basic WAF is on, with a rate limiting rule for /v1/public/leads and /v1/auth/*. Production Turnstile widget created.
+- Resend sending domain verified (SPF, DKIM, DMARC) and the email caps from 18.3 configured.
 
 ### 17.2 Legal & Content (Owner sign-off)
 - Replace all placeholder contacts, license numbers, counters, and testimonials with real data.
@@ -543,3 +597,94 @@ The site remains PRIVATE (`SITE_PRIVATE=true`, noindex) until this checklist is 
 1. Set `SITE_PRIVATE=false` and trigger production deployment.
 2. Submit sitemaps to Google Search Console and Bing Webmaster Tools.
 3. Monitor error tracking and Core Web Vitals closely for the first 14 days.
+### 17.4 When to start paying (upgrade triggers)
+
+Stay on Free Mode until a trigger fires. Prices were checked in October 2026; re-check each pricing page before paying.
+
+| Trigger | Upgrade | Cost |
+|---|---|---|
+| More than 80 emails on several days, or more than 2,400 in a month | Resend Pro | $20 per month for 50,000 emails |
+| Object storage above 8 GB | Stay on R2 pay-as-you-go (no plan change) | $0.015 per GB-month above the free 10 GB; egress stays free |
+| Need the full managed WAF ruleset or more than 5 custom rules | Cloudflare Pro | $20 per month billed yearly ($25 monthly) |
+| Need point-in-time recovery, or no one to administer the database | Managed PostgreSQL | Usage-based. Neon Launch: $0.106 per compute-hour plus $0.35 per GB-month; an always-on 1 compute-unit database was about $78 per month in one calculator |
+| Want CodeQL on a private repository | GitHub Code Security add-on | Price not verified |
+| CI minutes above 80 percent of 2,000 per month | Optimize caching first, then buy minutes | Price not verified |
+| Need hourly exchange rates | ExchangeRate-API Pro | $10 per month |
+| Heavy map traffic | A paid map tile provider | Varies |
+| Public site hosted on Vercel | Vercel Pro (Hobby is not for commercial use) | $20 per seat per month |
+
+---
+
+## 18. Lean Free Mode (v2.3)
+
+**Goal:** pay only for the domain and the host until the site earns revenue. Everything else uses a free tier or open source. Do not build operations tooling before it is needed. Limits were checked in October 2026; re-check pricing pages before relying on a number.
+
+### 18.1 What to do, and when
+
+| When | Do | Skip |
+|---|---|---|
+| Now (frontend, mock mode, Stage 13) | Nothing about servers or databases. No database runs and there is no real data. | Everything in this section |
+| Stage B1 | Choose the database (18.2). Write the backup script (18.4). | Dashboards, drills, load tests |
+| Before real leads arrive | The two non-negotiables, one restore test, and a free uptime monitor (18.4) | Point-in-time recovery, complex monitoring, high availability |
+| After revenue | Use the upgrade triggers in 17.4 | none |
+
+### 18.2 Database decision (made in Stage B1)
+
+Both options sit behind one `DATABASE_URL`. The code must not depend on either.
+
+| Option | Cost | Good for | Watch out for |
+|---|---|---|---|
+| A. PostgreSQL in Docker on the host (recommended for production) | $0 extra | Production | You own backups and updates. Postgres idle is light (tens of MB, my estimate), but the whole stack on one server wants about 2 GB RAM with swap. |
+| B. Managed free Postgres used as plain Postgres (Neon Free, or Supabase as database only) | $0 | Development and staging | See the warning below. |
+
+Managed free tier facts: Neon Free gives 0.5 GB per project and 100 compute-hours per month, and compute suspends after 5 minutes idle. Supabase Free gives 500 MB, no automatic backups, and pauses after a week of inactivity.
+
+**Warning for option B in production:** the worker (pg-boss) polls the database every few seconds, so a scale-to-zero database never sleeps. On Neon Free, 100 compute-hours at the smallest size last only about 16 days of nonstop use (my calculation), after which compute stops until the month resets. Use option B for development and staging only, or change the worker design first.
+
+For either option: choose a region next to the host; use a direct (non-pooled) connection for the worker and migrations; require TLS; confirm the provider supports the extensions pg_trgm, unaccent, and citext and the roles in section 10; run the 50,000-listing performance seed only on local Docker.
+
+### 18.3 Limits that must be enforced in code (cheap insurance)
+
+**Email (Resend Free: 3,000 per month, 100 per day).** `EMAIL_DAILY_CAP=90`, `EMAIL_MONTHLY_CAP=2700`. Priorities: P1 staff alerts for new leads and submissions; P2 invitations, resets, and security alerts; P3 the submitter's tracking link; P4 confirmations to visitors. Above 70 percent of the day's budget, skip P4. At the cap, keep everything queued with `scheduled_for` set to the next day. Never drop an email. New leads always appear in the admin Leads inbox regardless of email.
+
+**Storage (R2 free: 10 GB).** Warn the admin by email at 7 GB (`STORAGE_SOFT_LIMIT_GB`). Block new uploads at 9.5 GB (`STORAGE_HARD_LIMIT_GB`) with a clear message. Per listing: at most 25 photos of 250 KB or less, a floor plan of 250 KB or less, and documents of 10 MB or less. A daily job recomputes usage. Abandoned submission files are deleted after 30 days.
+
+**Exchange rates.** One request per day through `FxProvider`. Keep the last good rates and show "Rates updated {date}".
+
+### 18.4 Non-negotiables before real leads arrive
+
+1. **The database is never reachable from the internet.** With Docker Postgres: no published port, internal Docker network only (or bind to 127.0.0.1). With a managed database: a long unique password, TLS required, an IP allow-list if offered, and the connection string kept out of client code and git.
+2. **A nightly backup.** `scripts/backup-db.sh` runs `pg_dump -Fc`, encrypts the file with `age` using `BACKUP_AGE_PUBLIC_KEY`, and uploads it to the private bucket `S3_BUCKET_BACKUPS` on R2. Run it nightly by cron and keep the last 14. The private key stays offline with the owner. State the limit plainly: up to 24 hours of data can be lost.
+3. **One restore test before launch** (Stage 14), so the backup is proven and not just hoped for.
+4. **A free uptime monitor** on the home page and `/v1/internal/healthz`. Use Better Stack's free tier (10 monitors, 3-minute checks, commercial use allowed per the sources checked). UptimeRobot's free plan was restricted to non-commercial use from late 2024, and sources disagree on whether that changed, so read its current terms before choosing it.
+
+### 18.5 Free services in use
+
+| Need | Service | Free limit we rely on |
+|---|---|---|
+| Server | The owner's host (paid) running Docker Compose and Caddy | none |
+| Database | Option A or B in 18.2 | see 18.2 |
+| Object storage | Cloudflare R2 Standard (MinIO locally) | 10 GB, 1 million write-type and 10 million read-type operations per month, free egress |
+| Email | Resend Free (Mailpit locally) | 3,000 per month, 100 per day, 1 domain |
+| Spam protection | Cloudflare Turnstile | Free, up to 20 widgets |
+| DNS, TLS, DDoS, WAF | Cloudflare Free plan | Basic managed WAF, 5 custom rules, 1 rate limiting rule |
+| Exchange rates | ExchangeRate-API free key | 1,500 requests per month, daily updates |
+| Maps | Leaflet with OpenStreetMap tiles (`MAP_TILE_URL` swappable) | Follow the OSM tile policy; lazy load |
+| Analytics | Cloudflare Web Analytics | Free |
+| CI | GitHub Actions | 2,000 minutes per month on a private repo |
+| Scans | gitleaks, pnpm audit, Semgrep OSS CLI (Trivy and ZAP optional) | Free open source |
+| Authentication | Built into the API (passkeys, TOTP, Argon2id) | Free |
+| WhatsApp | `wa.me` links only | Free |
+
+### 18.6 Decisions to record in DECISIONS.md (ADR-002)
+
+- D9: the host runs web, admin, api, worker, and caddy with Docker Compose.
+- D10: the database is chosen at Stage B1 through `DATABASE_URL`; production default is Docker Postgres on the host.
+- D11: Cloudflare R2 for media and backups.
+- D12: Resend Free with the throttle in 18.3; ExchangeRate-API free key behind `FxProvider`.
+- D13: nightly encrypted backups to R2, no point-in-time recovery.
+- D14: operations tooling (usage panel, drills, load tests) is postponed until revenue.
+
+### 18.7 Forbidden in Lean Free Mode
+
+The WhatsApp Business API, SMS and phone verification, paid captcha, paid or hosted analytics, paid error tracking, paid map tiles, a paid CMS, a paid secrets manager, machine-translation APIs, chat widgets, and any vendor not listed in 18.5.
