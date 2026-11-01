@@ -58,7 +58,7 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 1b Reconcile Stages 1–3 and repo hygiene | Both | 1, 2, 3 | Done |
 | 4 Layout shell | Frontend | 1b (uses UI primitives) | Done |
 | 5 Contract, typed client, mock mode | Both | 1b | Done (`contract-v1`) |
-| B1 Backend foundation | Backend | 1b | Not started |
+| B1 Backend foundation | Backend | 1b | **NEXT TO RUN** |
 | B2 Database | Backend | B1, 5 | Not started |
 | B3 Identity, sessions, authorization | Backend | B2 | Not started |
 | B4 Public read API and search | Backend | B2, 5 | Not started |
@@ -72,7 +72,7 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 11 Admin app foundation and listings | Frontend | B6 | Done |
 | 12 Admin: leads, locations, content, users | Frontend | 11 | Done |
 | 12b Admin: usage panel (optional) | Frontend | B6 | Optional, only after launch |
-| 13 Arabic, accessibility, SEO, performance pass | Both | 10, 12 | **NEXT TO RUN** |
+| 13 Arabic, accessibility, SEO, performance pass | Both | 10, 12 | Done |
 | 14 Security review, QA, launch preparation | Both | 13, B6 | Not started |
 
 **Run order from here:** 13 (mock mode) -> B1 -> B2 -> B3 -> B4 -> B5 -> B6 -> 14. Stage 12b is optional and can wait until after launch. Stage 13 runs now against `API_MODE=mock`; its check of ISR with the API stopped moves to Stage 14 because it needs the live API from B4.

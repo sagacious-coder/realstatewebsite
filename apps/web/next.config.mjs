@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-const cspReportOnly = [
+const cspEnforced = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
@@ -21,10 +21,10 @@ const cspReportOnly = [
 ].join('; ');
 
 const securityHeaders = [
-  // 10.13 Item H1: CSP in Report-Only mode
+  // 10.13 Item H1: Enforced CSP (moved from Report-Only in Stage 13)
   {
-    key: 'Content-Security-Policy-Report-Only',
-    value: cspReportOnly,
+    key: 'Content-Security-Policy',
+    value: cspEnforced,
   },
   // 10.13 Item H2: Baseline security headers
   {

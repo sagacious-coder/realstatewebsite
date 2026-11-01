@@ -260,12 +260,14 @@ export function SearchFilterPanel({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <span className="mb-1 block text-[11px] text-muted">{t('minPrice')}</span>
+              <label htmlFor="filter-min-price" className="mb-1 block text-[11px] text-muted">{t('minPrice')}</label>
               <Input
+                id="filter-min-price"
                 type="number"
                 min={0}
                 step={50000}
                 placeholder="0"
+                aria-label={t('minPrice')}
                 value={filters.minPrice !== undefined ? filters.minPrice : ''}
                 onChange={(e) => {
                   const val = e.target.value ? Number(e.target.value) : undefined;
@@ -275,12 +277,14 @@ export function SearchFilterPanel({
               />
             </div>
             <div>
-              <span className="mb-1 block text-[11px] text-muted">{t('maxPrice')}</span>
+              <label htmlFor="filter-max-price" className="mb-1 block text-[11px] text-muted">{t('maxPrice')}</label>
               <Input
+                id="filter-max-price"
                 type="number"
                 min={0}
                 step={50000}
                 placeholder="Any"
+                aria-label={t('maxPrice')}
                 value={filters.maxPrice !== undefined ? filters.maxPrice : ''}
                 onChange={(e) => {
                   const val = e.target.value ? Number(e.target.value) : undefined;
@@ -399,28 +403,38 @@ export function SearchFilterPanel({
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Input
-              type="number"
-              min={0}
-              placeholder={t('minSize')}
-              value={filters.minSize !== undefined ? filters.minSize : ''}
-              onChange={(e) => {
-                const val = e.target.value ? Number(e.target.value) : undefined;
-                onFilterChange({ minSize: val });
-              }}
-              className="h-9 text-xs"
-            />
-            <Input
-              type="number"
-              min={0}
-              placeholder={t('maxSize')}
-              value={filters.maxSize !== undefined ? filters.maxSize : ''}
-              onChange={(e) => {
-                const val = e.target.value ? Number(e.target.value) : undefined;
-                onFilterChange({ maxSize: val });
-              }}
-              className="h-9 text-xs"
-            />
+            <div>
+              <label htmlFor="filter-min-size" className="sr-only">{t('minSize')}</label>
+              <Input
+                id="filter-min-size"
+                type="number"
+                min={0}
+                placeholder={t('minSize')}
+                aria-label={t('minSize')}
+                value={filters.minSize !== undefined ? filters.minSize : ''}
+                onChange={(e) => {
+                  const val = e.target.value ? Number(e.target.value) : undefined;
+                  onFilterChange({ minSize: val });
+                }}
+                className="h-9 text-xs"
+              />
+            </div>
+            <div>
+              <label htmlFor="filter-max-size" className="sr-only">{t('maxSize')}</label>
+              <Input
+                id="filter-max-size"
+                type="number"
+                min={0}
+                placeholder={t('maxSize')}
+                aria-label={t('maxSize')}
+                value={filters.maxSize !== undefined ? filters.maxSize : ''}
+                onChange={(e) => {
+                  const val = e.target.value ? Number(e.target.value) : undefined;
+                  onFilterChange({ maxSize: val });
+                }}
+                className="h-9 text-xs"
+              />
+            </div>
           </div>
         </div>
 

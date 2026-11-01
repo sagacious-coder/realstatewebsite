@@ -397,52 +397,57 @@ export function SellPropertyForm({
             {/* Size & Expected Price */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-size" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.size')}
                 </label>
                 <input
+                  id="sell-size"
                   type="number"
                   min="1"
                   step="any"
                   value={sizeSqm}
                   onChange={(e) => setSizeSqm(e.target.value)}
                   placeholder="e.g. 145"
+                  aria-describedby={errors.sizeSqm ? 'sell-size-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.sizeSqm ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.sizeSqm && (
-                  <p className="mt-1 text-xs text-red-600">{errors.sizeSqm}</p>
+                  <p id="sell-size-error" className="mt-1 text-xs text-red-600">{errors.sizeSqm}</p>
                 )}
               </div>
 
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-price" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.expectedPrice')}
                 </label>
                 <input
+                  id="sell-price"
                   type="number"
                   min="1"
                   step="any"
                   value={expectedPrice}
                   onChange={(e) => setExpectedPrice(e.target.value)}
                   placeholder="e.g. 2400000"
+                  aria-describedby={errors.expectedPrice ? 'sell-price-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.expectedPrice ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.expectedPrice && (
-                  <p className="mt-1 text-xs text-red-600">{errors.expectedPrice}</p>
+                  <p id="sell-price-error" className="mt-1 text-xs text-red-600">{errors.expectedPrice}</p>
                 )}
               </div>
 
               <div className="sm:col-span-1">
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-currency" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.currency')}
                 </label>
                 <select
+                  id="sell-currency"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
                   className="w-full px-4 py-2.5 rounded-xl bg-sand/60 border border-line text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold"
@@ -472,10 +477,11 @@ export function SellPropertyForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-country" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.country')}
                 </label>
                 <select
+                  id="sell-country"
                   value={countryCode}
                   onChange={(e) => setCountryCode(e.target.value as CountryCode)}
                   className="w-full px-4 py-2.5 rounded-xl bg-sand/60 border border-line text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold"
@@ -489,29 +495,32 @@ export function SellPropertyForm({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-city" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.city')}
                 </label>
                 <input
+                  id="sell-city"
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="e.g. Dubai, Istanbul, Batumi..."
+                  aria-describedby={errors.city ? 'sell-city-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.city ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.city && (
-                  <p className="mt-1 text-xs text-red-600">{errors.city}</p>
+                  <p id="sell-city-error" className="mt-1 text-xs text-red-600">{errors.city}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-area" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.area')}
                 </label>
                 <input
+                  id="sell-area"
                   type="text"
                   value={area}
                   onChange={(e) => setArea(e.target.value)}
@@ -536,29 +545,32 @@ export function SellPropertyForm({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+              <label htmlFor="sell-desc" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                 {t('form.description')}
               </label>
               <textarea
+                id="sell-desc"
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t('form.descriptionPlaceholder')}
+                aria-describedby={errors.description ? 'sell-desc-error' : undefined}
                 className={cn(
                   'w-full px-4 py-3 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold leading-relaxed',
                   errors.description ? 'border-red-500' : 'border-line'
                 )}
               />
               {errors.description && (
-                <p className="mt-1 text-xs text-red-600">{errors.description}</p>
+                <p id="sell-desc-error" className="mt-1 text-xs text-red-600">{errors.description}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+              <label htmlFor="sell-notes" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                 {t('form.notes')}
               </label>
               <textarea
+                id="sell-notes"
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -583,70 +595,78 @@ export function SellPropertyForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-name" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.name')}
                 </label>
                 <input
+                  id="sell-name"
                   type="text"
                   value={sellerName}
                   onChange={(e) => setSellerName(e.target.value)}
                   placeholder="Your full name"
+                  aria-describedby={errors.sellerName ? 'sell-name-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.sellerName ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.sellerName && (
-                  <p className="mt-1 text-xs text-red-600">{errors.sellerName}</p>
+                  <p id="sell-name-error" className="mt-1 text-xs text-red-600">{errors.sellerName}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-email" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.email')}
                 </label>
                 <input
+                  id="sell-email"
                   type="email"
                   value={sellerEmail}
                   onChange={(e) => setSellerEmail(e.target.value)}
                   placeholder="name@example.com"
+                  aria-describedby={errors.sellerEmail ? 'sell-email-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.sellerEmail ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.sellerEmail && (
-                  <p className="mt-1 text-xs text-red-600">{errors.sellerEmail}</p>
+                  <p id="sell-email-error" className="mt-1 text-xs text-red-600">{errors.sellerEmail}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
+                <label htmlFor="sell-phone" className="block text-xs font-semibold text-navy uppercase tracking-wider mb-2">
                   {t('form.phone')}
                 </label>
                 <input
+                  id="sell-phone"
                   type="tel"
                   value={sellerPhone}
                   onChange={(e) => setSellerPhone(e.target.value)}
                   placeholder="+971 50 123 4567"
+                  aria-describedby={errors.sellerPhone ? 'sell-phone-error' : undefined}
                   className={cn(
                     'w-full px-4 py-2.5 rounded-xl bg-sand/60 border text-navy text-sm focus:outline-none focus:ring-1 focus:ring-gold',
                     errors.sellerPhone ? 'border-red-500' : 'border-line'
                   )}
                 />
                 {errors.sellerPhone && (
-                  <p className="mt-1 text-xs text-red-600">{errors.sellerPhone}</p>
+                  <p id="sell-phone-error" className="mt-1 text-xs text-red-600">{errors.sellerPhone}</p>
                 )}
               </div>
             </div>
 
             {/* Consent Checkbox */}
             <div className="pt-2">
-              <label className="flex items-start gap-3 cursor-pointer">
+              <label htmlFor="sell-consent" className="flex items-start gap-3 cursor-pointer">
                 <input
+                  id="sell-consent"
                   type="checkbox"
                   checked={consentGiven}
                   onChange={(e) => setConsentGiven(e.target.checked)}
+                  aria-describedby={errors.consentGiven ? 'sell-consent-error' : undefined}
                   className="mt-1 h-4 w-4 rounded border-line text-gold focus:ring-gold cursor-pointer"
                 />
                 <span className="text-xs text-muted leading-relaxed select-none">
@@ -654,7 +674,7 @@ export function SellPropertyForm({
                 </span>
               </label>
               {errors.consentGiven && (
-                <p className="mt-1.5 text-xs text-red-600">{errors.consentGiven}</p>
+                <p id="sell-consent-error" className="mt-1.5 text-xs text-red-600">{errors.consentGiven}</p>
               )}
             </div>
           </div>

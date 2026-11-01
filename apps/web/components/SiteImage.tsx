@@ -73,6 +73,7 @@ export function SiteImage({
         fill={fill}
         sizes={resolvedSizes}
         priority={priority}
+        fetchPriority={priority ? 'high' : undefined}
         quality={quality}
         loading={priority ? undefined : 'lazy'}
         {...blurProps}

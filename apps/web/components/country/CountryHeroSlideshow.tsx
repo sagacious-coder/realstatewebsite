@@ -280,7 +280,7 @@ export function CountryHeroSlideshow({
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-ivory/30 bg-navy/60 backdrop-blur-sm transition-all hover:border-gold hover:text-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                 aria-label={isPlaying ? t('hero.pause') : t('hero.play')}
               >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ms-0.5 rtl:-scale-x-100" />}
               </button>
 
               {/* Slide Indicators / Dots */}
