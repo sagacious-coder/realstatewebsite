@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B1: Backend foundation (Fastify, Docker stack, healthz)`
+* **Current Stage in Progress:** `Stage B2: PostgreSQL database schema, migrations & seed`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage 13 (Arabic RTL deep pass, WCAG 2.2 AA accessibility audit, Core Web Vitals optimization, enforced Content-Security-Policy; zero lint/type errors; 465/465 web + 9/9 admin static routes compile clean)
-* **Next Up After 13:** Stage B1 (Backend foundation: Fastify, Docker stack, healthz)
+* **Latest Completed Milestone:** Stage B1 (Fastify backend foundation, Docker production infrastructure, RFC 9457 error handling, Pino D5 redaction, Service Provider interfaces & Vitest test harness; ADR-002 recorded; 8/8 tests pass; zero lint/type errors)
+* **Next Up After B1:** Stage B2 (PostgreSQL database schema, migrations & seed)
 
 ---
 
@@ -39,8 +39,8 @@
 
 | Stage | Milestone | Status | Completed Date | Verification / Commit |
 |---|---|---|---|---|
-| **Stage B1** | Backend foundation (Fastify, Docker stack, healthz) | **NEXT TO RUN** | — | — |
-| **Stage B2** | PostgreSQL database schema, migrations & seed | Not Started | — | — |
+| **Stage B1** | Backend foundation (Fastify, Docker stack, healthz) | **DONE** | 2026-11-01 | 8/8 Vitest tests pass, docker compose config validates, readyz green, pino redacted, typecheck/lint/build clean |
+| **Stage B2** | PostgreSQL database schema, migrations & seed | **NEXT TO RUN** | — | — |
 | **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | Not Started | — | — |
 | **Stage B4** | Public read API & search endpoints (contract parity) | Not Started | — | — |
 | **Stage B5** | Leads intake, S3 file worker & background jobs | Not Started | — | — |
@@ -348,3 +348,42 @@
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: 465/465 `apps/web` routes + 9/9 `apps/admin` routes compiled and prerendered cleanly.
   * `graphify update .`: Knowledge graph re-extracted (1496 nodes, 3614 edges, 98 communities).
+
+---
+
+### 2026-11-01 — Stage B1: Backend Foundation (Fastify, Docker Infrastructure, Service Providers & Test Harness)
+* **Action:** Scaffolding and baseline implementation of the `apps/api` Fastify service and `pg-boss` background worker, establishing production and local Docker infrastructure, enforcing RFC 9457 error semantics and Pino credential redaction, defining Service Provider interfaces with local adapters, and recording ADR-002 in `DECISIONS.md`.
+* **Outputs Created & Configured:**
+  * `ADR-002 in DECISIONS.md`: Recorded decisions D9 through D14 (Section 18.6), selecting Option A (PostgreSQL 16 in Docker on the host) with `DATABASE_URL` as the single portable connection interface, Cloudflare R2 standard storage with free egress, Resend Free queue throttling, nightly `age` encrypted backups to R2, and postponement of premature operations tooling.
+  * `apps/api Service & Core Plugins`:
+    - Fastify framework with `fastify-type-provider-zod` and strict TypeScript compilation.
+    - Dual entry points: `apps/api/src/server.ts` (HTTP REST API with graceful shutdown) and `apps/api/src/worker.ts` (`pg-boss` background worker with direct non-pooled connection).
+    - `src/config/env.ts`: Strict Zod-validated configuration module with environment defaults.
+    - `src/plugins/logging.ts`: Pino logging with Item D5 redaction rules (`authorization`, `cookie`, `set-cookie`, `apiKey`, `password`, `token`, `*.password`, `*.token`, `email`, `phone`, `message`) censoring secrets to `[REDACTED]`, and `x-request-id` correlation.
+    - `src/plugins/errors.ts`: RFC 9457 Problem Details error handler returning `application/problem+json` for 404s, Zod/schema validation errors (with `invalidParams`), 429 rate limiting, and 500s.
+    - `src/plugins/security.ts`: Helmet headers (nosniff, DENY frameguard, HSTS, strict referrer policy), CORS origin checking, and global rate limit baseline.
+    - `src/plugins/registry.ts`: Route metadata registry enforcing `audience` (`public` | `admin` | `internal`), `permission`, and `rateLimitClass` per route.
+    - `src/plugins/swagger.ts`: OpenAPI 3.1 documentation and interactive Swagger UI mounted at `/docs` in non-production.
+    - `src/routes/health.ts`: Liveness probe (`/v1/internal/healthz`) and readiness probe (`/v1/internal/readyz`).
+  * `Service Provider Interfaces & Local Adapters (`src/providers/`)`:
+    - `EmailProvider`: Interface with `MailpitEmailAdapter` supporting priority queues (P1–P4) and daily/monthly quota tracking.
+    - `ObjectStorage`: Interface with `MinioStorageAdapter` for S3-compatible buffer management, presigned upload generation, and byte usage tracking.
+    - `FxProvider`: Interface with `FixtureFxAdapter` providing deterministic exchange rates across USD, AED, EUR, TRY, GEL, and EGP.
+    - `CaptchaVerifier`: Interface with `TurnstileDummyVerifier` and `CloudflareTurnstileVerifier` for bot protection validation.
+  * `Infrastructure & Deployment Baseline`:
+    - `infra/docker-compose.yml`: Local dev stack (PostgreSQL with PostGIS, MinIO S3, Mailpit).
+    - `infra/docker-compose.prod.yml`: Production stack (`postgres` without published host ports, `api`, `worker`, `web`, `admin`, `caddy` exposing strictly ports 80 and 443 with memory limits and healthchecks).
+    - `infra/Caddyfile`: Edge reverse proxy routing root domain to `web:3000`, `admin.wildhills.com` to `admin:3001`, and `api.wildhills.com` to `api:3002` with automatic HTTPS.
+    - `apps/api/Dockerfile`: Multi-stage non-root build for API and worker containers.
+    - `scripts/backup-db.sh`: Automated backup script executing `pg_dump -Fc`, streaming encryption via `age` using public key `BACKUP_AGE_PUBLIC_KEY`, and upload to private S3/R2 bucket.
+  * `Test Harness & Verification`:
+    - `apps/api/vitest.config.ts` and `apps/api/test/foundation.test.ts`: 8/8 automated test cases passing.
+* **Validation:**
+  * `docker compose -f infra/docker-compose.prod.yml config`: Validated cleanly with 0 syntax errors.
+  * `docker compose -f infra/docker-compose.yml config`: Validated cleanly with 0 syntax errors.
+  * `pnpm test` (apps/api): 8/8 tests pass (readyz returns 200, healthz returns 200, unknown route returns RFC 9457 `application/problem+json`, Pino redaction censors Authorization and Cookie to `[REDACTED]`, all 4 service provider adapters succeed).
+  * `pnpm test` (contracts): 4/4 contract tests pass.
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: 465/465 `apps/web` routes + 9/9 `apps/admin` routes + `apps/api` dist compiled and prerendered cleanly.
+

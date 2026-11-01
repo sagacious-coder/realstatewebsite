@@ -129,3 +129,69 @@ The architecture adopts the default choices for key architectural decisions D1 t
 - **Positive**: Full sovereign control over data, security, and asset pipelines; zero BaaS vendor lock-in; unified type safety between frontend, admin, and backend; high developer velocity through Turborepo caching.
 - **Negative / Trade-offs**: Requires maintaining custom migrations, worker queues, and infrastructure configurations (handled via `infra/docker-compose.yml` and Drizzle migrations).
 
+---
+
+## ADR-002: Lean Free Mode Infrastructure Baseline & Self-Hosted Database (Stage B1)
+
+### Status
+Accepted (Stage B1)
+
+### Context & Problem Statement
+Section 18 ("Lean Free Mode v2.3") mandates zero operational overhead and zero recurring costs beyond domain registration and the server host until the site generates revenue. In Stage B1, the foundational infrastructure and database topology must be established while keeping `DATABASE_URL` as the single portable connection interface.
+
+Key requirements:
+1. Establish a single-server deployment topology capable of running the entire application stack (`apps/web`, `apps/admin`, `apps/api`, background worker `pg-boss`, and Caddy edge reverse proxy) with low memory footprint (~2 GB RAM + swap).
+2. Choose between Option A (PostgreSQL in Docker on the host) and Option B (managed free-tier Postgres like Neon or Supabase).
+3. Ensure background queue worker (`pg-boss`) operations do not exhaust free tier compute quotas or scale-to-zero limits (Neon Free 100 compute-hours exhaust in ~16 days under persistent worker polling).
+4. Enforce strict isolation: the database must never be exposed or reachable from the public internet.
+5. Provide automated, zero-cost encrypted off-site backups with proven cryptographic tooling (`age` encryption to Cloudflare R2).
+6. Postpone non-essential enterprise operations tooling until revenue justifies it.
+
+### Decision
+
+We select **Option A: PostgreSQL in Docker on the host** for both local development and production environments, governed by decisions D9 through D14 (Section 18.6):
+
+#### Decision D9: Host Stack & Docker Compose
+- **Choice**: The host server runs `web`, `admin`, `api`, `worker`, `postgres`, and `caddy` orchestrating all containers via `infra/docker-compose.prod.yml`.
+- **Rationale**: Keeps all inter-service communication within an internal Docker bridge network (`wildhills-internal`). The edge reverse proxy (`caddy`) exposes only standard HTTP/HTTPS ports (80 and 443) to the internet, providing automatic TLS certificate provisioning via Let's Encrypt / ZeroSSL.
+
+#### Decision D10: Database Topology & Single `DATABASE_URL` Switch
+- **Choice**: Option A (PostgreSQL 16 in Docker on the host). `DATABASE_URL` remains the sole configuration switch across all environments.
+- **Rationale**:
+  - Eliminates scale-to-zero compute exhaustion (Neon Free's 100-hour monthly quota exhausts rapidly under `pg-boss` continuous polling).
+  - PostgreSQL container publishes **no host ports** in production (`ports` directive omitted in `infra/docker-compose.prod.yml`); only accessible internally by `api` and `worker` over the Docker network.
+  - Keeps 100% database portability: swapping to managed PostgreSQL (or staging instances) requires only modifying `DATABASE_URL` with zero application code changes.
+  - Worker and migrations connect via direct (non-pooled, session-level) connections to support transactional advisory locks and listen/notify primitives.
+
+#### Decision D11: Object Storage
+- **Choice**: Cloudflare R2 Standard in production (10 GB free tier, zero egress fees), MinIO locally.
+- **Rationale**: Provides high availability and unlimited egress bandwidth without unexpected billing spikes. Storage quotas are strictly guarded in code at 7 GB (soft alert) and 9.5 GB (hard upload block) per Section 18.3.
+
+#### Decision D12: Transactional Email & Exchange Rates
+- **Choice**: Resend Free tier (3,000 emails/month, 100/day) with priority queue throttling; ExchangeRate-API free tier cached daily behind `FxProvider`.
+- **Rationale**:
+  - Hard code-level throttle (`EMAIL_DAILY_CAP=90`, `EMAIL_MONTHLY_CAP=2700`) ensures operations never drop leads or breach provider quotas. Priority scheduling routes staff alerts (P1) ahead of visitor confirmations (P4). Mailpit is used for local email interception.
+  - FX rates are fetched at most once per 24 hours, cached in the database, with stale-fallback resilience.
+
+#### Decision D13: Nightly Encrypted Off-Site Backups
+- **Choice**: Automated nightly database dumps via `scripts/backup-db.sh` using `pg_dump -Fc`, streaming encryption via `age` using public key `BACKUP_AGE_PUBLIC_KEY`, and upload to private bucket `S3_BUCKET_BACKUPS` on Cloudflare R2.
+- **Rationale**:
+  - Provides zero-cost disaster recovery with zero plaintext credentials or database dumps residing on remote storage.
+  - Decryption private key is retained exclusively offline with the platform owner.
+  - Retains a rolling 14-day backup history. Point-in-time recovery (WAL archiving) is intentionally deferred until revenue.
+
+#### Decision D14: Postponed Operations Tooling
+- **Choice**: Operations dashboards, Chaos drills, and synthetic load testing are deferred until the platform reaches revenue milestones (Section 17.4 upgrade triggers).
+- **Rationale**: Prevents premature optimization and maintenance overhead during pre-revenue phases while relying on standard Linux system metrics, Docker health checks, and a free external uptime monitor (Better Stack) hitting `/v1/internal/healthz`.
+
+### Consequences
+- **Positive**:
+  - Total infrastructure cost is bounded strictly to the single VPS host and domain name ($0 marginal SaaS costs).
+  - High performance and zero external database latency since PostgreSQL runs local to the Fastify API.
+  - Database is completely unexposed to internet port scanners and automated attacks.
+  - Robust Disaster Recovery with `age` encrypted offsite storage.
+- **Negative / Trade-offs**:
+  - Host server maintenance (OS patches, Docker updates, disk space monitoring) is owned by the operator.
+  - Server requires at least 2 GB RAM + swap to comfortably run the combined web, admin, api, worker, postgres, and caddy containers.
+
+

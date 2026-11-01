@@ -1,0 +1,162 @@
+name: wildhills-prod
+
+networks:
+  wildhills-internal:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: wildhills-prod-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-wh_owner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_prod_password}
+      POSTGRES_DB: ${POSTGRES_DB:-wild_hills}
+    # Notice: NO published ports to host. Database is only reachable on wildhills-internal network.
+    networks:
+      - wildhills-internal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-wh_owner} -d ${POSTGRES_DB:-wild_hills}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    container_name: wildhills-prod-api
+    restart: always
+    command: ["node", "dist/server.js"]
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      HOST: 0.0.0.0
+      DATABASE_URL: postgres://${POSTGRES_USER:-wh_owner}:${POSTGRES_PASSWORD:-change_me_prod_password}@postgres:5432/${POSTGRES_DB:-wild_hills}
+      CORS_ORIGIN: https://${DOMAIN:-wildhills.com},https://admin.${DOMAIN:-wildhills.com}
+      S3_ENDPOINT: ${S3_ENDPOINT:-https://r2.cloudflarestorage.com}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-change_me}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-change_me}
+      S3_BUCKET_PUBLIC: ${S3_BUCKET_PUBLIC:-wild-hills-public}
+      S3_BUCKET_PRIVATE: ${S3_BUCKET_PRIVATE:-wild-hills-private}
+      RESEND_API_KEY: ${RESEND_API_KEY:-re_change_me}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-1x0000000000000000000000000000000AA}
+    networks:
+      - wildhills-internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3002/v1/internal/healthz').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  worker:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    container_name: wildhills-prod-worker
+    restart: always
+    command: ["node", "dist/worker.js"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-wh_owner}:${POSTGRES_PASSWORD:-change_me_prod_password}@postgres:5432/${POSTGRES_DB:-wild_hills}
+      S3_ENDPOINT: ${S3_ENDPOINT:-https://r2.cloudflarestorage.com}
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-change_me}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-change_me}
+      RESEND_API_KEY: ${RESEND_API_KEY:-re_change_me}
+      EMAIL_DAILY_CAP: 90
+      EMAIL_MONTHLY_CAP: 2700
+    networks:
+      - wildhills-internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  web:
+    image: ${WEB_IMAGE:-wildhills-web:latest}
+    container_name: wildhills-prod-web
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: https://api.${DOMAIN:-wildhills.com}
+    networks:
+      - wildhills-internal
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  admin:
+    image: ${ADMIN_IMAGE:-wildhills-admin:latest}
+    container_name: wildhills-prod-admin
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: https://api.${DOMAIN:-wildhills.com}
+    networks:
+      - wildhills-internal
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3001/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: wildhills-prod-caddy
+    restart: always
+    # Strictly ports 80 and 443 are published to the host
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-wildhills.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - wildhills-internal
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    depends_on:
+      - web
+      - admin
+      - api
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
