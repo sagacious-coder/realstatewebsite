@@ -37,3 +37,4 @@ export const developers = pgTable('developers', {
 
 export type DeveloperRow = typeof developers.$inferSelect;
 export type NewDeveloperRow = typeof developers.$inferInsert;
+

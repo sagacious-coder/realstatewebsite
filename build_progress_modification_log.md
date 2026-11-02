@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B3: Identity, sessions, and authorization`
+* **Current Stage in Progress:** `Stage B4: Public read API and search`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage B2 (PostgreSQL database schema, Drizzle ORM definitions, numbered migrations 0001–0003, publish guard & immutable triggers, RLS policies with `withActor()` context, Stage 5 fixtures seed, synthetic listings generator; 18/18 tests pass; zero lint/type errors)
-* **Next Up After B2:** Stage B3 (Identity, WebAuthn passkeys, sessions & policy)
+* **Latest Completed Milestone:** Stage B3 (Identity, WebAuthn passkeys, sessions, CSRF, capability tokens, Section 10.8 authorization policy matrix; 69/69 API tests pass; zero lint/type errors)
+* **Next Up After B3:** Stage B4 (Public read API & search endpoints)
 
 ---
 
@@ -41,8 +41,8 @@
 |---|---|---|---|---|
 | **Stage B1** | Backend foundation (Fastify, Docker stack, healthz) | **DONE** | 2026-11-01 | 8/8 Vitest tests pass, docker compose config validates, readyz green, pino redacted, typecheck/lint/build clean |
 | **Stage B2** | PostgreSQL database schema, migrations & seed | **DONE** | 2026-11-02 | Drizzle schema, 0001–0003 SQL migrations, publish guard & audit immutability triggers, RLS, 10/10 DB integration tests pass, Stage 5 parity |
-| **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **NEXT TO RUN** | — | — |
-| **Stage B4** | Public read API & search endpoints (contract parity) | Not Started | — | — |
+| **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **DONE** | 2026-11-03 | Passkeys (FIDO2), Argon2id, TOTP RFC 6238, recovery codes, sessions, __Host- cookies, CSRF, capability tokens, Section 10.8 policy matrix, 69/69 tests pass |
+| **Stage B4** | Public read API & search endpoints (contract parity) | **NEXT TO RUN** | — | — |
 | **Stage B5** | Leads intake, S3 file worker & background jobs | Not Started | — | — |
 | **Stage B6** | Admin API surface, review queue & audit logging | Not Started | — | — |
 
@@ -414,5 +414,52 @@
   * `pnpm run typecheck`: 0 errors across all 7 packages.
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: 465/465 `apps/web` routes + 9/9 `apps/admin` routes + `apps/api` dist compiled and prerendered cleanly.
+
+---
+
+### 2026-11-03 — Stage B3: Identity, Sessions, and Authorization
+* **Action:** Implemented the complete enterprise authentication, session management, cookie hardening, CSRF defense, progressive rate limiting, single-use capability token exchange, and Section 10.8 authorization policy matrix engine.
+* **Outputs Created & Configured:**
+  * `Database Schema & Migration 0004 (`apps/api/src/db/migrations/0004_auth_tables.sql`)`:
+    - Hardened `sessions` table with `last_active_at` for idle timeout enforcement and `step_up_until` for elevated privilege tracking.
+    - Created `invitations` table with 48h expiration and hashed tokens for staff onboarding.
+    - Created `recovery_codes` table storing SHA-256 hashes of single-use emergency backup recovery codes.
+    - Created `webauthn_challenges` table for temporary FIDO2 assertion/registration challenge persistence.
+    - Granted least-privilege permissions to `wh_owner`, `wh_api`, and `wh_worker`.
+  * `Identity & Credential Engines (`apps/api/src/auth/`)`:
+    - `passkeys.ts`: Full WebAuthn / FIDO2 passkey engine using `@simplewebauthn/server` v14 with authenticator counter verification, clone detection, and options generation.
+    - `passwords.ts`: Secure password fallback with `@node-rs/argon2` (Argon2id, 19 MiB memory cost, 2 time iterations).
+    - `totp.ts`: Zero-dependency RFC 6238 Time-based One-Time Password engine with Base32 encoding, dynamic truncation, and +/- 30s clock drift window.
+    - `recovery.ts`: Single-use emergency recovery codes generator (10 codes per user, SHA-256 hashed).
+    - `invitations.ts`: Staff onboarding flow with cryptographically random tokens, expiration validation, and user creation.
+  * `Sessions & Cookie Hardening (`apps/api/src/auth/sessions.ts` & `cookies.ts`)`:
+    - Hashed session token storage (`sessions.id` stores SHA-256 of raw 32-byte token).
+    - Session rotation upon login, privilege elevation, and step-up MFA verification.
+    - Timeouts: 2-hour idle timeout, 12-hour absolute timeout, and remote single/all session revocation.
+    - `__Host-wh_session` cookie prefix in HTTPS/production (HttpOnly, Secure, SameSite=Lax, Path=/).
+  * `CSRF & Progressive Rate Limiting (`apps/api/src/auth/csrf.ts` & `rate-limiter.ts`)`:
+    - CSRF protection validating `Sec-Fetch-Site: cross-site` rejections, allow-listed `Origin` / `Referer`, and session-bound CSRF token checks.
+    - Progressive delay rate limiter: 0ms (1-3 attempts), 500ms (attempt 4), 1000ms (attempt 5), 15-minute lockout (attempt 6+).
+  * `Central Policy Module (`apps/api/src/auth/policy.ts`)`:
+    - `authorize(actor, permission, resource)` strictly enforcing Section 10.8 permission matrix for `wh_owner`, `wh_admin`, `wh_agent`, `public`, and `submitter`.
+    - Country-scoping checks for country managers and agents; author ownership checks on listing mutations.
+  * `Capability Tokens (`apps/api/src/auth/capability.ts`)`:
+    - Cryptographically signed HMAC-SHA256 capability tokens for "Sell With Us" property submitters with single-use validation and POST exchange rotation.
+  * `Immutable Audit Logging (`apps/api/src/auth/audit.ts`)`:
+    - Append-only audit logger capturing auth events (`auth.login.success`, `auth.login.failure`, `auth.step_up.success`, `auth.passkey.registered`, `auth.invitation.created`, `auth.recovery_code.used`) with automatic credential redaction.
+  * `Auth Routes & Plugins (`apps/api/src/routes/auth.ts` & `plugins/auth.ts`)`:
+    - Full Fastify endpoints for password login, WebAuthn assertion/registration, TOTP setup/verify, emergency recovery, step-up MFA, invitations, logout, and `/me`.
+  * `Test Harness & Verification (`apps/api/test/`)`:
+    - `test/auth.test.ts`: 45 unit and integration tests covering password hashing, TOTP, passkeys, session lifecycle, CSRF, rate-limiting, capability tokens, invitations, Section 10.8 matrix, and audit logging.
+    - `test/auth-routes.test.ts`: 6 HTTP end-to-end integration tests with in-memory database injection validating cookie setting, `/me`, step-up rotation, and invitation onboarding.
+* **Validation:**
+  * `pnpm test` (apps/api): 69/69 tests pass across 4 test suites (8 foundation + 10 database + 45 auth + 6 auth-routes).
+  * `pnpm test` (contracts): 4/4 contract tests pass.
+  * `pnpm contracts:openapi:check`: Clean, zero OpenAPI drift.
+  * `pnpm run typecheck`: 0 errors across all packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: All 465 web routes + 9 admin routes + contracts + api dist compile and build with zero errors.
+  * `graphify update .`: Knowledge graph re-extracted (2055 nodes, 4634 edges, 132 communities).
+
 
 

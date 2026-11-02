@@ -46,3 +46,4 @@ export const locations = pgTable('locations', {
 
 export type LocationRow = typeof locations.$inferSelect;
 export type NewLocationRow = typeof locations.$inferInsert;
+

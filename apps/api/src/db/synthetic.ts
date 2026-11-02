@@ -119,3 +119,4 @@ export function generateSyntheticListings(
 
   return items;
 }
+

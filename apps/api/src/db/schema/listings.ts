@@ -137,3 +137,4 @@ export type NewListingRow = typeof listings.$inferInsert;
 export type ListingImageRow = typeof listingImages.$inferSelect;
 export type ListingTranslationRow = typeof listingTranslations.$inferSelect;
 export type ListingDocumentRow = typeof listingDocuments.$inferSelect;
+

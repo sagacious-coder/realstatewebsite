@@ -29,6 +29,11 @@ export const envSchema = z.object({
   TURNSTILE_SECRET_KEY: z.string().default('1x0000000000000000000000000000000AA'),
   EXCHANGERATE_API_KEY: z.string().optional(),
   BACKUP_AGE_PUBLIC_KEY: z.string().optional(),
+  SESSION_SECRET: z.string().default('wh_dev_session_secret_at_least_32_characters_long'),
+  WEBAUTHN_RP_ID: z.string().default('localhost'),
+  WEBAUTHN_RP_NAME: z.string().default('Wild Hills Real Estate'),
+  WEBAUTHN_ORIGIN: z.string().default('http://localhost:3001'),
+  COOKIE_SECRET: z.string().default('wh_dev_cookie_secret_at_least_32_characters_long'),
 });
 
 export type Env = z.infer<typeof envSchema>;

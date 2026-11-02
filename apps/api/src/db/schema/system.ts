@@ -27,3 +27,4 @@ export const usageCounters = pgTable('usage_counters', {
 
 export type ExchangeRateRow = typeof exchangeRates.$inferSelect;
 export type UsageCounterRow = typeof usageCounters.$inferSelect;
+

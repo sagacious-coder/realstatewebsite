@@ -10,7 +10,9 @@ import { errorsPlugin } from './plugins/errors.js';
 import { securityPlugin } from './plugins/security.js';
 import { registryPlugin } from './plugins/registry.js';
 import { swaggerPlugin } from './plugins/swagger.js';
+import { authPlugin } from './plugins/auth.js';
 import { healthRoutes } from './routes/health.js';
+import { authRoutes } from './routes/auth.js';
 
 export async function buildApp(customLogger?: any): Promise<FastifyInstance<any, any, any, any, any>> {
   const defaultLoggerConfig = {
@@ -64,10 +66,12 @@ export async function buildApp(customLogger?: any): Promise<FastifyInstance<any,
   await app.register(errorsPlugin);
   await app.register(securityPlugin);
   await app.register(registryPlugin);
+  await app.register(authPlugin);
   await app.register(swaggerPlugin);
 
   // Register route modules
   await app.register(healthRoutes);
+  await app.register(authRoutes);
 
   return app;
 }

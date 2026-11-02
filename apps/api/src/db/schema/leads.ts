@@ -116,3 +116,4 @@ export type LeadNoteRow = typeof leadNotes.$inferSelect;
 export type SubmissionRow = typeof submissions.$inferSelect;
 export type NewSubmissionRow = typeof submissions.$inferInsert;
 export type SubmissionDocumentRow = typeof submissionDocuments.$inferSelect;
+

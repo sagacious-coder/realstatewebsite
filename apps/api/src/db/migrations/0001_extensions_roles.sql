@@ -37,3 +37,4 @@ BEGIN
   RETURN lower(unaccent(trim(input_text)));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+

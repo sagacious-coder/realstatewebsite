@@ -26,3 +26,4 @@ export const auditLog = pgTable('audit_log', {
 
 export type AuditLogRow = typeof auditLog.$inferSelect;
 export type NewAuditLogRow = typeof auditLog.$inferInsert;
+

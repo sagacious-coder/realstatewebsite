@@ -11,6 +11,7 @@ export const MIGRATION_FILES = [
   '0001_extensions_roles.sql',
   '0002_core_tables.sql',
   '0003_triggers_and_rls.sql',
+  '0004_auth_tables.sql',
 ];
 
 export async function runMigrations(clientOrPool: any) {
@@ -54,3 +55,4 @@ async function main() {
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   void main();
 }
+
