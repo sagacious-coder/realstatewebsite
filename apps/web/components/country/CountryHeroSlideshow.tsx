@@ -239,9 +239,9 @@ export function CountryHeroSlideshow({
                   priority={isActive || idx === 0}
                   fetchPriority={isActive || idx === 0 ? 'high' : 'auto'}
                   quality={90}
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
                   unoptimized={true}
-                  className="object-cover object-center filter brightness-[0.82]"
+                  className="object-cover object-center filter brightness-[0.82] transform-gpu backface-hidden"
                 />
               </div>
             );

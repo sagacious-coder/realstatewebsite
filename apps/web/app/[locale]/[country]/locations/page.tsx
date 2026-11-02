@@ -106,13 +106,13 @@ export default async function LocationsDirectoryPage({ params }: LocationsDirect
               href={`/${locale}/${countryCode}/locations/${city.slug}`}
               className="group block rounded-2xl overflow-hidden bg-card border border-line shadow-sm hover:shadow-md transition-all duration-300"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-navy">
+              <div className="relative aspect-[16/10] overflow-hidden isolate bg-navy">
                 <SiteImage
                   src={city.coverImage || '/images/defaults/apartment/cover.webp'}
                   alt={city.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 1200px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/30 to-transparent" />
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
@@ -154,13 +154,13 @@ export default async function LocationsDirectoryPage({ params }: LocationsDirect
                 href={`/${locale}/${countryCode}/locations/${area.slug}`}
                 className="group block rounded-2xl overflow-hidden bg-card border border-line shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-navy">
+                <div className="relative aspect-[16/10] overflow-hidden isolate bg-navy">
                   <SiteImage
                     src={area.coverImage || '/images/defaults/apartment/cover-card.webp'}
                     alt={area.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">

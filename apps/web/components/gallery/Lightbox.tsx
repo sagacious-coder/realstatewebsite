@@ -138,14 +138,15 @@ export function Lightbox({
             )}
 
             {/* Main Image */}
-            <div className="relative max-h-full max-w-full w-full h-[70vh] flex items-center justify-center">
+            <div className="relative max-h-full max-w-full w-full h-[70vh] flex items-center justify-center overflow-hidden isolate">
               <SiteImage
                 src={current.src}
                 alt={current.alt}
                 fill
                 priority
-                sizes="100vw"
-                className="h-full w-full object-contain"
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
+                className="h-full w-full object-contain transform-gpu backface-hidden"
               />
             </div>
 

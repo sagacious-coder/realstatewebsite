@@ -10,12 +10,14 @@ export interface SiteImageProps extends Omit<ImageProps, 'src'> {
   showSampleBadge?: boolean;
   fallbackLabel?: string;
   quality?: number;
+  containerClassName?: string;
 }
 
 /**
  * SiteImage: Brand wrapper around Next.js <Image /> adhering to Section 5:
  * - Reads real dimensions & blur placeholders from lib/image-manifest.ts
- * - Sets sizes, blur placeholder, quality=88 (up to 90), and lazy loading by default
+ * - Sets sizes, blur placeholder, quality=90, and lazy loading by default
+ * - Uses hardware acceleration (transform-gpu backface-hidden will-change-transform) to prevent texture blurring
  * - Gracefully falls back to PlaceholderImage for missing/placeholder assets
  */
 export function SiteImage({
@@ -26,8 +28,9 @@ export function SiteImage({
   fill,
   sizes,
   priority = false,
-  quality = 88,
+  quality = 90,
   className,
+  containerClassName,
   showSampleBadge = false,
   fallbackLabel,
   ...rest
@@ -52,8 +55,8 @@ export function SiteImage({
   const resolvedSizes =
     sizes ||
     (fill || priority
-      ? '(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px'
-      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 600px');
+      ? '(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px'
+      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px');
 
   // Allow explicit quality prop up to 90 for hero & detail galleries
   const resolvedQuality = Math.min(Math.max(quality, 1), 90);
@@ -67,7 +70,13 @@ export function SiteImage({
       : {};
 
   return (
-    <div className={cn('relative overflow-hidden', fill ? 'w-full h-full' : '', className)}>
+    <div
+      className={cn(
+        'relative overflow-hidden isolate',
+        fill ? 'w-full h-full' : '',
+        containerClassName
+      )}
+    >
       <Image
         src={src}
         alt={alt}
@@ -81,7 +90,7 @@ export function SiteImage({
         loading={priority ? undefined : 'lazy'}
         {...blurProps}
         className={cn(
-          'transition-transform duration-500',
+          'transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out',
           fill ? 'object-cover' : 'h-auto w-full object-cover',
           className
         )}

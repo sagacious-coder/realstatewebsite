@@ -203,9 +203,11 @@ export function ZoomViewer({
               <SiteImage
                 src={imageSrc}
                 alt={alt}
-                width={1600}
+                width={2400}
                 height={1200}
-                className="rounded-[4px] border border-line/60 bg-white p-4 shadow-sm object-contain"
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
+                className="rounded-[4px] border border-line/60 bg-white p-4 shadow-sm object-contain transform-gpu backface-hidden"
                 priority
               />
             </div>

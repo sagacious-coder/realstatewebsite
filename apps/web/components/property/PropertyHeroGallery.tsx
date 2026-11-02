@@ -79,7 +79,7 @@ export function PropertyHeroGallery({
         {primaryPhoto && (
           <div
             onClick={() => openLightboxAt(0)}
-            className="group relative sm:col-span-2 sm:row-span-2 cursor-pointer overflow-hidden bg-navy"
+            className="group relative sm:col-span-2 sm:row-span-2 cursor-pointer overflow-hidden isolate bg-navy"
           >
             <SiteImage
               src={primaryPhoto.src}
@@ -87,8 +87,8 @@ export function PropertyHeroGallery({
               fill
               priority
               quality={90}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
+              className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/15 transition-colors" />
           </div>
@@ -104,14 +104,14 @@ export function PropertyHeroGallery({
             <div
               key={photo.id}
               onClick={() => openLightboxAt(photoIndex)}
-              className="group relative col-span-1 row-span-1 cursor-pointer overflow-hidden bg-navy"
+              className="group relative col-span-1 row-span-1 cursor-pointer overflow-hidden isolate bg-navy"
             >
               <SiteImage
                 src={photo.src}
                 alt={photo.alt}
                 fill
-                sizes="(max-width: 1024px) 25vw, 300px"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
+                className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/15 transition-colors" />
 
@@ -130,7 +130,7 @@ export function PropertyHeroGallery({
       </div>
 
       {/* Mobile Swipe / Hero Viewport */}
-      <div className="sm:hidden relative aspect-[4/3] w-full rounded-card overflow-hidden border border-line bg-navy-2">
+      <div className="sm:hidden relative aspect-[4/3] w-full rounded-card overflow-hidden isolate border border-line bg-navy-2">
         {primaryPhoto && (
           <div
             onClick={() => openLightboxAt(0)}
@@ -142,7 +142,7 @@ export function PropertyHeroGallery({
               fill
               priority
               quality={90}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
+              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
               className="object-cover"
             />
           </div>

@@ -87,17 +87,17 @@ export function CountryChooser({ locale }: { locale: string }) {
               )}
             >
               {/* Background Panel Image */}
-              <div className="absolute inset-0 bg-navy-2 overflow-hidden">
+              <div className="absolute inset-0 bg-navy-2 overflow-hidden isolate">
                 <SiteImage
                   src={country.panelImage}
                   alt={t(`countries.${country.code}.name`)}
                   fill
                   priority={country.code === 'ae'}
                   className={cn(
-                    'object-cover transition-transform duration-700 ease-out will-change-transform',
+                    'object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out',
                     isExpanded ? 'scale-105' : 'group-hover:scale-105'
                   )}
-                  sizes="(max-width: 1024px) 50vw, 35vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
                 />
                 {/* Ambient Top & Bottom Gradients for high contrast & legibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-navy/30" />
@@ -180,14 +180,14 @@ export function CountryChooser({ locale }: { locale: string }) {
             className="group relative flex flex-col justify-end min-h-[300px] sm:min-h-[340px] overflow-hidden rounded-card border border-line/30 bg-navy-2 p-6 shadow-subtle transition-all duration-300 hover:border-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
           >
             {/* Background Image with Ambient Gradient */}
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 overflow-hidden isolate">
               <SiteImage
                 src={country.panelImage}
                 alt={t(`countries.${country.code}.name`)}
                 fill
                 priority={country.code === 'ae'}
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />
             </div>

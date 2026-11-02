@@ -107,13 +107,13 @@ export function HomeView({ locale, featured, introSeenInitial = false }: HomeVie
                   key={item.id}
                   className="group overflow-hidden rounded-card border border-line bg-white p-4 text-start shadow-subtle transition-all duration-300 hover:border-gold hover:shadow-md"
                 >
-                  <div className="relative mb-3 aspect-[16/10] w-full overflow-hidden rounded bg-navy-2">
+                  <div className="relative mb-3 aspect-[16/10] w-full overflow-hidden isolate rounded bg-navy-2">
                     <SiteImage
                       src={item.coverImage}
                       alt={item.title}
                       fill
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
                     />
                     <div className="absolute end-2 top-2 z-10">
                       <span className="rounded bg-navy/85 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-gold-light uppercase backdrop-blur-sm border border-white/10">

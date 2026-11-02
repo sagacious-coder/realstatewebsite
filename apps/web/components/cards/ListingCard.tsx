@@ -98,7 +98,7 @@ export function ListingCard({
       {/* 4:3 Media Frame */}
       <div
         className={cn(
-          'relative aspect-[4/3] w-full overflow-hidden bg-navy-2',
+          'relative aspect-[4/3] w-full overflow-hidden isolate bg-navy-2',
           isListView && 'sm:w-72 md:w-80 sm:aspect-[4/3] flex-shrink-0'
         )}
       >
@@ -107,8 +107,8 @@ export function ListingCard({
             src={displayCover}
             alt={title}
             fill
-            className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 600px"
+            className="transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
           />
         </a>
 

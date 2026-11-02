@@ -60,7 +60,7 @@ export function Gallery({
       {/* Main Image Frame */}
       <div
         className={cn(
-          'group relative w-full overflow-hidden rounded-[6px] border border-line bg-navy/5',
+          'group relative w-full overflow-hidden isolate rounded-[6px] border border-line bg-navy/5',
           aspectClass
         )}
       >
@@ -69,9 +69,9 @@ export function Gallery({
           alt={current.alt || `Property photo ${currentIndex + 1} of ${total}`}
           fill
           priority={currentIndex === 0}
-          sizes="(max-width: 1024px) 100vw, 1200px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
           style={objectPositionStyle}
-          className="h-full w-full object-cover transition-transform duration-700 motion-safe:group-hover:scale-[1.02] motion-reduce:transform-none"
+          className="h-full w-full object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transform-none"
         />
 
         {/* Counter Badge */}

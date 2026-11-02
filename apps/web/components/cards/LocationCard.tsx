@@ -47,13 +47,13 @@ export function LocationCard({
       aria-label={`${name}, ${countryName}, ${isZero ? 'No listings yet' : `${listingCount} listings`}`}
     >
       {/* 4:3 Image Container */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-ivory">
+      <div className="relative aspect-[4/3] w-full overflow-hidden isolate bg-ivory">
         <SiteImage
           src={imageSrc}
           alt={`${name}, ${countryName}`}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 600px"
-          className="h-full w-full object-cover transition-transform duration-700 motion-safe:group-hover:scale-[1.03] motion-reduce:transform-none"
+          sizes="(max-width: 768px) 100vw, 1200px"
+          className="h-full w-full object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transform-none"
         />
 
         {/* Subtle gradient vignette at bottom of image for readability */}

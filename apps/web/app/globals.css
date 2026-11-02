@@ -217,3 +217,10 @@ body:has([data-nav-hero]) .site-nav[data-at-top='true'][data-open='false'] .site
       background-color 200ms ease-out;
   }
 }
+
+@layer utilities {
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}

@@ -59,13 +59,13 @@ export function BlogSection({
                 className="group flex flex-col overflow-hidden rounded-[6px] border border-line bg-white shadow-sm transition-all duration-300 hover:border-gold/60 hover:shadow-md text-start"
               >
                 {/* 16:9 Image Frame */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-ivory">
+                <div className="relative aspect-[16/9] w-full overflow-hidden isolate bg-ivory">
                   <SiteImage
                     src={coverImage}
                     alt={post.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="h-full w-full object-cover transition-transform duration-700 motion-safe:group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
+                    className="h-full w-full object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
                   />
                   {post.tags && post.tags.length > 0 && (
                     <div className="absolute top-3 start-3">

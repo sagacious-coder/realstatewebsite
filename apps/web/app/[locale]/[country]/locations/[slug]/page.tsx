@@ -154,14 +154,15 @@ export default async function LocationDetailPage({ params }: LocationPageProps) 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="relative rounded-3xl overflow-hidden bg-navy min-h-[380px] sm:min-h-[460px] flex items-end shadow-xl border border-line">
           {/* Background Image */}
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 overflow-hidden isolate">
             <SiteImage
               src={location.coverImage || '/images/defaults/apartment/cover.webp'}
               alt={location.name}
               fill
               className="object-cover"
               priority
-              sizes="(max-width: 1280px) 100vw, 1280px"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/55 to-navy/20" />
           </div>
@@ -321,13 +322,13 @@ export default async function LocationDetailPage({ params }: LocationPageProps) 
                 href={`/${locale}/${countryCode}/locations/${item.slug}`}
                 className="group block rounded-2xl overflow-hidden bg-card border border-line shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-navy">
+                <div className="relative aspect-[16/10] overflow-hidden isolate bg-navy">
                   <SiteImage
                     src={item.coverImage || '/images/defaults/apartment/cover-card.webp'}
                     alt={item.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
