@@ -236,10 +236,11 @@ export function CountryHeroSlideshow({
                   src={imgSrc}
                   alt={slide.alt}
                   fill
-                  priority={idx === 0}
-                  fetchPriority={idx === 0 ? 'high' : 'auto'}
+                  priority={isActive || idx === 0}
+                  fetchPriority={isActive || idx === 0 ? 'high' : 'auto'}
                   quality={90}
                   sizes="100vw"
+                  unoptimized={true}
                   className="object-cover object-center filter brightness-[0.82]"
                 />
               </div>
@@ -442,3 +443,5 @@ export function CountryHeroSlideshow({
     </div>
   );
 }
+
+export default CountryHeroSlideshow;

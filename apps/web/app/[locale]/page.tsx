@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { setRequestLocale } from 'next-intl/server';
-import { BrandIntro } from '@/components/intro/BrandIntro';
+import { BrandIntroClient as BrandIntro } from '@/components/intro/BrandIntroClient';
 import { CountryChooser } from '@/components/home/CountryChooser';
 import { SiteImage } from '@/components/SiteImage';
 import { getFeaturedListings, type ListingSummary } from '@/lib/data';

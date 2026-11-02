@@ -53,7 +53,7 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  transpilePackages: ['@wild-hills/ui', '@wild-hills/contracts', '@wild-hills/api-client'],
+  transpilePackages: ['framer-motion', 'motion', '@wild-hills/ui', '@wild-hills/contracts', '@wild-hills/api-client'],
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

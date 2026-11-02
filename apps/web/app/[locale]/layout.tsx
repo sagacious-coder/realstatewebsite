@@ -33,6 +33,13 @@ export async function generateMetadata({
       template: '%s | Wild Hills Real Estate',
     },
     description,
+    icons: {
+      icon: [
+        { url: '/icon.svg', type: 'image/svg+xml' },
+        { url: '/favicon.ico', sizes: 'any' },
+      ],
+      apple: '/apple-icon.png',
+    },
     robots: isPrivate
       ? {
           index: false,

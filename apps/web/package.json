@@ -22,6 +22,7 @@
     "@wild-hills/contracts": "workspace:*",
     "@wild-hills/ui": "workspace:*",
     "clsx": "^2.1.1",
+    "framer-motion": "^14.9.0",
     "lucide-react": "^1.16.0",
     "next": "^15.2.1",
     "next-intl": "^3.26.3",
