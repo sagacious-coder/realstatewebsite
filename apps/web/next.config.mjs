@@ -55,10 +55,7 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: ['framer-motion', 'motion', '@wild-hills/ui', '@wild-hills/contracts', '@wild-hills/api-client'],
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000,
+    unoptimized: true,
   },
   async headers() {
     const isPrivate = process.env.SITE_PRIVATE === 'true';
