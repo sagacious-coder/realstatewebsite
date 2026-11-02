@@ -15,6 +15,58 @@ export interface ImageManifestEntry {
 }
 
 export const imageManifest: Record<string, ImageManifestEntry> = {
+  "/images/panels/panel-eg.webp": {
+    "path": "/images/panels/panel-eg.webp",
+    "width": 1400,
+    "height": 2000,
+    "format": "webp",
+    "sizeBytes": 956912,
+    "sizeKB": 934.5,
+    "budgetKB": 250,
+    "overBudget": false,
+    "is_sample": false,
+    "is_placeholder_image": false,
+    "blurDataURL": "data:image/webp;base64,UklGRigBAABXRUJQVlA4IBwBAABwBwCdASogAC4APzmKvlYvKSajqqoB4CcJbACdMxyEltqBiKKAM4QSBfUUMNxl0X4kPpD6XVa8X9mxHxou1sDgCSwAAAD3Oxd8/YWiCXA37U9bJ2rS2fwDtg3VAVtUc8/hyerkptaL/EGTwCTFBclJdAtoErp+vKJ0XL3K2yGNRwJeQkrHWhIYnGIroocT6m0LP5Kk1kBZjBwS/yaeNL1M2hsjDpa+TfrXv3GvKI3999KiWZUJUacHH+B3bL45tZsBkyTo6hytwlgOIpJO2/CqY33TljV1eTbDDg/525jlbbML8O+JSu+6SggEWOWk3FLSCXfYOe6zsN7z14F/iMSwFi5sh0JJevJA9gr/F/92vOp6DdiV9t6v0zMAAA=="
+  },
+  "/images/panels/panel-ge.webp": {
+    "path": "/images/panels/panel-ge.webp",
+    "width": 1400,
+    "height": 2000,
+    "format": "webp",
+    "sizeBytes": 502962,
+    "sizeKB": 491.2,
+    "budgetKB": 250,
+    "overBudget": false,
+    "is_sample": false,
+    "is_placeholder_image": false,
+    "blurDataURL": "data:image/webp;base64,UklGRlQBAABXRUJQVlA4IEgBAAAwCACdASogAC4APzmSvlmvKiYjpWsx4CcJZAC7M8hGvV1ogERLAlAN9bySsAESfo/CqV7Z888B7JjiqHRJSgEQ6cP3aNDAoCaKAAD+L6sFvFcaYAYO/XL/py5LtXVTN3SeixTPLwjNkH7RbxSIR2xeoZx0+CdLCB88ZtBupQGLwdgHCrZ13ht/uM+hgGnjg5wNKMSlRiVmdQOxg1utpLzkYbox4tNV9hhpss56/sydEasEnjTJQv+PJjK4Sj8A48ztKwMFNrJXE7y1cqdTkfr6HTjCtMa5u57OToftMyNvyno31kqiMUbxknx1+H+fuwRek9lrO2MCTNa+8oyjCwU5hH8rL7Oi7rSSeQhMOhDis9cVPuQ66H3X3U2ydT6xwqiOtn/3wiGYJDDD05MJMfMsg7HMfi/XIg9I9wt68XlPDJv0VwQGRzwA"
+  },
+  "/images/panels/panel-tr.webp": {
+    "path": "/images/panels/panel-tr.webp",
+    "width": 1400,
+    "height": 2000,
+    "format": "webp",
+    "sizeBytes": 582556,
+    "sizeKB": 568.9,
+    "budgetKB": 250,
+    "overBudget": false,
+    "is_sample": false,
+    "is_placeholder_image": false,
+    "blurDataURL": "data:image/webp;base64,UklGRtwAAABXRUJQVlA4INAAAAAQBgCdASogAC4APx12slOtJ6UitUwBoCOJbAC7M2jKT8kJGyQqoC5BMyrNUtMlIB75UPPK3WLXfTAA/q6sF02kqhc9fUi+hcYX5preawhkAdjbxHEL39tupDXxbtTyxXi8u+zEPwf6BpUs31+5j3y7RkebwZquqjpEXJTvm29HtaEdNHxIUWw6bQaoLWg8QicL7CfwvhLvHRByG67sd1tRrHMEbxA5qvOdaCx0Xw3nykC6o41INIqX+VnF0CgIAPdnSeMjwdT1gCeLRPPD7AAA"
+  },
+  "/images/panels/panel-ae.webp": {
+    "path": "/images/panels/panel-ae.webp",
+    "width": 1400,
+    "height": 2000,
+    "format": "webp",
+    "sizeBytes": 480050,
+    "sizeKB": 468.8,
+    "budgetKB": 250,
+    "overBudget": false,
+    "is_sample": false,
+    "is_placeholder_image": false,
+    "blurDataURL": "data:image/webp;base64,UklGRugAAABXRUJQVlA4INwAAAAQBgCdASogAC4APzmKtVYvKSSjqqwB4CcJZgC3uHVnPAG5xovhwLVnhEgNkoxPYSy6wDlw1cazdgAA/GstuZUC9ceyfI53pUqvr1097PKyNtcbZKUqZ2ReQS+qO/hJkUW3j8onB8S/rzBq1LykZMpsozbEhUBlTolYjWgbu5Ac7tWt0h3Dv1nuzLghS0qZwxUKheH86nOSFfRmgbHzJMw4TWGdtT7zDWHyOrjeKODb4bHW2i42eIlpPqL4WFrSAEwsv7zoDDyVlJTTvt8Onb0+9O9qbvUP+YLogAAA"
+  },
   "/brand/wild-hills-logo-full-light.svg": {
     "path": "/brand/wild-hills-logo-full-light.svg",
     "width": 0,
@@ -209,19 +261,18 @@ export const imageManifest: Record<string, ImageManifestEntry> = {
     "is_sample": false,
     "is_placeholder_image": false,
     "blurDataURL": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACwAQCdASoIAAoABUB8JQBOgB6I1yxAAP7ThHltaLoQkdkge+cLcWYPDuhkAAAA"
-  },
-  "/images/panels/panel-egypt.webp": {
+  },  "/images/panels/panel-egypt.webp": {
     "path": "/images/panels/panel-egypt.webp",
-    "width": 800,
-    "height": 1400,
+    "width": 1400,
+    "height": 2000,
     "format": "webp",
-    "sizeBytes": 59538,
-    "sizeKB": 58.1,
-    "budgetKB": 180,
+    "sizeBytes": 956912,
+    "sizeKB": 934.5,
+    "budgetKB": 250,
     "overBudget": false,
     "is_sample": false,
     "is_placeholder_image": false,
-    "blurDataURL": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAACwAQCdASoGAAoABUB8JQBOgCHcMGgAAP7GN51WF1DZmRTXZIwyB2AWAAA="
+    "blurDataURL": "data:image/webp;base64,UklGRigBAABXRUJQVlA4IBwBAABwBwCdASogAC4APzmKvlYvKSajqqoB4CcJbACdMxyEltqBiKKAM4QSBfUUMNxl0X4kPpD6XVa8X9mxHxou1sDgCSwAAAD3Oxd8/YWiCXA37U9bJ2rS2fwDtg3VAVtUc8/hyerkptaL/EGTwCTFBclJdAtoErp+vKJ0XL3K2yGNRwJeQkrHWhIYnGIroocT6m0LP5Kk1kBZjBwS/yaeNL1M2hsjDpa+TfrXv3GvKI3999KiWZUJUacHH+B3bL45tZsBkyTo6hytwlgOIpJO2/CqY33TljV1eTbDDg/525jlbbML8O+JSu+6SggEWOWk3FLSCXfYOe6zsN7z14F/iMSwFi5sh0JJevJA9gr/F/92vOp6DdiV9t6v0zMAAA=="
   },
   "/images/egypt/hero/hero-02.webp": {
     "path": "/images/egypt/hero/hero-02.webp",
@@ -300,19 +351,18 @@ export const imageManifest: Record<string, ImageManifestEntry> = {
     "is_sample": false,
     "is_placeholder_image": false,
     "blurDataURL": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAQAgCdASoIAAoABUB8JaACdH8AGMC8xwE8AP6fArfqRCRXqoGKCx8K10G2ZTHsT2n60lAQAAA="
-  },
-  "/images/panels/panel-georgia.webp": {
+  },  "/images/panels/panel-georgia.webp": {
     "path": "/images/panels/panel-georgia.webp",
-    "width": 800,
-    "height": 1400,
+    "width": 1400,
+    "height": 2000,
     "format": "webp",
-    "sizeBytes": 104298,
-    "sizeKB": 101.9,
-    "budgetKB": 180,
+    "sizeBytes": 502962,
+    "sizeKB": 491.2,
+    "budgetKB": 250,
     "overBudget": false,
     "is_sample": false,
     "is_placeholder_image": false,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAgCdASoGAAoABUB8JaACdH8AGN3EOTQAAP6BUmSUp50bvKu/LTKzgz7E/cWgAAA="
+    "blurDataURL": "data:image/webp;base64,UklGRlQBAABXRUJQVlA4IEgBAAAwCACdASogAC4APzmSvlmvKiYjpWsx4CcJZAC7M8hGvV1ogERLAlAN9bySsAESfo/CqV7Z888B7JjiqHRJSgEQ6cP3aNDAoCaKAAD+L6sFvFcaYAYO/XL/py5LtXVTN3SeixTPLwjNkH7RbxSIR2xeoZx0+CdLCB88ZtBupQGLwdgHCrZ13ht/uM+hgGnjg5wNKMSlRiVmdQOxg1utpLzkYbox4tNV9hhpss56/sydEasEnjTJQv+PJjK4Sj8A48ztKwMFNrJXE7y1cqdTkfr6HTjCtMa5u57OToftMyNvyno31kqiMUbxknx1+H+fuwRek9lrO2MCTNa+8oyjCwU5hH8rL7Oi7rSSeQhMOhDis9cVPuQ66H3X3U2ydT6xwqiOtn/3wiGYJDDD05MJMfMsg7HMfi/XIg9I9wt68XlPDJv0VwQGRzwA"
   },
   "/images/georgia/hero/hero-02.webp": {
     "path": "/images/georgia/hero/hero-02.webp",
@@ -391,19 +441,18 @@ export const imageManifest: Record<string, ImageManifestEntry> = {
     "is_sample": false,
     "is_placeholder_image": false,
     "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAAAQAgCdASoIAAoABUB8JZACdAEPEKR1BqgAAP7TAg4zGO3S8X1HIMCiOI43sEr611DrAAAA"
-  },
-  "/images/panels/panel-turkey.webp": {
+  },  "/images/panels/panel-turkey.webp": {
     "path": "/images/panels/panel-turkey.webp",
-    "width": 800,
-    "height": 1400,
+    "width": 1400,
+    "height": 2000,
     "format": "webp",
-    "sizeBytes": 111892,
-    "sizeKB": 109.3,
-    "budgetKB": 180,
+    "sizeBytes": 582556,
+    "sizeKB": 568.9,
+    "budgetKB": 250,
     "overBudget": false,
     "is_sample": false,
     "is_placeholder_image": false,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAQCdASoGAAoABUB8JZACdAEPEJbiQZAA/tMCDjMY7Gtkj8JoMbF88KHci9y8AAA="
+    "blurDataURL": "data:image/webp;base64,UklGRtwAAABXRUJQVlA4INAAAAAQBgCdASogAC4APx12slOtJ6UitUwBoCOJbAC7M2jKT8kJGyQqoC5BMyrNUtMlIB75UPPK3WLXfTAA/q6sF02kqhc9fUi+hcYX5preawhkAdjbxHEL39tupDXxbtTyxXi8u+zEPwf6BpUs31+5j3y7RkebwZquqjpEXJTvm29HtaEdNHxIUWw6bQaoLWg8QicL7CfwvhLvHRByG67sd1tRrHMEbxA5qvOdaCx0Xw3nykC6o41INIqX+VnF0CgIAPdnSeMjwdT1gCeLRPPD7AAA"
   },
   "/images/turkey/hero/hero-02.webp": {
     "path": "/images/turkey/hero/hero-02.webp",
@@ -482,19 +531,18 @@ export const imageManifest: Record<string, ImageManifestEntry> = {
     "is_sample": false,
     "is_placeholder_image": false,
     "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoIAAoABUB8JZQC7ADcEPZNAAD+mC3focuzMdtGAjhoVa0HxYaD+HeoAAA="
-  },
-  "/images/panels/panel-uae.webp": {
+  },  "/images/panels/panel-uae.webp": {
     "path": "/images/panels/panel-uae.webp",
-    "width": 800,
-    "height": 1400,
+    "width": 1400,
+    "height": 2000,
     "format": "webp",
-    "sizeBytes": 61422,
-    "sizeKB": 60,
-    "budgetKB": 180,
+    "sizeBytes": 480050,
+    "sizeKB": 468.8,
+    "budgetKB": 250,
     "overBudget": false,
     "is_sample": false,
     "is_placeholder_image": false,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoGAAoABUB8JZQCw7D0MXmQAAD+tgpeJuOyTCDJ/pSI4WKHw+9SfxpcAAA="
+    "blurDataURL": "data:image/webp;base64,UklGRugAAABXRUJQVlA4INwAAAAQBgCdASogAC4APzmKtVYvKSSjqqwB4CcJZgC3uHVnPAG5xovhwLVnhEgNkoxPYSy6wDlw1cazdgAA/GstuZUC9ceyfI53pUqvr1097PKyNtcbZKUqZ2ReQS+qO/hJkUW3j8onB8S/rzBq1LykZMpsozbEhUBlTolYjWgbu5Ac7tWt0h3Dv1nuzLghS0qZwxUKheH86nOSFfRmgbHzJMw4TWGdtT7zDWHyOrjeKODb4bHW2i42eIlpPqL4WFrSAEwsv7zoDDyVlJTTvt8Onb0+9O9qbvUP+YLogAAA"
   },
   "/images/uae/hero/hero-02.webp": {
     "path": "/images/uae/hero/hero-02.webp",

@@ -53,3 +53,7 @@ As required by WILD_HILLS_BUILD_SPEC.md Section 15.5, every image from source ma
 | `images/defaults/villa/gallery-06.webp` | `gallery-06-garden-patio.jpg` | to verify |
 | `images/defaults/villa/gallery-07.webp` | `gallery-07-sea-view-pool.jpg` | to verify |
 | `images/defaults/villa/gallery-08.webp` | `gallery-08-resort-pool.jpg` | to verify |
+| `images/panels/panel-ae.webp` | Unsplash `photo-1518684079-3c830dcef090` (Dubai Marina) | to verify |
+| `images/panels/panel-tr.webp` | Unsplash `photo-1527838832700-5059252407fa` (Istanbul Bosphorus) | to verify |
+| `images/panels/panel-ge.webp` | Unsplash `photo-1600585154526-990dced4db0d` (Contemporary Villa) | to verify |
+| `images/panels/panel-eg.webp` | Unsplash `photo-1571003123894-1f0594d2b5d9` (Red Sea Waterfront Villa) | to verify |

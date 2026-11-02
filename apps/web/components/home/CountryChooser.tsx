@@ -22,10 +22,10 @@ interface CountryCardConfig {
 }
 
 const COUNTRIES_CONFIG: readonly CountryCardConfig[] = [
-  { code: 'ae', panelImage: '/images/panels/panel-uae.webp' },
-  { code: 'tr', panelImage: '/images/panels/panel-turkey.webp' },
-  { code: 'ge', panelImage: '/images/panels/panel-georgia.webp' },
-  { code: 'eg', panelImage: '/images/panels/panel-egypt.webp' },
+  { code: 'ae', panelImage: '/images/panels/panel-ae.webp' },
+  { code: 'tr', panelImage: '/images/panels/panel-tr.webp' },
+  { code: 'ge', panelImage: '/images/panels/panel-ge.webp' },
+  { code: 'eg', panelImage: '/images/panels/panel-eg.webp' },
 ] as const;
 
 export function CountryChooser({ locale }: { locale: string }) {
@@ -93,17 +93,18 @@ export function CountryChooser({ locale }: { locale: string }) {
                   alt={t(`countries.${country.code}.name`)}
                   fill
                   priority={country.code === 'ae'}
+                  quality={90}
                   className={cn(
                     'object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out',
                     isExpanded ? 'scale-105' : 'group-hover:scale-105'
                   )}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 {/* Ambient Top & Bottom Gradients for high contrast & legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-navy/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#101B33]/90 via-[#101B33]/40 to-transparent" />
                 <div
                   className={cn(
-                    'absolute inset-0 bg-navy/20 transition-opacity duration-300',
+                    'absolute inset-0 bg-[#101B33]/20 transition-opacity duration-300',
                     isExpanded ? 'opacity-0' : isAnyExpanded ? 'opacity-40' : 'opacity-0'
                   )}
                 />
@@ -186,10 +187,11 @@ export function CountryChooser({ locale }: { locale: string }) {
                 alt={t(`countries.${country.code}.name`)}
                 fill
                 priority={country.code === 'ae'}
+                quality={90}
                 className="object-cover transform-gpu backface-hidden will-change-transform transition-transform duration-500 ease-out group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1440px) 100vw, 2560px"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#101B33]/90 via-[#101B33]/40 to-transparent" />
             </div>
 
             {/* Top Badges */}

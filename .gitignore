@@ -10,8 +10,8 @@ node_modules/
 *.env.local
 
 # Raw source assets (Section 2 rule 3: never touched, never committed)
-source-images/
-images/
+/source-images/
+/images/
 
 # Build and cache files
 .next/
