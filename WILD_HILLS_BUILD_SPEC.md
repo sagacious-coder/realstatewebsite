@@ -59,8 +59,8 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | 4 Layout shell | Frontend | 1b (uses UI primitives) | Done |
 | 5 Contract, typed client, mock mode | Both | 1b | Done (`contract-v1`) |
 | B1 Backend foundation | Backend | 1b | Done |
-| B2 Database | Backend | B1, 5 | **NEXT TO RUN** |
-| B3 Identity, sessions, authorization | Backend | B2 | Not started |
+| B2 Database | Backend | B1, 5 | Done |
+| B3 Identity, sessions, authorization | Backend | B2 | **NEXT TO RUN** |
 | B4 Public read API and search | Backend | B2, 5 | Not started |
 | 6 Intro and country chooser | Frontend | 1b, 4 | Done |
 | 7 Country home | Frontend | 4, 5 (B4 for live data) | Done |

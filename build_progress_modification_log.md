@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B2: PostgreSQL database schema, migrations & seed`
+* **Current Stage in Progress:** `Stage B3: Identity, sessions, and authorization`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage B1 (Fastify backend foundation, Docker production infrastructure, RFC 9457 error handling, Pino D5 redaction, Service Provider interfaces & Vitest test harness; ADR-002 recorded; 8/8 tests pass; zero lint/type errors)
-* **Next Up After B1:** Stage B2 (PostgreSQL database schema, migrations & seed)
+* **Latest Completed Milestone:** Stage B2 (PostgreSQL database schema, Drizzle ORM definitions, numbered migrations 0001–0003, publish guard & immutable triggers, RLS policies with `withActor()` context, Stage 5 fixtures seed, synthetic listings generator; 18/18 tests pass; zero lint/type errors)
+* **Next Up After B2:** Stage B3 (Identity, WebAuthn passkeys, sessions & policy)
 
 ---
 
@@ -40,8 +40,8 @@
 | Stage | Milestone | Status | Completed Date | Verification / Commit |
 |---|---|---|---|---|
 | **Stage B1** | Backend foundation (Fastify, Docker stack, healthz) | **DONE** | 2026-11-01 | 8/8 Vitest tests pass, docker compose config validates, readyz green, pino redacted, typecheck/lint/build clean |
-| **Stage B2** | PostgreSQL database schema, migrations & seed | **NEXT TO RUN** | — | — |
-| **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | Not Started | — | — |
+| **Stage B2** | PostgreSQL database schema, migrations & seed | **DONE** | 2026-11-02 | Drizzle schema, 0001–0003 SQL migrations, publish guard & audit immutability triggers, RLS, 10/10 DB integration tests pass, Stage 5 parity |
+| **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **NEXT TO RUN** | — | — |
 | **Stage B4** | Public read API & search endpoints (contract parity) | Not Started | — | — |
 | **Stage B5** | Leads intake, S3 file worker & background jobs | Not Started | — | — |
 | **Stage B6** | Admin API surface, review queue & audit logging | Not Started | — | — |
@@ -386,4 +386,33 @@
   * `pnpm run typecheck`: 0 errors across all 7 packages.
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: 465/465 `apps/web` routes + 9/9 `apps/admin` routes + `apps/api` dist compiled and prerendered cleanly.
+
+---
+
+### 2026-11-02 — Stage B2: PostgreSQL Database Schema, Migrations, RLS & Seed
+* **Action:** Implemented Drizzle ORM schemas and numbered SQL migrations for all core tables, established PostgreSQL security extensions and least-privilege roles, implemented `normalize_search()` and triggers (publish guard, audit log immutability), enforced Row-Level Security (RLS) with `withActor()` context helper, built Stage 5 fixtures seed script, created a synthetic listings generator, and verified complete test coverage.
+* **Outputs Created & Configured:**
+  * `Drizzle ORM Schema (`apps/api/src/db/schema/`)`:
+    - Defined modular tables with UUIDv7 primary keys, BigInt minor units for currency, timestamptz for dates, and optimistic concurrency `version` columns.
+    - Tables created: `locations`, `developers`, `projects`, `listings`, `listing_images`, `listing_translations`, `listing_documents`, `leads`, `lead_notes`, `submissions`, `submission_documents`, `users`, `sessions`, `passkeys`, `totp_factors`, `audit_log`, `exchange_rates`, `usage_counters`.
+    - Enforced Decision D6: zero `favorites` or `saved_searches` tables.
+  * `SQL Migrations (`apps/api/src/db/migrations/`)`:
+    - `0001_extensions_roles.sql`: Enabled `pg_trgm`, `unaccent`, `citext`; created least-privilege roles (`wh_owner`, `wh_api`, `wh_public_ro`, `wh_worker`); created `normalize_search()` function for diacritic unaccenting and case folding.
+    - `0002_core_tables.sql`: Generated DDL for all 18 tables, foreign keys, compound indexes, trigram GIN index on `normalize_search(title)`, and least-privilege role permissions.
+    - `0003_triggers_and_rls.sql`: Created `trg_publish_guard()` trigger (preventing incomplete listings from becoming published), `trg_audit_log_immutable()` trigger (forbidding updates/deletes on `audit_log`), and configured Row-Level Security (`ENABLE` and `FORCE ROW LEVEL SECURITY`) with policies on `listings`, `leads`, `lead_notes`, `listing_documents`, and `submissions`.
+  * `RLS Context & Execution Helper (`apps/api/src/db/context.ts`)`:
+    - `withActor(db, actor, callback)`: Configures transaction session variables (`app.current_user_id`, `app.current_user_role`, `app.current_country_scopes`, `app.current_submission_token`) and elevates/drops role privileges (`wh_public_ro` vs `wh_api`) to ensure strict RLS evaluation across actors.
+  * `Data Seeding & Synthetic Testing (`apps/api/src/db/`)`:
+    - `seed.ts`: Reads directly from `@wild-hills/contracts/fixtures` into PostgreSQL, seeding exact fixture counts: 51 locations, 10 developers, 8 projects, 24 sample listings (6 per country), 5 leads, 3 submissions, and exchange rates.
+    - `synthetic.ts`: Generator creating randomized, realistic listings with minor-unit prices, bedroom/bathroom distributions, and localized data for search load testing.
+  * `Test Harness & Verification (`apps/api/test/database.test.ts`)`:
+    - 10 integration tests executing on in-memory PostgreSQL engine (PGlite) with all extensions loaded: migration verification, role checks, `normalize_search()` accent/case tests, publish guard failure assertions, audit log immutability protection, public vs staff RLS isolation, seller capability token RLS isolation, Stage 5 fixture count parity, and synthetic search testing.
+* **Validation:**
+  * `pnpm test` (apps/api): 18/18 tests pass (8 foundation + 10 database integration tests).
+  * `pnpm test` (contracts): 4/4 contract tests pass.
+  * `pnpm contracts:openapi:check`: Clean, zero OpenAPI drift.
+  * `pnpm run typecheck`: 0 errors across all 7 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: 465/465 `apps/web` routes + 9/9 `apps/admin` routes + `apps/api` dist compiled and prerendered cleanly.
+
 

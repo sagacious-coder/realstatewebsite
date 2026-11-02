@@ -46,3 +46,4 @@ export const swaggerPlugin: FastifyPluginAsync = fp(async (fastify) => {
     staticCSP: true,
   });
 });
+

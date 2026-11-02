@@ -36,3 +36,4 @@ export const loggingPlugin: FastifyPluginAsync = fp(async (fastify) => {
     void reply.header('x-request-id', reqId);
   });
 });
+

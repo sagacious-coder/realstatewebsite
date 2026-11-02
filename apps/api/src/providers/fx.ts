@@ -39,3 +39,4 @@ export class FixtureFxAdapter implements FxProvider {
     };
   }
 }
+

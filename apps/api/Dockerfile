@@ -49,3 +49,4 @@ USER apiuser
 EXPOSE 3002
 
 CMD ["node", "dist/server.js"]
+

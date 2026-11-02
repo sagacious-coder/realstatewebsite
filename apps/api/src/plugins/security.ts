@@ -55,3 +55,4 @@ export const securityPlugin: FastifyPluginAsync = fp(async (fastify) => {
     }),
   });
 });
+

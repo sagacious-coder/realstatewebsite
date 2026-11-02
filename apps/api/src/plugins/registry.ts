@@ -57,3 +57,4 @@ export const registryPlugin: FastifyPluginAsync = fp(async (fastify) => {
     routeOptions.config = config;
   });
 });
+

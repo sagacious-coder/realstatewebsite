@@ -58,3 +58,4 @@ echo "Rotating backups older than 14 days in s3://${S3_BUCKET}..."
 # In production, retention is managed via S3/R2 lifecycle rules (14-day expiration rule recommended)
 
 echo "Backup completed successfully: ${BACKUP_FILENAME}"
+

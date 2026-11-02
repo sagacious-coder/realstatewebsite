@@ -84,3 +84,4 @@ export class MinioStorageAdapter implements ObjectStorage {
     return total;
   }
 }
+

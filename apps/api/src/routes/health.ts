@@ -117,3 +117,4 @@ export const healthRoutes: FastifyPluginAsync = async (fastify) => {
     async (_request, reply) => reply.redirect('/v1/internal/readyz')
   );
 };
+

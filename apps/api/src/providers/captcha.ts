@@ -84,3 +84,4 @@ export class CloudflareTurnstileVerifier implements CaptchaVerifier {
     }
   }
 }
+
