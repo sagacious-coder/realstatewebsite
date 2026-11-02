@@ -86,7 +86,8 @@ export function PropertyHeroGallery({
               alt={primaryPhoto.alt}
               fill
               priority
-              sizes="(max-width: 1024px) 50vw, 600px"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/15 transition-colors" />
@@ -140,7 +141,8 @@ export function PropertyHeroGallery({
               alt={primaryPhoto.alt}
               fill
               priority
-              sizes="100vw"
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px"
               className="object-cover"
             />
           </div>

@@ -238,6 +238,7 @@ export function CountryHeroSlideshow({
                   fill
                   priority={idx === 0}
                   fetchPriority={idx === 0 ? 'high' : 'auto'}
+                  quality={90}
                   sizes="100vw"
                   className="object-cover object-center filter brightness-[0.82]"
                 />

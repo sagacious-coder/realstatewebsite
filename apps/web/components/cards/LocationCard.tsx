@@ -52,7 +52,7 @@ export function LocationCard({
           src={imageSrc}
           alt={`${name}, ${countryName}`}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 600px"
           className="h-full w-full object-cover transition-transform duration-700 motion-safe:group-hover:scale-[1.03] motion-reduce:transform-none"
         />
 

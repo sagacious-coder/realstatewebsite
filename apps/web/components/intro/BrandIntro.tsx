@@ -318,33 +318,21 @@ export function BrandIntro({ initialPlaying = true }: BrandIntroProps) {
                 <ellipse cx="456" cy="460" rx="9" ry="14" fill="#1E5C41" />
               </g>
 
-              {/* Layer 5: Modern Towers */}
+              {/* Layer 5: Modern Towers (Canonical Brand Symbol Architecture) */}
               <g className="anim-towers">
-                {/* Tower 1 */}
-                <rect x="520" y="440" width="42" height="170" fill="#FAF8F3" rx="1" />
-                <rect x="527" y="455" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="545" y="455" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="527" y="480" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="545" y="480" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="527" y="505" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="545" y="505" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-
-                {/* Tower 2 */}
-                <rect x="575" y="410" width="48" height="200" fill="#FAF8F3" rx="1" />
-                <polygon points="575,410 599,380 623,410" fill="#FAF8F3" />
-                <rect x="585" y="430" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-                <rect x="603" y="430" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-                <rect x="585" y="460" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-                <rect x="603" y="460" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-                <rect x="585" y="490" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-                <rect x="603" y="490" width="10" height="15" fill="#C99E4C" opacity="0.85" />
-
-                {/* Tower 3 */}
-                <rect x="635" y="455" width="38" height="155" fill="#FAF8F3" rx="1" />
-                <rect x="643" y="475" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="657" y="475" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="643" y="500" width="8" height="12" fill="#C99E4C" opacity="0.85" />
-                <rect x="657" y="500" width="8" height="12" fill="#C99E4C" opacity="0.85" />
+                {/* Central Tall Tower */}
+                <rect x="572" y="224" width="60" height="420" rx="4" fill="#16284D" stroke="#C99E4C" strokeWidth="1.5" />
+                {/* Right Tower */}
+                <rect x="644" y="392" width="80" height="250" rx="4" fill="#16284D" stroke="#C99E4C" strokeWidth="1.5" />
+                {/* Left Tower */}
+                <rect x="520" y="476" width="44" height="170" rx="4" fill="#16284D" stroke="#C99E4C" strokeWidth="1.5" />
+                {/* Brand Gold Window Slits */}
+                <rect x="586" y="256" width="32" height="6" rx="1" fill="#C99E4C" />
+                <rect x="586" y="292" width="32" height="6" rx="1" fill="#C99E4C" />
+                <rect x="586" y="328" width="32" height="6" rx="1" fill="#C99E4C" />
+                <rect x="586" y="364" width="32" height="6" rx="1" fill="#C99E4C" />
+                <rect x="662" y="424" width="44" height="6" rx="1" fill="#C99E4C" />
+                <rect x="662" y="460" width="44" height="6" rx="1" fill="#C99E4C" />
               </g>
 
               {/* Layer 6: Water & Ripples */}

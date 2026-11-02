@@ -15,7 +15,7 @@ export interface SiteImageProps extends Omit<ImageProps, 'src'> {
 /**
  * SiteImage: Brand wrapper around Next.js <Image /> adhering to Section 5:
  * - Reads real dimensions & blur placeholders from lib/image-manifest.ts
- * - Sets sizes, blur placeholder, quality=85, and lazy loading by default
+ * - Sets sizes, blur placeholder, quality=88 (up to 90), and lazy loading by default
  * - Gracefully falls back to PlaceholderImage for missing/placeholder assets
  */
 export function SiteImage({
@@ -26,7 +26,7 @@ export function SiteImage({
   fill,
   sizes,
   priority = false,
-  quality = 85,
+  quality = 88,
   className,
   showSampleBadge = false,
   fallbackLabel,
@@ -48,12 +48,15 @@ export function SiteImage({
   const finalWidth = width || (fill ? undefined : meta?.width || 1200);
   const finalHeight = height || (fill ? undefined : meta?.height || 800);
 
-  // Accurate responsive sizes defaults
+  // Accurate responsive sizes defaults requesting 2x density for retina viewports
   const resolvedSizes =
     sizes ||
     (fill || priority
-      ? '(max-width: 768px) 100vw, (max-width: 1440px) 80vw, 1600px'
-      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw');
+      ? '(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1920px'
+      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1440px) 33vw, 600px');
+
+  // Allow explicit quality prop up to 90 for hero & detail galleries
+  const resolvedQuality = Math.min(Math.max(quality, 1), 90);
 
   const blurProps: Partial<ImageProps> =
     meta?.blurDataURL && !priority
@@ -74,7 +77,7 @@ export function SiteImage({
         sizes={resolvedSizes}
         priority={priority}
         fetchPriority={priority ? 'high' : undefined}
-        quality={quality}
+        quality={resolvedQuality}
         loading={priority ? undefined : 'lazy'}
         {...blurProps}
         className={cn(
