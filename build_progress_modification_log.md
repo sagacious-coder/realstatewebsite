@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B5: Leads, submissions, files, and jobs`
+* **Current Stage in Progress:** `Stage B6: Admin API surface, review queue & audit logging`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage B4 (Public read API, search query builder, trigram suggest, HTTP caching & ETag, live adapter parity; 97/97 API tests pass; zero lint/type errors)
-* **Next Up After B4:** Stage B5 (Leads intake, S3 file worker & background jobs)
+* **Latest Completed Milestone:** Stage B5 (Inbound leads capture, seller submissions with capability tokens, presigned upload pipeline, pg-boss worker engine with Sharp processing, email quota throttling, storage guard; 115/115 API tests pass, zero lint/typecheck errors)
+* **Next Up After B5:** Stage B6 (Admin API surface, review queue & audit logging)
 
 ---
 
@@ -43,8 +43,8 @@
 | **Stage B2** | PostgreSQL database schema, migrations & seed | **DONE** | 2026-11-02 | Drizzle schema, 0001–0003 SQL migrations, publish guard & audit immutability triggers, RLS, 10/10 DB integration tests pass, Stage 5 parity |
 | **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **DONE** | 2026-11-03 | Passkeys (FIDO2), Argon2id, TOTP RFC 6238, recovery codes, sessions, __Host- cookies, CSRF, capability tokens, Section 10.8 policy matrix, 69/69 tests pass |
 | **Stage B4** | Public read API & search endpoints (contract parity) | **DONE** | 2026-11-03 | 97/97 tests pass, public_* views, wh_public_ro isolation, trigram suggest, ETag 304, live adapter parity |
-| **Stage B5** | Leads intake, S3 file worker & background jobs | **NEXT TO RUN** | — | — |
-| **Stage B6** | Admin API surface, review queue & audit logging | Not Started | — | — |
+| **Stage B5** | Leads intake, S3 file worker & background jobs | **DONE** | 2026-11-03 | 18/18 worker tests pass (115 monorepo API tests), Turnstile bot defense, capability tokens, presigned uploads, Sharp WebP compression, email throttle & storage guard verified |
+| **Stage B6** | Admin API surface, review queue & audit logging | **NEXT TO RUN** | — | — |
 
 ---
 
@@ -501,6 +501,54 @@
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: Monorepo build passes cleanly (465/465 pages in web, 9/9 in admin, API compiled).
   * `graphify update .`: Knowledge graph re-extracted (2185 nodes, 5075 edges, 135 communities).
+
+---
+
+### 2026-11-03 — Stage B5: Leads Intake, Seller Submissions, Storage Pipeline & Background Worker Engine
+* **Action:** Implemented inbound lead intake with bot defense and idempotency, seller property submissions with cryptographically signed capability tokens, S3/R2 presigned upload pipeline with storage guard, background worker engine (`pg-boss`) with image processing (`sharp`), transactional email outbox, and Lean Free Mode quota throttling (Section 18.3).
+* **Outputs Created & Configured:**
+  * `Database Migration 0006 (`apps/api/src/db/migrations/0006_leads_worker.sql`)`:
+    - Created `idempotency_records` table to guarantee zero duplicate submissions upon network retry.
+    - Created `email_outbox` table with priorities (`P1`, `P2`, `P3`, `P4`), status, scheduling, and error tracking.
+    - Granted least-privilege permissions across `wh_owner`, `wh_api`, `wh_public_ro`, and `wh_worker`.
+    - Defined matching Drizzle ORM schemas in `apps/api/src/db/schema/system.ts`.
+  * `Layered Repositories (`apps/api/src/repositories/`)`:
+    - `leads.repository.ts`: Persists inbound leads under public actor context and manages idempotency records.
+    - `submissions.repository.ts`: Persists property submissions under public actor context, attaches uploaded documents in `submission_documents`, and enforces submitter capability token RLS isolation.
+    - `usage.repository.ts`: Atomically updates daily `email_count` and `storage_bytes` in `usage_counters`, and manages transactional email outbox lifecycle.
+    - `rates.repository.ts`: Added `updateRates()` for daily automated FX rate refreshes.
+  * `Quota & Storage Guards (`apps/api/src/services/quota.service.ts`)`:
+    - Implemented Section 18.3 rules:
+      - Daily email cap (90 emails) and monthly cap (2,700 emails).
+      - Above 70% of daily budget (>= 63 emails), visitor confirmations (P4) are skipped to conserve capacity for staff alerts (P1).
+      - At daily cap (>= 90 emails), emails are deferred with `scheduled_for` set to tomorrow 00:00 UTC (never drop an email).
+      - Storage guard: monitors byte usage against soft limit (7.0 GB) and hard limit (9.5 GB), blocking new upload presigns when hard limit is breached.
+  * `Asynchronous Job Queue & Worker Service (`apps/api/src/services/queue.service.ts`, `worker.service.ts`, `worker.ts`)`:
+    - `lead.intake`: Dispatches P1 concierge alert and localized P4 visitor auto-responder acknowledgment email via `EmailProvider`.
+    - `submission.intake`: Dispatches P1 review queue alert and P3 confirmation with private capability link (`/sell/status?token=...`) to seller.
+    - `media.process`: Validates uploaded files in S3, uses `sharp` to strip EXIF, auto-orient, and convert images to WebP within the 250 KB budget; updates storage counters.
+    - `fx.refresh`: Scheduled daily FX synchronization via `FxProvider`.
+    - Worker lifecycle: Graceful shutdown on `SIGTERM` / `SIGINT`, retry backoff (3 attempts, 5s delay), and structured Pino logging.
+  * `Public Endpoints & Fastify Routes (`apps/api/src/routes/leads.ts`)`:
+    - `POST /v1/public/leads` and `POST /v1/leads`: Validates `LeadCreateSchema`, verifies Turnstile token, checks honeypots and fill times, enforces idempotency, persists lead, and enqueues worker job.
+    - `POST /v1/public/submissions` and `POST /v1/submissions`: Validates `SubmissionCreateSchema`, mints capability token, persists submission with `pending_review` status, and enqueues worker job.
+    - `POST /v1/public/uploads/presign` and `POST /v1/uploads/presign`: Validates `UploadPresignRequestSchema`, enforces MIME allow-list (`image/*`, `application/pdf`) and size limits (15MB photos, 25MB PDFs), checks storage hard limit, and returns presigned S3 URL.
+  * `Contracts & API Client Parity (`packages/contracts`, `packages/api-client`)`:
+    - Added `capabilityToken` and `trackingUrl` to `SubmissionResponseSchema`.
+    - Added `UploadPresignRequestSchema` and `UploadPresignResponseSchema` to contracts, updated `generate-openapi.mjs` and verified zero OpenAPI drift.
+    - Implemented `presignUpload()` in `MockApiClient` and `LiveApiClient`.
+  * `Test Harness & Verification (`apps/api/test/leads-worker.test.ts`)`:
+    - 18 integration test cases covering: lead capture, Turnstile verification and failures, honeypot/fill-time detection, idempotency deduplication, submission intake and capability token issuance, presigned upload URLs, MIME and size limit rejection, storage hard limit enforcement, worker execution of `lead.intake` and `submission.intake`, email quota throttling (70% skip, 100% defer), `media.process` Sharp EXIF stripping and WebP compression, and FX refresh.
+* **Validation:**
+  * `pnpm test` (apps/api): 115/115 tests pass across 6 suites (8 foundation + 10 database + 45 auth + 6 auth-routes + 28 public + 18 leads-worker).
+  * `pnpm test` (contracts): 4/4 contract tests pass.
+  * `pnpm contracts:openapi:check`: Clean, zero OpenAPI drift.
+  * `pnpm test` (api-client): 6/6 tests pass.
+  * `pnpm run typecheck`: 0 errors across all 5 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: Monorepo build passes cleanly (462/462 pages in web, 9/9 in admin, API compiled).
+  * `graphify update .`: Knowledge graph re-extracted (2275 nodes, 5414 edges, 139 communities).
+
 
 
 

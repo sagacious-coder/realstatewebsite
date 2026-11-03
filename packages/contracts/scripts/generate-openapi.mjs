@@ -481,6 +481,48 @@ export function buildOpenApiDocument() {
           },
         },
       },
+      '/v1/uploads/presign': {
+        post: {
+          summary: 'Generate presigned upload URL',
+          description: 'Request a presigned S3 upload URL for property photos, floor plans, or verification documents.',
+          operationId: 'presignUpload',
+          tags: ['Uploads'],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/UploadPresignRequest' },
+              },
+            },
+          },
+          responses: {
+            '200': {
+              description: 'Presigned upload URL generated successfully',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/UploadPresignResponse' },
+                },
+              },
+            },
+            '400': {
+              description: 'Validation error (RFC 9457)',
+              content: {
+                'application/problem+json': {
+                  schema: { $ref: '#/components/schemas/ProblemDetails' },
+                },
+              },
+            },
+            '403': {
+              description: 'Storage quota exceeded (RFC 9457)',
+              content: {
+                'application/problem+json': {
+                  schema: { $ref: '#/components/schemas/ProblemDetails' },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     components: {
       schemas: {
@@ -1027,7 +1069,35 @@ export function buildOpenApiDocument() {
           properties: {
             success: { type: 'boolean' },
             submissionId: { type: 'string' },
+            capabilityToken: { type: 'string' },
+            trackingUrl: { type: 'string' },
             message: { type: 'string' },
+          },
+          additionalProperties: false,
+        },
+        UploadPresignRequest: {
+          type: 'object',
+          required: ['fileName', 'contentType', 'fileSizeBytes'],
+          properties: {
+            fileName: { type: 'string' },
+            contentType: {
+              type: 'string',
+              enum: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'application/pdf'],
+            },
+            fileSizeBytes: { type: 'integer', minimum: 1, maximum: 26214400 },
+            category: { type: 'string', enum: ['photo', 'floor_plan', 'document'], default: 'photo' },
+            submissionId: { type: 'string' },
+            listingId: { type: 'string' },
+          },
+          additionalProperties: false,
+        },
+        UploadPresignResponse: {
+          type: 'object',
+          required: ['uploadUrl', 'key', 'expiresInSeconds'],
+          properties: {
+            uploadUrl: { type: 'string' },
+            key: { type: 'string' },
+            expiresInSeconds: { type: 'integer' },
           },
           additionalProperties: false,
         },

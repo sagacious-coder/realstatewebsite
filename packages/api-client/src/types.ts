@@ -22,6 +22,8 @@ import {
   SubmissionRecord,
   SubmissionResponse,
   SubmissionStatus,
+  UploadPresignRequest,
+  UploadPresignResponse,
   Testimonial,
 } from '@wild-hills/contracts';
 
@@ -55,6 +57,7 @@ export interface ApiClient {
   getBlogPosts(countryCode?: CountryCode): Promise<BlogPost[]>;
   createLead(data: LeadCreate): Promise<LeadResponse>;
   createSubmission(data: SubmissionCreate): Promise<SubmissionResponse>;
+  presignUpload(data: UploadPresignRequest): Promise<UploadPresignResponse>;
   getLeads(countryCode?: CountryCode): Promise<LeadRecord[]>;
   getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]>;
   updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean>;

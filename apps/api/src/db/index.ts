@@ -20,6 +20,10 @@ export function setDatabase(customDb: any): void {
   activeDb = customDb;
 }
 
+export function getDatabase(): any {
+  return activeDb || defaultDb;
+}
+
 /**
  * Active application database instance.
  * Transparently delegates to the active or default database provider.

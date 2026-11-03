@@ -16,6 +16,7 @@ import { healthRoutes } from './routes/health.js';
 import { authRoutes } from './routes/auth.js';
 import { publicRoutes } from './routes/public.js';
 import { contentRoutes } from './routes/content.js';
+import { leadsRoutes } from './routes/leads.js';
 
 export async function buildApp(customLogger?: any): Promise<FastifyInstance<any, any, any, any, any>> {
   const defaultLoggerConfig = {
@@ -79,6 +80,8 @@ export async function buildApp(customLogger?: any): Promise<FastifyInstance<any,
   await app.register(publicRoutes, { prefix: '/v1/public' });
   await app.register(publicRoutes, { prefix: '/v1' });
   await app.register(contentRoutes, { prefix: '/v1' });
+  await app.register(leadsRoutes, { prefix: '/v1/public' });
+  await app.register(leadsRoutes, { prefix: '/v1' });
 
   return app;
 }

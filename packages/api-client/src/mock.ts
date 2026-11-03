@@ -40,6 +40,9 @@ import {
   SubmissionRecord,
   SubmissionResponse,
   SubmissionStatus,
+  UploadPresignRequest,
+  UploadPresignRequestSchema,
+  UploadPresignResponse,
   Testimonial,
   toListingSummary,
   toMinorUnits,
@@ -547,6 +550,17 @@ export class MockApiClient implements ApiClient {
       success: true,
       submissionId,
       message: `Property submission registered successfully for ${parsed.sellerName}`,
+    };
+  }
+
+  async presignUpload(data: UploadPresignRequest): Promise<UploadPresignResponse> {
+    await delay();
+    const payload = UploadPresignRequestSchema.parse(data);
+    const key = `uploads/${Date.now()}-${payload.fileName}`;
+    return {
+      uploadUrl: `https://storage.wildhills.example/mock-bucket/${key}?presigned=true`,
+      key,
+      expiresInSeconds: 3600,
     };
   }
 

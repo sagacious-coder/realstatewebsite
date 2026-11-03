@@ -2,6 +2,8 @@ import { PgBoss } from 'pg-boss';
 import pino from 'pino';
 import { env } from './config/env.js';
 import { REDACTED_PATHS } from './plugins/logging.js';
+import { queueService } from './services/queue.service.js';
+import { workerService } from './services/worker.service.js';
 
 const logger = pino({
   level: env.NODE_ENV === 'test' ? 'silent' : 'info',
@@ -9,6 +11,23 @@ const logger = pino({
     paths: REDACTED_PATHS,
     censor: '[REDACTED]',
   },
+});
+
+// Register handler functions into queueService
+queueService.registerHandler('lead.intake', async (data) => {
+  await workerService.handleLeadIntake(data);
+});
+
+queueService.registerHandler('submission.intake', async (data) => {
+  await workerService.handleSubmissionIntake(data);
+});
+
+queueService.registerHandler('media.process', async (data) => {
+  await workerService.handleMediaProcess(data);
+});
+
+queueService.registerHandler('fx.refresh', async () => {
+  await workerService.handleFxRefresh();
 });
 
 export async function startWorker() {
@@ -41,14 +60,55 @@ export async function startWorker() {
 
   try {
     await boss.start();
+    queueService.setPgBoss(boss);
     logger.info('✅ pg-boss background worker connected and listening for jobs');
 
-    // Register baseline job queues
-    await boss.createQueue('email:send');
-    await boss.createQueue('fx:sync');
-    await boss.createQueue('storage:cleanup');
+    // Register job queues with retry backoff and concurrency
+    await boss.createQueue('lead.intake', { retryLimit: 3, retryDelay: 5 });
+    await boss.createQueue('submission.intake', { retryLimit: 3, retryDelay: 5 });
+    await boss.createQueue('media.process', { retryLimit: 3, retryDelay: 5 });
+    await boss.createQueue('fx.refresh', { retryLimit: 2, retryDelay: 10 });
+    await boss.createQueue('storage.cleanup', { retryLimit: 1 });
 
-    logger.info('Queues initialized: email:send, fx:sync, storage:cleanup');
+    // Attach worker listeners
+    await boss.work('lead.intake', { batchSize: 5 }, async (jobs) => {
+      for (const job of jobs) {
+        try {
+          await workerService.handleLeadIntake(job.data as any);
+        } catch (err) {
+          logger.error({ err, jobId: job.id }, 'Error processing lead.intake job');
+          throw err;
+        }
+      }
+    });
+
+    await boss.work('submission.intake', { batchSize: 5 }, async (jobs) => {
+      for (const job of jobs) {
+        try {
+          await workerService.handleSubmissionIntake(job.data as any);
+        } catch (err) {
+          logger.error({ err, jobId: job.id }, 'Error processing submission.intake job');
+          throw err;
+        }
+      }
+    });
+
+    await boss.work('media.process', { batchSize: 2 }, async (jobs) => {
+      for (const job of jobs) {
+        try {
+          await workerService.handleMediaProcess(job.data as any);
+        } catch (err) {
+          logger.error({ err, jobId: job.id }, 'Error processing media.process job');
+          throw err;
+        }
+      }
+    });
+
+    await boss.work('fx.refresh', async () => {
+      await workerService.handleFxRefresh();
+    });
+
+    logger.info('Worker queues active: lead.intake, submission.intake, media.process, fx.refresh');
   } catch (err) {
     logger.warn({ err }, 'Failed to start pg-boss (PostgreSQL may be offline during initial bootstrap)');
   }
@@ -59,4 +119,3 @@ export async function startWorker() {
 if (process.env.NODE_ENV !== 'test') {
   void startWorker();
 }
-

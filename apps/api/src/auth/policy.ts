@@ -77,7 +77,11 @@ export function authorize(
     permission === 'public:read' ||
     permission === PERMISSIONS.READ_PUBLIC ||
     permission === PERMISSIONS.CREATE_LEAD ||
-    permission === PERMISSIONS.CREATE_SUBMISSION
+    permission === PERMISSIONS.CREATE_SUBMISSION ||
+    permission === 'public:create_lead' ||
+    permission === 'public:create_submission' ||
+    permission === 'public:presign_upload' ||
+    permission === 'create:upload'
   ) {
     return { allowed: true };
   }

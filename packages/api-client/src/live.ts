@@ -31,6 +31,10 @@ import {
   SubmissionResponse,
   SubmissionResponseSchema,
   SubmissionStatus,
+  UploadPresignRequest,
+  UploadPresignRequestSchema,
+  UploadPresignResponse,
+  UploadPresignResponseSchema,
   Testimonial,
 } from '@wild-hills/contracts';
 import { ApiClient, ApiClientConfig, ApiMode } from './types.js';
@@ -255,6 +259,18 @@ export class LiveApiClient implements ApiClient {
         body: JSON.stringify(payload),
       },
       SubmissionResponseSchema
+    );
+  }
+
+  async presignUpload(data: UploadPresignRequest): Promise<UploadPresignResponse> {
+    const payload = UploadPresignRequestSchema.parse(data);
+    return this.request(
+      '/v1/uploads/presign',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      },
+      UploadPresignResponseSchema
     );
   }
 

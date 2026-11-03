@@ -126,8 +126,42 @@ export const SubmissionResponseSchema = z
   .object({
     success: z.boolean(),
     submissionId: z.string(),
+    capabilityToken: z.string().optional(),
+    trackingUrl: z.string().optional(),
     message: z.string().optional(),
   })
   .strict();
 
 export type SubmissionResponse = z.infer<typeof SubmissionResponseSchema>;
+
+export const UploadCategorySchema = z.enum(['photo', 'floor_plan', 'document']);
+export type UploadCategory = z.infer<typeof UploadCategorySchema>;
+
+export const UploadPresignRequestSchema = z
+  .object({
+    fileName: z.string().min(1).max(255),
+    contentType: z.enum([
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/avif',
+      'application/pdf',
+    ]),
+    fileSizeBytes: z.number().int().positive().max(25 * 1024 * 1024),
+    category: UploadCategorySchema.default('photo'),
+    submissionId: z.string().optional(),
+    listingId: z.string().optional(),
+  })
+  .strict();
+
+export type UploadPresignRequest = z.infer<typeof UploadPresignRequestSchema>;
+
+export const UploadPresignResponseSchema = z
+  .object({
+    uploadUrl: z.string(),
+    key: z.string(),
+    expiresInSeconds: z.number(),
+  })
+  .strict();
+
+export type UploadPresignResponse = z.infer<typeof UploadPresignResponseSchema>;

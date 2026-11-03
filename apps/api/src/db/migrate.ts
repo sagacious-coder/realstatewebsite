@@ -13,6 +13,7 @@ export const MIGRATION_FILES = [
   '0003_triggers_and_rls.sql',
   '0004_auth_tables.sql',
   '0005_public_views.sql',
+  '0006_leads_worker.sql',
 ];
 
 export async function runMigrations(clientOrPool: any) {
