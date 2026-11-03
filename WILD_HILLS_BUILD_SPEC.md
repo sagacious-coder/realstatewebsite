@@ -61,11 +61,11 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | B1 Backend foundation | Backend | 1b | Done |
 | B2 Database | Backend | B1, 5 | Done |
 | B3 Identity, sessions, authorization | Backend | B2 | Done |
-| B4 Public read API and search | Backend | B2, 5 | **NEXT TO RUN** |
+| B4 Public read API and search | Backend | B2, 5 | Done |
 | 6 Intro and country chooser | Frontend | 1b, 4 | Done |
 | 7 Country home | Frontend | 4, 5 (B4 for live data) | Done |
 | 8 Search and listings page | Frontend | 7 (B4 for live data) | Done |
-| B5 Leads, submissions, files, jobs | Backend | B3, B4 | Not started |
+| B5 Leads, submissions, files, jobs | Backend | B3, B4 | **NEXT TO RUN** |
 | 9 Property page, leads, share cards | Frontend | 8 (B5 for live leads) | Done |
 | 10 Remaining public pages | Frontend | 9 | Done |
 | B6 Admin API | Backend | B3, B5 | Not started |

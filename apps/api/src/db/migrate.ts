@@ -12,6 +12,7 @@ export const MIGRATION_FILES = [
   '0002_core_tables.sql',
   '0003_triggers_and_rls.sql',
   '0004_auth_tables.sql',
+  '0005_public_views.sql',
 ];
 
 export async function runMigrations(clientOrPool: any) {

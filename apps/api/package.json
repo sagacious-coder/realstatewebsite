@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/pg": "^8.23.1",
+    "@wild-hills/api-client": "workspace:*",
     "@wild-hills/config": "workspace:*",
     "drizzle-kit": "^0.31.11",
     "typescript": "^5.7.0",

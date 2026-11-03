@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B4: Public read API and search`
+* **Current Stage in Progress:** `Stage B5: Leads, submissions, files, and jobs`
 * **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage B3 (Identity, WebAuthn passkeys, sessions, CSRF, capability tokens, Section 10.8 authorization policy matrix; 69/69 API tests pass; zero lint/type errors)
-* **Next Up After B3:** Stage B4 (Public read API & search endpoints)
+* **Latest Completed Milestone:** Stage B4 (Public read API, search query builder, trigram suggest, HTTP caching & ETag, live adapter parity; 97/97 API tests pass; zero lint/type errors)
+* **Next Up After B4:** Stage B5 (Leads intake, S3 file worker & background jobs)
 
 ---
 
@@ -42,8 +42,8 @@
 | **Stage B1** | Backend foundation (Fastify, Docker stack, healthz) | **DONE** | 2026-11-01 | 8/8 Vitest tests pass, docker compose config validates, readyz green, pino redacted, typecheck/lint/build clean |
 | **Stage B2** | PostgreSQL database schema, migrations & seed | **DONE** | 2026-11-02 | Drizzle schema, 0001–0003 SQL migrations, publish guard & audit immutability triggers, RLS, 10/10 DB integration tests pass, Stage 5 parity |
 | **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **DONE** | 2026-11-03 | Passkeys (FIDO2), Argon2id, TOTP RFC 6238, recovery codes, sessions, __Host- cookies, CSRF, capability tokens, Section 10.8 policy matrix, 69/69 tests pass |
-| **Stage B4** | Public read API & search endpoints (contract parity) | **NEXT TO RUN** | — | — |
-| **Stage B5** | Leads intake, S3 file worker & background jobs | Not Started | — | — |
+| **Stage B4** | Public read API & search endpoints (contract parity) | **DONE** | 2026-11-03 | 97/97 tests pass, public_* views, wh_public_ro isolation, trigram suggest, ETag 304, live adapter parity |
+| **Stage B5** | Leads intake, S3 file worker & background jobs | **NEXT TO RUN** | — | — |
 | **Stage B6** | Admin API surface, review queue & audit logging | Not Started | — | — |
 
 ---
@@ -460,6 +460,48 @@
   * `pnpm run lint`: 0 warnings, 0 errors across all packages.
   * `pnpm run build`: All 465 web routes + 9 admin routes + contracts + api dist compile and build with zero errors.
   * `graphify update .`: Knowledge graph re-extracted (2055 nodes, 4634 edges, 132 communities).
+
+---
+
+### 2026-11-03 — Stage B4: Public Read API, Listing Search & Live Adapter Parity
+* **Action:** Implemented public read endpoints, search query builder, typo-tolerant suggest engine, HTTP caching with ETag generation, read-only database pool isolation with `public_*` SQL views, and 100% contract parity with `@wild-hills/api-client` `LiveApiClient`.
+* **Outputs Created & Configured:**
+  * `Database Views Migration 0005 (`apps/api/src/db/migrations/0005_public_views.sql`)`:
+    - Created secure database views `public_locations`, `public_developers`, `public_projects`, `public_listings` (filtering `review_status = 'published'`), `public_listing_images`, and `public_rates`.
+    - Granted strict `SELECT` permissions on views to `wh_public_ro`, `wh_api`, and `wh_owner`.
+    - Defined matching Drizzle views schema in `apps/api/src/db/schema/views.ts`.
+  * `HTTP Caching & ETag Plugin (`apps/api/src/plugins/caching.ts`)`:
+    - `setCacheHeaders` reply decorator configuring `Cache-Control` (`max-age`, `s-maxage`, `stale-while-revalidate`) and `X-Cache-Tags`.
+    - Fastify `onSend` hook generating SHA-256 weak ETags (`W/"..."`) and intercepting `If-None-Match` conditional requests to return `304 Not Modified` with empty body.
+  * `Layered Repositories (`apps/api/src/repositories/`)`:
+    - `locations.repository.ts`: Queries `public_locations` under `withActor(db, { role: 'public' })`, handles country filters, slug/ID lookups, and calculates active published listing counts per city/area.
+    - `developers.repository.ts`: Queries `public_developers` under `withActor`, handles country filtering, operating markets, and active listing counts.
+    - `projects.repository.ts`: Queries `public_projects` under `withActor`, handles country filtering and slug/ID lookup.
+    - `rates.repository.ts`: Queries `public_rates` under `withActor`.
+    - `listings.repository.ts`: Parameterized SQL query builder on `public_listings` with dynamic filters, allow-listed sorting (`SORT_ALLOWLIST`), pagination (`page`, `limit`), dynamic facet counts (`byType`, `byCity`, `byStatus`, `priceRange`), listing images, and entity briefs.
+    - `search.repository.ts`: Typo-tolerant search using `normalize_search()` and trigram similarity (`similarity(normalize_search(...), normalize_search(q)) > 0.2`) across locations, developers, and listings.
+  * `Layered Services (`apps/api/src/services/`)`:
+    - `locations.service.ts`: Maps rows to `Location` DTOs (`LocationSchema.parse`).
+    - `developers.service.ts`: Maps rows to `Developer` DTOs (`DeveloperSchema.parse`).
+    - `projects.service.ts`: Maps rows to `Project` DTOs (`ProjectSchema.parse`).
+    - `rates.service.ts`: Maps rows to `ExchangeRates` DTO (`ExchangeRatesSchema.parse`).
+    - `listings.service.ts`: Query normalization, currency minor unit conversion, mapping to `ListingSummary` DTOs, `SearchResult` wrapping, and `ListingDetail` DTO building.
+    - `search.service.ts`: Builds `PublicSuggestResult` and `SmartSearchSuggestionGroup`.
+    - `content.service.ts`: Serves typed country settings, buying guides, FAQs, testimonials, and blog posts.
+  * `Public Endpoints & Fastify Routing (`apps/api/src/routes/`)`:
+    - `routes/public.ts`: Mounts endpoints at `/v1/public/*` and `/v1/*` with strict Zod validation (`.strict()`) and RFC 9457 Problem Details for 404s.
+    - `routes/content.ts`: Mounts `/v1/search/suggestions` and `/v1/content/*`.
+  * `Test Harness & Verification (`apps/api/test/public.test.ts`)`:
+    - 28 integration test cases covering: all public read endpoints, search filters, allow-listed sorting, pagination, facet aggregation, diacritic-tolerant suggest matching, HTTP caching headers (`Cache-Control`, `X-Cache-Tags`), weak ETag generation and 304 Not Modified validation, role isolation denying write mutations on `wh_public_ro`, and full end-to-end parity with `@wild-hills/api-client` `LiveApiClient`.
+* **Validation:**
+  * `pnpm test` (apps/api): 97/97 tests pass across 5 suites (8 foundation + 10 database + 45 auth + 6 auth-routes + 28 public).
+  * `pnpm test` (contracts): 4/4 contract tests pass.
+  * `pnpm test` (api-client): 6/6 tests pass.
+  * `pnpm run typecheck`: 0 errors across all 5 packages.
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run build`: Monorepo build passes cleanly (465/465 pages in web, 9/9 in admin, API compiled).
+  * `graphify update .`: Knowledge graph re-extracted (2185 nodes, 5075 edges, 135 communities).
+
 
 
 
