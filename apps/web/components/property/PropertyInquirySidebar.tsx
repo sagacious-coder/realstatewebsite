@@ -49,8 +49,8 @@ export function PropertyInquirySidebar({
 
   // Agent fallbacks
   const agentName = agent?.name || t('agent');
-  const agentPhone = agent?.phone || '+971 4 000 0000';
-  const rawWhatsapp = (agent?.whatsapp || agent?.phone || '97140000000').replace(/[^0-9]/g, '');
+  const agentPhone = agent?.phone || '+971 50 680 2332';
+  const rawWhatsapp = (agent?.whatsapp || agent?.phone || '971506802332').replace(/[^0-9]/g, '');
   const whatsappUrl = `https://wa.me/${rawWhatsapp}?text=${encodeURIComponent(
     `Inquiry regarding ${refCode} - ${title}`
   )}`;

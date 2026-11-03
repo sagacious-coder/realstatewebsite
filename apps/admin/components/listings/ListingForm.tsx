@@ -256,11 +256,11 @@ export function ListingForm({ initialListing, mode = 'create' }: ListingFormProp
         virtualTourUrl: null,
         agent: initialListing?.agent || {
           name: 'Elena Rostova',
-          phone: '+971 4 000 0000',
-          whatsapp: '+97140000000',
-          email: 'advisory@wildhills.example',
+          phone: '+971 50 680 2332',
+          whatsapp: '971506802332',
+          email: 'walidward@gmail.com',
           avatarUrl: '/images/defaults/apartment/cover-card.webp',
-          license: 'WH-ADV-8821',
+          license: '501-2026-200074238',
         },
         paymentPlan: hasInstallments
           ? {

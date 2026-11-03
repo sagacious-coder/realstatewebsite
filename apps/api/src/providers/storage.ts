@@ -17,6 +17,11 @@ export interface ObjectStorage {
     key: string,
     expiresInSeconds?: number
   ): Promise<{ uploadUrl: string; key: string }>;
+  getSignedDownloadUrl?(
+    bucket: string,
+    key: string,
+    expiresInSeconds?: number
+  ): Promise<string>;
   getUsageBytes(bucket: string): Promise<number>;
 }
 
@@ -72,6 +77,10 @@ export class MinioStorageAdapter implements ObjectStorage {
       uploadUrl: `${this.endpoint}/${bucket}/${key}?mock-presigned=true`,
       key,
     };
+  }
+
+  async getSignedDownloadUrl(bucket: string, key: string, expiresInSeconds = 60): Promise<string> {
+    return `${this.endpoint}/${bucket}/${key}?mock-signed=true&expiresIn=${expiresInSeconds}`;
   }
 
   async getUsageBytes(bucket: string): Promise<number> {

@@ -15,8 +15,38 @@ export interface CountryContact {
 
 export const CONTACTS_ARE_SAMPLE = true;
 
+export interface UaeCorporateLicensing {
+  tradeNameEn: string;
+  tradeNameAr: string;
+  legalFormEn: string;
+  legalFormAr: string;
+  unifiedRegistrationNo: string;
+  unifiedLicenceNo: string;
+  establishmentDate: string;
+  issuanceDate: string;
+  expiryDate: string;
+  officialEmail: string;
+  officialMobile: string;
+  whatsappUrl: string;
+}
+
+export const UAE_CORPORATE_CREDENTIALS: UaeCorporateLicensing = {
+  tradeNameEn: 'WILD HILLS REAL ESTATE - L.L.C - S.P.C',
+  tradeNameAr: 'وايلد هيلز للعقارات - ذ.م.م - ش.ش.و',
+  legalFormEn: 'Limited Liability Company - Sole Proprietorship Company',
+  legalFormAr: 'شركة ذات مسؤولية محدودة - شركة الشخص الواحد',
+  unifiedRegistrationNo: '101-2026-200113050',
+  unifiedLicenceNo: '501-2026-200074238',
+  establishmentDate: '06/07/2026',
+  issuanceDate: '06/07/2026',
+  expiryDate: '05/07/2027',
+  officialEmail: 'walidward@gmail.com',
+  officialMobile: '+971 50 680 2332',
+  whatsappUrl: 'https://wa.me/971506802332',
+};
+
 export const COUNTRY_CONTACTS: Record<CountryCode, CountryContact> = {
-  ae: { phone: '+971 4 000 0000', whatsapp: '+97140000000', email: 'uae@wildhills.example' },
+  ae: { phone: '+971 50 680 2332', whatsapp: '971506802332', email: 'walidward@gmail.com' },
   eg: { phone: '+20 2 0000 0000', whatsapp: '+20200000000', email: 'egypt@wildhills.example' },
   ge: { phone: '+995 32 000 0000', whatsapp: '+99532000000', email: 'georgia@wildhills.example' },
   tr: { phone: '+90 212 000 0000', whatsapp: '+90212000000', email: 'turkey@wildhills.example' },

@@ -62,5 +62,18 @@ export interface ApiClient {
   getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]>;
   updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean>;
   updateSubmissionStatus(submissionId: string, status: SubmissionStatus): Promise<boolean>;
+  getAdminListings(filters?: {
+    country?: CountryCode;
+    type?: string;
+    status?: string;
+    search?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<ListingSummary[]>;
+  getAdminListingById(id: string): Promise<ListingDetail | null>;
+  saveAdminListing(listing: ListingDetail): Promise<ListingDetail>;
+  deleteAdminListing(id: string): Promise<boolean>;
+  duplicateAdminListing(id: string): Promise<ListingDetail | null>;
 }
 

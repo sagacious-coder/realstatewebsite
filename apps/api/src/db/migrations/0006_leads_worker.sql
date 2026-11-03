@@ -39,3 +39,4 @@ GRANT ALL ON email_outbox, idempotency_records TO wh_owner;
 GRANT SELECT, INSERT, UPDATE, DELETE ON email_outbox, idempotency_records TO wh_api;
 GRANT SELECT, INSERT ON email_outbox, idempotency_records TO wh_public_ro;
 GRANT SELECT, INSERT, UPDATE ON email_outbox, idempotency_records TO wh_worker;
+

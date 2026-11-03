@@ -594,5 +594,56 @@ export class MockApiClient implements ApiClient {
     item.updatedAt = new Date().toISOString();
     return true;
   }
+
+  async getAdminListings(filters?: {
+    country?: CountryCode;
+    type?: string;
+    status?: string;
+    search?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<ListingSummary[]> {
+    await delay();
+    let list = [...FIXTURE_LISTINGS];
+    if (filters?.country) list = list.filter((l) => l.location.countryCode === filters.country);
+    if (filters?.type && filters.type !== 'all') list = list.filter((l) => l.propertyType === filters.type);
+    if (filters?.status && filters.status !== 'all') list = list.filter((l) => l.status === filters.status);
+    if (filters?.search) {
+      const q = filters.search.toLowerCase().trim();
+      list = list.filter((l) => l.title.toLowerCase().includes(q) || l.refNumber.toLowerCase().includes(q));
+    }
+    return list.map(toListingSummary);
+  }
+
+  async getAdminListingById(id: string): Promise<ListingDetail | null> {
+    await delay();
+    const found = FIXTURE_LISTINGS.find(
+      (l) => l.id === id || l.slug === id || l.refNumber.toLowerCase() === id.toLowerCase()
+    );
+    return found ? { ...found } : null;
+  }
+
+  async saveAdminListing(listing: ListingDetail): Promise<ListingDetail> {
+    await delay();
+    return { ...listing };
+  }
+
+  async deleteAdminListing(_id: string): Promise<boolean> {
+    await delay();
+    return true;
+  }
+
+  async duplicateAdminListing(id: string): Promise<ListingDetail | null> {
+    await delay();
+    const original = await this.getAdminListingById(id);
+    if (!original) return null;
+    return {
+      ...original,
+      id: `${original.id}-copy`,
+      refNumber: `${original.refNumber}-COPY`,
+      title: `${original.title} (Copy)`,
+    };
+  }
 }
 

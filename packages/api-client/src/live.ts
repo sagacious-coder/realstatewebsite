@@ -276,12 +276,14 @@ export class LiveApiClient implements ApiClient {
 
   async getLeads(countryCode?: CountryCode): Promise<LeadRecord[]> {
     const qs = countryCode ? `?country=${encodeURIComponent(countryCode)}` : '';
-    return this.request(`/v1/admin/leads${qs}`, { method: 'GET' });
+    const res: any = await this.request(`/v1/admin/leads${qs}`, { method: 'GET' });
+    return res?.items || res || [];
   }
 
   async getSubmissions(countryCode?: CountryCode): Promise<SubmissionRecord[]> {
     const qs = countryCode ? `?country=${encodeURIComponent(countryCode)}` : '';
-    return this.request(`/v1/admin/submissions${qs}`, { method: 'GET' });
+    const res: any = await this.request(`/v1/admin/submissions${qs}`, { method: 'GET' });
+    return res?.items || res || [];
   }
 
   async updateLeadStatus(leadId: string, status: LeadStatus, notes?: string): Promise<boolean> {
@@ -298,6 +300,79 @@ export class LiveApiClient implements ApiClient {
       body: JSON.stringify({ status }),
     });
     return true;
+  }
+
+  async getAdminListings(filters?: {
+    country?: CountryCode;
+    type?: string;
+    status?: string;
+    search?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<ListingSummary[]> {
+    const params = new URLSearchParams();
+    if (filters?.country) params.set('country', filters.country);
+    if (filters?.type && filters.type !== 'all') params.set('propertyType', filters.type);
+    if (filters?.status && filters.status !== 'all') params.set('status', filters.status);
+    if (filters?.search) params.set('search', filters.search);
+    if (filters?.sort) params.set('sort', filters.sort);
+    if (filters?.page) params.set('page', String(filters.page));
+    if (filters?.limit) params.set('limit', String(filters.limit));
+
+    const qs = params.toString() ? `?${params.toString()}` : '';
+    const res: any = await this.request(`/v1/admin/listings${qs}`, { method: 'GET' });
+    return res?.items || res || [];
+  }
+
+  async getAdminListingById(id: string): Promise<ListingDetail | null> {
+    try {
+      const res: any = await this.request(`/v1/admin/listings/${encodeURIComponent(id)}`, {
+        method: 'GET',
+      });
+      return res?.listing || res || null;
+    } catch (err) {
+      if (err instanceof ApiClientError && err.problem.status === 404) {
+        return null;
+      }
+      throw err;
+    }
+  }
+
+  async saveAdminListing(listing: ListingDetail): Promise<ListingDetail> {
+    if (listing.id) {
+      try {
+        const existing = await this.getAdminListingById(listing.id);
+        if (existing) {
+          const res: any = await this.request(`/v1/admin/listings/${encodeURIComponent(listing.id)}`, {
+            method: 'PUT',
+            body: JSON.stringify(listing),
+          });
+          return res?.listing || res;
+        }
+      } catch {
+        // Fallback to create
+      }
+    }
+    const res: any = await this.request('/v1/admin/listings', {
+      method: 'POST',
+      body: JSON.stringify(listing),
+    });
+    return res?.listing || res;
+  }
+
+  async deleteAdminListing(id: string): Promise<boolean> {
+    await this.request(`/v1/admin/listings/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    return true;
+  }
+
+  async duplicateAdminListing(id: string): Promise<ListingDetail | null> {
+    const res: any = await this.request(`/v1/admin/listings/${encodeURIComponent(id)}/duplicate`, {
+      method: 'POST',
+    });
+    return res?.listing || res || null;
   }
 }
 

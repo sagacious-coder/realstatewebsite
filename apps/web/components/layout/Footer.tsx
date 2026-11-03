@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { CookieSettingsButton } from '@/components/layout/CookieSettingsButton';
 import { COUNTRY_CODES } from '@/lib/countries';
@@ -10,6 +10,7 @@ import {
   CONTACTS_ARE_SAMPLE,
   COUNTRY_CONTACTS,
   FOOTER_COUNTRY_LINKS,
+  UAE_CORPORATE_CREDENTIALS,
 } from '@/lib/site-config';
 
 /**
@@ -119,7 +120,81 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-ivory/20 pt-6 text-sm text-ivory/80 md:flex-row md:items-center md:justify-between">
+        {/* Official UAE Corporate Licensing & Regulatory Disclosures */}
+        <div className="mt-12 rounded-card border border-gold/30 bg-navy-2/60 p-5 md:p-6 backdrop-blur-sm">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 rounded-[4px] border border-gold/40 bg-gold/10 px-2.5 py-1 text-xs font-semibold text-gold-light">
+                <ShieldCheck className="h-4 w-4 text-gold" strokeWidth={1.5} aria-hidden="true" />
+                <span>{t('footer.corporate.badge')}</span>
+              </div>
+              <div className="space-y-1">
+                <p className="font-serif text-sm font-semibold tracking-wide text-ivory">
+                  <span>{t('footer.corporate.tradeName')}</span>
+                  <span className="mx-2 text-ivory/40" aria-hidden="true">|</span>
+                  <bdi className="font-sans text-xs font-normal text-ivory/80">
+                    {UAE_CORPORATE_CREDENTIALS.tradeNameAr === t('footer.corporate.tradeName')
+                      ? UAE_CORPORATE_CREDENTIALS.tradeNameEn
+                      : UAE_CORPORATE_CREDENTIALS.tradeNameAr}
+                  </bdi>
+                </p>
+                <p className="text-xs text-ivory/70">
+                  <span>{t('footer.corporate.legalForm')}</span>
+                  <span className="mx-2 text-ivory/40" aria-hidden="true">|</span>
+                  <bdi className="text-ivory/60">
+                    {UAE_CORPORATE_CREDENTIALS.legalFormAr === t('footer.corporate.legalForm')
+                      ? UAE_CORPORATE_CREDENTIALS.legalFormEn
+                      : UAE_CORPORATE_CREDENTIALS.legalFormAr}
+                  </bdi>
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 md:grid-cols-4 lg:gap-6 text-xs">
+              <div className="space-y-1">
+                <span className="text-[11px] uppercase tracking-wider text-gold-light/80 block">
+                  {t('footer.corporate.unifiedRegistrationLabel')}
+                </span>
+                <span className="font-mono font-medium text-ivory block" dir="ltr">
+                  {UAE_CORPORATE_CREDENTIALS.unifiedRegistrationNo}
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] uppercase tracking-wider text-gold-light/80 block">
+                  {t('footer.corporate.unifiedLicenceLabel')}
+                </span>
+                <span className="font-mono font-medium text-ivory block" dir="ltr">
+                  {UAE_CORPORATE_CREDENTIALS.unifiedLicenceNo}
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] uppercase tracking-wider text-gold-light/80 block">
+                  {t('footer.corporate.validityLabel')}
+                </span>
+                <span className="font-mono font-medium text-ivory block" dir="ltr">
+                  {`${UAE_CORPORATE_CREDENTIALS.issuanceDate} – ${UAE_CORPORATE_CREDENTIALS.expiryDate}`}
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-[11px] uppercase tracking-wider text-gold-light/80 block">
+                  {t('footer.corporate.emailLabel')}
+                </span>
+                <a
+                  href={`mailto:${UAE_CORPORATE_CREDENTIALS.officialEmail}`}
+                  dir="ltr"
+                  className="font-mono text-ivory underline-offset-4 hover:underline hover:text-gold-light block truncate"
+                >
+                  {UAE_CORPORATE_CREDENTIALS.officialEmail}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-ivory/20 pt-6 text-sm text-ivory/80 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
             <p>{t('footer.copyright', { year: new Date().getFullYear() })}</p>
             <p className="text-xs">{t('footer.disclaimer')}</p>

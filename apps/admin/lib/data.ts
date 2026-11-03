@@ -37,10 +37,10 @@ export interface AdminGeneralSettings {
 }
 
 let adminGeneralSettingsStore: AdminGeneralSettings = {
-  companyName: 'Wild Hills Luxury Properties LLC',
-  contactEmail: 'concierge@wildhills.com',
-  whatsappAlertPhone: '+971 50 123 4567',
-  emergencyPhone: '+971 4 321 0000',
+  companyName: 'WILD HILLS REAL ESTATE - L.L.C - S.P.C',
+  contactEmail: 'walidward@gmail.com',
+  whatsappAlertPhone: '+971 50 680 2332',
+  emergencyPhone: '+971 50 680 2332',
   defaultCurrency: 'USD',
   autoApproveDrafts: false,
   leadNotificationEmail: true,
@@ -53,6 +53,10 @@ export async function getAdminListings(filters?: {
   search?: string;
   sort?: string;
 }): Promise<ListingSummary[]> {
+  if (apiClient.mode === 'live') {
+    return apiClient.getAdminListings(filters);
+  }
+
   let list = [...adminListingsStore];
 
   if (filters?.country) {
@@ -96,6 +100,10 @@ export async function getAdminListings(filters?: {
 }
 
 export async function getAdminListingById(idOrSlug: string): Promise<ListingDetail | null> {
+  if (apiClient.mode === 'live') {
+    return apiClient.getAdminListingById(idOrSlug);
+  }
+
   const normalized = idOrSlug.toLowerCase();
   const found = adminListingsStore.find(
     (l) =>
@@ -107,6 +115,10 @@ export async function getAdminListingById(idOrSlug: string): Promise<ListingDeta
 }
 
 export async function saveAdminListing(listing: ListingDetail): Promise<ListingDetail> {
+  if (apiClient.mode === 'live') {
+    return apiClient.saveAdminListing(listing);
+  }
+
   const index = adminListingsStore.findIndex((l) => l.id === listing.id);
   const now = new Date().toISOString();
 
@@ -131,12 +143,20 @@ export async function saveAdminListing(listing: ListingDetail): Promise<ListingD
 }
 
 export async function deleteAdminListing(id: string): Promise<boolean> {
+  if (apiClient.mode === 'live') {
+    return apiClient.deleteAdminListing(id);
+  }
+
   const initialLength = adminListingsStore.length;
   adminListingsStore = adminListingsStore.filter((l) => l.id !== id);
   return adminListingsStore.length < initialLength;
 }
 
 export async function duplicateAdminListing(id: string): Promise<ListingDetail | null> {
+  if (apiClient.mode === 'live') {
+    return apiClient.duplicateAdminListing(id);
+  }
+
   const original = await getAdminListingById(id);
   if (!original) return null;
 
@@ -159,6 +179,10 @@ export async function duplicateAdminListing(id: string): Promise<ListingDetail |
 }
 
 export async function getAdminDevelopers(countryCode?: CountryCode): Promise<Developer[]> {
+  if (apiClient.mode === 'live') {
+    return apiClient.getDevelopers(countryCode);
+  }
+
   if (!countryCode) return [...adminDevelopersStore];
   return adminDevelopersStore.filter((d) => d.countryCodes.includes(countryCode));
 }
@@ -175,6 +199,10 @@ export async function saveAdminDeveloper(dev: Developer): Promise<Developer> {
 }
 
 export async function getAdminLocations(countryCode?: CountryCode): Promise<Location[]> {
+  if (apiClient.mode === 'live') {
+    return apiClient.getLocations(countryCode);
+  }
+
   if (!countryCode) return [...adminLocationsStore];
   return adminLocationsStore.filter((l) => l.countryCode === countryCode);
 }
@@ -214,6 +242,10 @@ export async function updateAdminSubmissionStatus(
 }
 
 export async function getAdminExchangeRates(): Promise<ExchangeRates> {
+  if (apiClient.mode === 'live') {
+    return apiClient.getExchangeRates();
+  }
+
   return { ...adminRatesStore, rates: { ...adminRatesStore.rates } };
 }
 

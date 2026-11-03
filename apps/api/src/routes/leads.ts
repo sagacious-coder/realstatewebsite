@@ -129,3 +129,4 @@ export const leadsRoutes: FastifyPluginAsync = async (fastify) => {
     }
   );
 };
+

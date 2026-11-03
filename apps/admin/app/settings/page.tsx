@@ -177,6 +177,42 @@ export default function AdminSettingsPage() {
               </div>
             </div>
 
+            {/* Regulatory Disclosures & UAE Licensing Information */}
+            <div className="pt-4 border-t border-line/60">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck className="w-4 h-4 text-gold-dark" />
+                <h4 className="font-serif text-xs font-bold text-navy uppercase tracking-wider">
+                  UAE Corporate Licensing & Registration
+                </h4>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-sand/40 p-3.5 rounded-xl border border-line/50 text-xs">
+                <div>
+                  <span className="text-[11px] text-muted block">Trade Name (EN)</span>
+                  <span className="font-semibold text-navy">WILD HILLS REAL ESTATE - L.L.C - S.P.C</span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-muted block">Trade Name (AR)</span>
+                  <span className="font-semibold text-navy font-arabic" dir="rtl">وايلد هيلز للعقارات - ذ.م.م - ش.ش.و</span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-muted block">Legal Form</span>
+                  <span className="font-semibold text-navy">LLC - Sole Proprietorship Company</span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-muted block">Unified Registration No.</span>
+                  <span className="font-mono font-semibold text-navy">101-2026-200113050</span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-muted block">Unified Licence No.</span>
+                  <span className="font-mono font-semibold text-navy">501-2026-200074238</span>
+                </div>
+                <div>
+                  <span className="text-[11px] text-muted block">Licence Validity Period</span>
+                  <span className="font-mono font-semibold text-emerald-800">06/07/2026 – 05/07/2027</span>
+                </div>
+              </div>
+            </div>
+
             <div className="pt-3 flex justify-end">
               <button
                 type="submit"

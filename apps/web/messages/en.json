@@ -128,8 +128,29 @@
         "contact": "Contact"
       },
       "copyright": "© {year} Wild Hills Real Estate. All rights reserved.",
-      "disclaimer": "Information on this website is general in nature and is not legal, tax or investment advice.",
-      "sampleNote": "Sample content: contact details and addresses are placeholders to be replaced before launch."
+      "disclaimer": "WILD HILLS REAL ESTATE - L.L.C - S.P.C is a licensed real estate entity in the UAE (Unified Licence No. 501-2026-200074238 | Unified Registration No. 101-2026-200113050). Information on this website is general in nature and is not legal, tax or investment advice.",
+      "sampleNote": "Sample content: contact details and addresses for regional branches outside the UAE are placeholders to be replaced before regional launch.",
+      "corporate": {
+        "badge": "Official UAE Licensing & Registration",
+        "tradeNameLabel": "Trade Name",
+        "tradeName": "WILD HILLS REAL ESTATE - L.L.C - S.P.C",
+        "legalFormLabel": "Legal Form",
+        "legalForm": "Limited Liability Company - Sole Proprietorship Company",
+        "unifiedRegistrationLabel": "Unified Registration No.",
+        "unifiedRegistrationNo": "101-2026-200113050",
+        "unifiedLicenceLabel": "Unified Licence No.",
+        "unifiedLicenceNo": "501-2026-200074238",
+        "validityLabel": "Licence Validity",
+        "validityDates": "06/07/2026 – 05/07/2027",
+        "establishmentLabel": "Establishment Date",
+        "establishmentDate": "06/07/2026",
+        "issuanceLabel": "Issuance Date",
+        "issuanceDate": "06/07/2026",
+        "expiryLabel": "Expiry Date",
+        "expiryDate": "05/07/2027",
+        "emailLabel": "Official Email",
+        "phoneLabel": "Official Mobile"
+      }
     },
     "cookies": {
       "title": "Cookies on this site",

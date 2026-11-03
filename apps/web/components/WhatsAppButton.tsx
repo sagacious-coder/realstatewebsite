@@ -20,7 +20,7 @@ export interface WhatsAppButtonProps {
  * - Minimum 44px tap target on mobile
  */
 export function WhatsAppButton({
-  phone = '+971400000000',
+  phone = '+971 50 680 2332',
   message = 'Hello Wild Hills, I would like to inquire about properties.',
   label = 'WhatsApp us',
   variant = 'emerald',
