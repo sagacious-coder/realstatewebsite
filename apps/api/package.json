@@ -6,7 +6,7 @@
   "description": "Wild Hills Fastify backend API and pg-boss background worker",
   "main": "dist/server.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"const fs=require('fs'); fs.cpSync('src/db/migrations', 'dist/db/migrations', {recursive: true})\"",
     "dev": "tsc && node --watch dist/server.js",
     "start": "node dist/server.js",
     "start:worker": "node dist/worker.js",

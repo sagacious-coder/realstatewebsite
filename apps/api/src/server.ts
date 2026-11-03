@@ -1,8 +1,29 @@
+import pg from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { buildApp } from './app.js';
 import { env } from './config/env.js';
+import { runMigrations } from './db/migrate.js';
+import { runSeed } from './db/seed.js';
+import * as schema from './db/schema/index.js';
 
 async function main() {
   const app = await buildApp();
+
+  if (process.env.AUTO_MIGRATE === 'true') {
+    const client = new pg.Client({ connectionString: env.DATABASE_URL });
+    try {
+      await client.connect();
+      app.log.info('Applying database migrations on startup...');
+      await runMigrations(client);
+      if (process.env.AUTO_SEED === 'true') {
+        app.log.info('Applying idempotent database seed on startup...');
+        const dbInstance = drizzle(client, { schema });
+        await runSeed(dbInstance);
+      }
+    } finally {
+      await client.end();
+    }
+  }
 
   const shutdown = async (signal: string) => {
     app.log.info({ signal }, 'Graceful shutdown initiated');

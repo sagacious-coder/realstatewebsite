@@ -323,6 +323,18 @@ export const adminRoutes: FastifyPluginAsync = async (fastify) => {
     async (req, reply) => {
       const actor = req.actor as Actor;
       const body = req.body as z.infer<typeof ListingCreateSchema>;
+      if (
+        actor.role !== 'owner' &&
+        actor.countryScopes &&
+        !actor.countryScopes.includes(body.countryCode)
+      ) {
+        return reply.status(403).send({
+          type: 'https://datatracker.ietf.org/doc/html/rfc9457#section-3.1',
+          title: 'Forbidden',
+          status: 403,
+          detail: `Country '${body.countryCode}' is outside actor's assigned country scopes`,
+        });
+      }
       const { images, ...data } = body;
 
       // Calculate priceUsdMinor if omitted

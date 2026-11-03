@@ -6,16 +6,23 @@ import fp from 'fastify-plugin';
 import { env } from '../config/env.js';
 
 export const securityPlugin: FastifyPluginAsync = fp(async (fastify) => {
-  // Helmet security headers (nosniff, DENY frameguard, HSTS)
+  // Helmet security headers (enforced CSP, nosniff, DENY frameguard, HSTS)
   await fastify.register(helmet, {
-    contentSecurityPolicy: false, // Managed by proxy or specific frontend headers
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        frameAncestors: ["'none'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+      },
+    },
     crossOriginEmbedderPolicy: false,
     frameguard: {
       action: 'deny',
     },
     noSniff: true,
     hsts: {
-      maxAge: 31536000,
+      maxAge: 63072000,
       includeSubDomains: true,
       preload: true,
     },

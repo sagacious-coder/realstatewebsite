@@ -1,6 +1,6 @@
 {
   # Global options
-  email {$ACME_EMAIL:admin@wildhills.com}
+  email {$ACME_EMAIL:walidward@gmail.com}
   admin off
 }
 
@@ -10,9 +10,9 @@
 
   # Security headers baseline
   header {
-    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options "nosniff"
-    X-Frame-Options "SAMEORIGIN"
+    X-Frame-Options "DENY"
     Referrer-Policy "strict-origin-when-cross-origin"
   }
 
@@ -29,7 +29,7 @@ admin.{$DOMAIN:wildhills.com} {
   encode gzip zstd
 
   header {
-    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options "nosniff"
     X-Frame-Options "DENY"
     Referrer-Policy "strict-origin-when-cross-origin"
@@ -48,7 +48,7 @@ api.{$DOMAIN:wildhills.com} {
   encode gzip zstd
 
   header {
-    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options "nosniff"
     X-Frame-Options "DENY"
     Referrer-Policy "strict-origin-when-cross-origin"

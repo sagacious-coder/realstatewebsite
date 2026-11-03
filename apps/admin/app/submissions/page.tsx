@@ -55,21 +55,7 @@ const SUBMISSION_STATUS_COLORS: Record<SubmissionStatus, { bg: string; text: str
   archived: { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300' },
 };
 
-/**
- * Formula Injection Protection (RFC 4180 + Excel/Calc CSV Neutralization)
- * Prepends a single-quote (') if the value begins with =, +, -, or @
- */
-function sanitizeCsvValue(val: unknown): string {
-  if (val === null || val === undefined) return '';
-  let str = String(val).trim();
-  if (/^[=+\-@]/.test(str)) {
-    str = `'${str}`;
-  }
-  if (/[",\n\r]/.test(str)) {
-    str = `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
+import { sanitizeCsvValue } from '@/lib/csv';
 
 export default function SubmissionsPage() {
   const router = useRouter();

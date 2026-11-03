@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "node -e \"console.log('web tests pass')\"",
+    "test": "node --test test/**/*.test.mjs",
     "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {

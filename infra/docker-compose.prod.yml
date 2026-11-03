@@ -35,7 +35,7 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: wildhills-prod-api
     restart: always
-    command: ["node", "dist/server.js"]
+    command: ["sh", "-c", "node dist/db/migrate.js && node dist/db/seed.js && node dist/server.js"]
     environment:
       NODE_ENV: production
       PORT: 3002

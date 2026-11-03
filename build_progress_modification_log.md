@@ -6,10 +6,10 @@
 
 ## 1. Executive Status
 
-* **Current Stage in Progress:** `Stage B6: Admin API surface, review queue & audit logging`
-* **Architecture:** v2.1 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL + Next.js)
-* **Latest Completed Milestone:** Stage B5 (Inbound leads capture, seller submissions with capability tokens, presigned upload pipeline, pg-boss worker engine with Sharp processing, email quota throttling, storage guard; 115/115 API tests pass, zero lint/typecheck errors)
-* **Next Up After B5:** Stage B6 (Admin API surface, review queue & audit logging)
+* **Current Stage in Progress:** `PROJECT COMPLETE (All Frontend Stages 1–14 & Backend Stages B1–B6 Done)`
+* **Architecture:** v2.3 Custom Monorepo (`pnpm` + Turborepo + Fastify + PostgreSQL 16 + `pg-boss` + Next.js 15, Lean Free Mode)
+* **Latest Completed Milestone:** Stage 14 (Security & Hardening Audit, Database RLS & Least-Privilege Verification, Comprehensive Visitor/Seller/Admin E2E Journeys, Clean-Instance Database Restore Verification, Restore Runbook, and Production Launch Checklist; 159/159 monorepo tests pass, zero lint/typecheck/build errors)
+* **Next Up:** Production cutover upon Owner sign-off in [`LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md) (`SITE_PRIVATE=false`)
 
 ---
 
@@ -33,7 +33,7 @@
 | **Stage 11** | Admin App foundation, listings management & uploads | **DONE** | 2026-10-31 | 8/8 admin routes build clean, zero lint/typecheck errors |
 | **Stage 12** | Admin CRM, leads, locations, settings & users | **DONE** | 2026-10-31 | Formula-safe CSV export, 9/9 admin routes build clean, zero type/lint errors |
 | **Stage 13** | Arabic RTL pass, WCAG 2.2 AA audit & Core Web Vitals | **DONE** | 2026-11-01 | Enforced CSP, before/after audit table, 465/465 SSG build clean, zero lint/type errors |
-| **Stage 14** | Security audit, end-to-end tests & launch prep | Not Started | — | — |
+| **Stage 14** | Security audit, end-to-end tests & launch prep | **DONE** | 2026-11-03 | 9/9 E2E & security tests, 5/5 web/admin audit tests, clean DB restore verified, `LAUNCH_CHECKLIST.md` & `restore-database.md` ready |
 
 ### Backend Track (Custom Fastify + PostgreSQL + Worker)
 
@@ -44,7 +44,7 @@
 | **Stage B3** | Identity, WebAuthn passkeys, sessions & policy | **DONE** | 2026-11-03 | Passkeys (FIDO2), Argon2id, TOTP RFC 6238, recovery codes, sessions, __Host- cookies, CSRF, capability tokens, Section 10.8 policy matrix, 69/69 tests pass |
 | **Stage B4** | Public read API & search endpoints (contract parity) | **DONE** | 2026-11-03 | 97/97 tests pass, public_* views, wh_public_ro isolation, trigram suggest, ETag 304, live adapter parity |
 | **Stage B5** | Leads intake, S3 file worker & background jobs | **DONE** | 2026-11-03 | 18/18 worker tests pass (115 monorepo API tests), Turnstile bot defense, capability tokens, presigned uploads, Sharp WebP compression, email throttle & storage guard verified |
-| **Stage B6** | Admin API surface, review queue & audit logging | **NEXT TO RUN** | — | — |
+| **Stage B6** | Admin API surface, review queue & audit logging | **DONE** | 2026-11-03 | 23/23 admin integration tests pass (138 API tests), optimistic concurrency (`409 Conflict`), `trg_publish_guard`, submission-to-draft conversion, formula-safe CSV export, immutable audit log |
 
 ---
 
@@ -549,7 +549,56 @@
   * `pnpm run build`: Monorepo build passes cleanly (462/462 pages in web, 9/9 in admin, API compiled).
   * `graphify update .`: Knowledge graph re-extracted (2275 nodes, 5414 edges, 139 communities).
 
+---
 
+### 2026-11-03 — Stage B6: Admin API Surface, Seller Review Queue & Immutable Audit Logging
+* **Action:** Implemented the complete authenticated Admin API surface (`/v1/admin/*`), seller submission review & draft conversion workflow, CRM lead notes & formula-safe CSV export, locations/developers/rates management, immutable audit trail, and live adapter wiring in `apps/admin`.
+* **Outputs Created & Configured:**
+  * `Database Migration 0007 (`apps/api/src/db/migrations/0007_admin_notes.sql`)`:
+    - Created `lead_notes` table with RLS policies (`country_scopes` enforcement) and grants for `wh_owner` and `wh_api`.
+  * `Admin Repository & Service (`apps/api/src/repositories/admin.repository.ts`, `services/admin.service.ts`)`:
+    - Full CRUD for listings (`GET`, `POST`, `PUT` with `expectedVersion` optimistic concurrency check returning `409 Conflict`, `publish` guarded by `trg_publish_guard`, `unpublish`, `duplicate`, soft-delete `archived`).
+    - Leads CRM management (`GET`, status transition `PATCH`, internal notes `POST`, formula-injection-safe CSV export `GET /v1/admin/leads/export` neutralizing leading `=`, `+`, `-`, `@`, `\t`, `\r`).
+    - Seller submissions review queue (`GET`, status `PATCH`, `POST /v1/admin/submissions/:id/convert` copying submission attributes & photos into a new draft listing, and 60s short-lived signed S3 URLs for private KYC/title documents).
+    - Locations, Developers, Exchange Rates (`PUT /v1/admin/rates` requiring step-up MFA), and immutable `audit_events` inspection (`GET /v1/admin/audit`).
+  * `Admin Live Client Wiring (`apps/admin/lib/data.ts`)`:
+    - Upgraded `apps/admin` data layer to communicate directly with `/v1/admin/*` when `NEXT_PUBLIC_API_MODE=live` while retaining instant mock fallback.
+  * `Test Harness & Verification (`apps/api/test/admin.test.ts`)`:
+    - 23 integration tests covering all admin endpoints, RBAC & country scope isolation, optimistic concurrency `409 Conflict`, publish guard enforcement, submission-to-draft conversion, CSV formula neutralization, and audit trail immutability.
 
+---
 
+### 2026-11-03 — Official UAE Corporate Licensing Disclosures & Contact Update
+* **Action:** Replaced all placeholder UAE company, contact, and licensing details across `apps/web`, `apps/admin`, `apps/api`, and `packages/contracts` with verified official credentials.
+* **Verified Credentials Applied:**
+  * **Trade Name (EN / AR):** `WILD HILLS REAL ESTATE - L.L.C - S.P.C` / `وايلد هيلز للعقارات - ذ.م.م - ش.ش.و`
+  * **Legal Form (EN / AR):** `Limited Liability Company - Sole Proprietorship Company` / `شركة ذات مسؤولية محدودة - شركة الشخص الواحد`
+  * **Unified Registration No.:** `101-2026-200113050` | **Unified Licence No.:** `501-2026-200074238`
+  * **Establishment / Issuance / Expiry:** `06/07/2026` — `05/07/2027`
+  * **Official Contact:** `walidward@gmail.com` | `+971 50 680 2332` (`https://wa.me/971506802332`)
+* **Files Updated:** `apps/web/lib/site-config.ts`, `apps/web/components/layout/Footer.tsx`, `apps/web/components/WhatsAppButton.tsx`, `apps/web/components/property/PropertyInquirySidebar.tsx`, `packages/contracts/src/fixtures/content.ts`, `apps/admin/lib/data.ts`, `apps/admin/app/settings/page.tsx`, `apps/admin/components/listings/ListingForm.tsx`, `apps/web/messages/en.json`, `apps/web/messages/ar.json`.
+
+---
+
+### 2026-11-03 — Stage 14: Security Audit, Comprehensive E2E Test Suite & Production Launch Prep
+* **Action:** Executed final security hardening audit, automated end-to-end user journey verification across Visitor, Seller, and Admin flows, clean-instance database backup & restore test, restore runbook authoring, and production launch checklist preparation.
+* **Outputs Created & Verified:**
+  * `Security & Hardening Audit`:
+    - Enforced CSP with `frame-ancestors 'none'`, HSTS (`max-age=63072000; includeSubDomains; preload`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and `__Host-` session cookies verified across `apps/web/next.config.mjs`, `apps/admin/next.config.mjs`, `apps/api/src/plugins/security.ts`, and `infra/Caddyfile`.
+    - Database RLS & Least-Privilege verified: `wh_public_ro` strictly blocked from `INSERT`/`UPDATE`/`DELETE` across all tables and views; scoped agents restricted to assigned `country_scopes` on both reads and writes (`POST /v1/admin/listings` & `PUT /v1/admin/listings/:id`).
+    - Pino log redaction (`apps/api/src/plugins/logging.ts`) verified for passwords, session tokens, capability tokens, authorization headers, cookies, and customer PII.
+    - Formula injection guard (`apps/admin/lib/csv.ts` & `apps/api/src/services/admin.service.ts`) verified across both Admin UI and API CSV exports.
+  * `Automated End-to-End (E2E) Test Suite (`apps/api/test/stage14-e2e.test.ts`, `apps/web/test/web-audit.test.mjs`, `apps/admin/test/admin-audit.test.mjs`)`:
+    - **Visitor Journey**: Country chooser $\rightarrow$ Country homepage $\rightarrow$ Search directory (`/buy`) $\rightarrow$ Filter by budget/bedrooms $\rightarrow$ Property detail page $\rightarrow$ Submit inquiry lead $\rightarrow$ Verify lead persisted in PostgreSQL.
+    - **Seller Journey**: "Sell With Us" 4-step wizard $\rightarrow$ Presign upload $\rightarrow$ Submit property $\rightarrow$ Receive capability token $\rightarrow$ Exchange token & verify submission in pending queue.
+    - **Admin Journey**: Staff login (`__Host-` session cookie) $\rightarrow$ Review & qualify lead in CRM $\rightarrow$ Approve & convert seller submission to listing draft $\rightarrow$ Enrich & publish listing $\rightarrow$ Verify listing appears live on public `/buy` directory and resolves by slug.
+  * `Production Stack, Auto-Migrate & Database Restore Verification`:
+    - Configured `apps/api` and `infra/docker-compose.prod.yml` to automatically run idempotent database migrations (`dist/db/migrate.js`) and initial seed (`dist/db/seed.js`) on container startup.
+    - Executed clean-instance database backup & restore verification (`Test 3.2` in `stage14-e2e.test.ts`).
+    - Created 1-page database restore runbook at [`docs/runbooks/restore-database.md`](docs/runbooks/restore-database.md) and production cutover checklist at [`LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md) (`SITE_PRIVATE=true` preserved).
+* **Validation:**
+  * `pnpm test`: 100% pass across all workspaces (`apps/api`: 147/147 tests across 8 suites; `packages/contracts`: 4/4; `packages/api-client`: 6/6; `apps/admin`: 3/3; `apps/web`: 2/2 — **162 total tests passing**).
+  * `pnpm run lint`: 0 warnings, 0 errors across all packages.
+  * `pnpm run typecheck`: 0 TypeScript errors across all packages.
+  * `pnpm run build`: Clean production build across all packages (`@wild-hills/contracts`, `@wild-hills/ui`, `@wild-hills/api-client`, `@wild-hills/api`, `@wild-hills/admin`, `@wild-hills/web`).
 

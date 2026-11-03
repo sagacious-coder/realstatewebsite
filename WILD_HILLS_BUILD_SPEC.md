@@ -4,7 +4,7 @@ Put this file in the project root. Tell the agent: "Read WILD_HILLS_BUILD_SPEC.m
 
 **Revision:** October 2026. External BaaS is removed. The backend is now a custom API built in this repository: PostgreSQL, a TypeScript API service, a job worker, and S3-compatible storage. 
 **Lean Free Mode (v2.3):** until the site earns revenue, pay only for the domain and the host. Every other service uses a free tier or open source. Do not build operations tooling (dashboards, drills, load tests) before it is needed. What to do now, at launch, and later is in section 18.1.
-**Current Repo State:** Frontend Stages 1 to 12 are done and run in `API_MODE=mock`. There is no database, no server process, and no real data yet. Next to run: Stage 13 (mock mode). Database work starts at Stage B1, not before.
+**Current Repo State:** All Frontend Stages (1 to 14) and Backend Stages (B1 to B6) are Done (`PROJECT COMPLETE`). Both `API_MODE=mock` and `API_MODE=live` are fully operational and verified.
 
 ## Contents
 
@@ -68,12 +68,12 @@ The frontend and the backend meet at a written contract (the OpenAPI document ge
 | B5 Leads, submissions, files, jobs | Backend | B3, B4 | Done |
 | 9 Property page, leads, share cards | Frontend | 8 (B5 for live leads) | Done |
 | 10 Remaining public pages | Frontend | 9 | Done |
-| B6 Admin API | Backend | B3, B5 | **NEXT TO RUN** |
+| B6 Admin API | Backend | B3, B5 | Done |
 | 11 Admin app foundation and listings | Frontend | B6 | Done |
 | 12 Admin: leads, locations, content, users | Frontend | 11 | Done |
 | 12b Admin: usage panel (optional) | Frontend | B6 | Optional, only after launch |
 | 13 Arabic, accessibility, SEO, performance pass | Both | 10, 12 | Done |
-| 14 Security review, QA, launch preparation | Both | 13, B6 | Not started |
+| 14 Security review, QA, launch preparation | Both | 13, B6 | Done |
 
 **Run order from here:** 13 (mock mode) -> B1 -> B2 -> B3 -> B4 -> B5 -> B6 -> 14. Stage 12b is optional and can wait until after launch. Stage 13 runs now against `API_MODE=mock`; its check of ISR with the API stopped moves to Stage 14 because it needs the live API from B4.
 

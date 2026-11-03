@@ -249,8 +249,11 @@ export class AdminRepository {
     const bathrooms = String(data.bathrooms || '1');
     const agent = data.agent || {
       name: 'Wild Hills Private Office',
-      phone: '+971 4 321 0000',
-      email: 'concierge@wildhills.com',
+      phone: '+971 50 680 2332',
+      whatsapp: '+971506802332',
+      email: 'walidward@gmail.com',
+      avatarUrl: '/images/logo-icon.svg',
+      license: '501-2026-200074238',
     };
 
     const newListing: NewListingRow = {
@@ -957,8 +960,11 @@ export class AdminRepository {
         floorPlans: [],
         agent: {
           name: 'Wild Hills Private Office',
-          phone: '+971 4 321 0000',
-          email: 'concierge@wildhills.com',
+          phone: '+971 50 680 2332',
+          whatsapp: '+971506802332',
+          email: 'walidward@gmail.com',
+          avatarUrl: '/images/logo-icon.svg',
+          license: '501-2026-200074238',
         },
         version: 1,
       };

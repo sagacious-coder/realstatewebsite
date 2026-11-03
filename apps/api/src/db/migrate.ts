@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import pg from 'pg';
@@ -17,7 +17,11 @@ export const MIGRATION_FILES = [
 ];
 
 export async function runMigrations(clientOrPool: any) {
-  const migrationsDir = join(__dirname, 'migrations');
+  const localMigrationsDir = join(__dirname, 'migrations');
+  const fallbackMigrationsDir = join(__dirname, '../../src/db/migrations');
+  const migrationsDir = existsSync(localMigrationsDir)
+    ? localMigrationsDir
+    : fallbackMigrationsDir;
 
   for (const filename of MIGRATION_FILES) {
     const filePath = join(migrationsDir, filename);
@@ -44,7 +48,7 @@ async function main() {
     await client.connect();
     console.log('Connected to PostgreSQL for migrations...');
     await runMigrations(client);
-    console.log('✅ Migrations 0001-0003 applied successfully');
+    console.log('✅ Migrations 0001-0006 applied successfully');
   } catch (err) {
     console.error('❌ Migration failed:', err);
     process.exit(1);

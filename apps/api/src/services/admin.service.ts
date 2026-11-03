@@ -315,9 +315,12 @@ export class AdminService {
     const videoUrl = row.videoUrl || row.video_url || null;
     const virtualTourUrl = row.virtualTourUrl || row.virtual_tour_url || null;
     const agent = row.agent || {
-      name: 'Wild Hills Concierge',
-      phone: '+971 4 321 0000',
-      email: 'concierge@wildhills.com',
+      name: 'Wild Hills Private Office',
+      phone: '+971 50 680 2332',
+      whatsapp: '+971506802332',
+      email: 'walidward@gmail.com',
+      avatarUrl: '/images/logo-icon.svg',
+      license: '501-2026-200074238',
     };
     const lat = row.latitude ?? row.lat;
     const lng = row.longitude ?? row.lng;

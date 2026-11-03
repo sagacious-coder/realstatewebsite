@@ -15,6 +15,7 @@ const cspEnforced = [
   "font-src 'self' data:",
   "connect-src 'self' https:",
   "frame-src 'self' https://challenges.cloudflare.com",
+  "frame-ancestors 'none'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
